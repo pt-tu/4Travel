@@ -1,34 +1,56 @@
-import "./AddCustomer.css";
+import "./Form.css";
 import { Col, Row, Button, DatePicker, Form, Input } from "antd";
 
 const { TextArea } = Input;
 
 function AddCustomer() {
   return (
-    <div className="AddEdit">
+    <div className="wrapper">
       <h3>Quay lại</h3>
-      <h1>THÔNG TIN KHÁCH HÀNG</h1>
-      <Form>
-        <Row>
+      <h1 className="pageTitle">THÔNG TIN KHÁCH HÀNG</h1>
+      <Form labelCol={{ span: 3 }} labelAlign="left">
+        <Row justify={"space-between"}>
           <Col span={12}>
-            <Form.Item name={"name"} required label="Họ và tên">
+            <Form.Item
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 17 }}
+              name={"name"}
+              required
+              label="Họ và tên"
+            >
               <Input />
             </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form.Item name={"cic"} required label="CMND/CCCD">
+          <Col span={11}>
+            <Form.Item
+              labelCol={{ span: 6 }}
+              name={"cic"}
+              required
+              label="CMND/CCCD"
+            >
               <Input />
             </Form.Item>
           </Col>
         </Row>
-        <Row>
+        <Row justify={"space-between"}>
           <Col span={12}>
-            <Form.Item name={"phone"} required label="Số điện thoại">
+            <Form.Item
+              labelCol={{ span: 6 }}
+              wrapperCol={{ span: 17 }}
+              name={"phone"}
+              required
+              label="Số điện thoại"
+            >
               <Input />
             </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form.Item name={"email"} required label="Email">
+          <Col span={11}>
+            <Form.Item
+              labelCol={{ span: 6 }}
+              name={"email"}
+              required
+              label="Email"
+            >
               <Input />
             </Form.Item>
           </Col>
@@ -37,17 +59,17 @@ function AddCustomer() {
           <DatePicker placeholder="DD/MM/YY" format={"DD/MM/YY"} />
         </Form.Item>
         <Form.Item name={"address"} required label="Địa chỉ">
-          <Input />
+          <Input className="longInput" />
         </Form.Item>
         <Form.Item name={"note"} label="Ghi chú">
-          <TextArea />
+          <TextArea rows={5} />
         </Form.Item>
         <Form.Item name={"special"} label="Yêu cầu đặc biệt">
-          <TextArea />
+          <TextArea rows={5} />
         </Form.Item>
-        <Form.Item>
+        <Form.Item className="submitButton">
           <Button type="primary" htmlType="submit">
-            Submit
+            Xác nhận
           </Button>
         </Form.Item>
       </Form>

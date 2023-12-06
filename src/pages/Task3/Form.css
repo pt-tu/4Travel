@@ -1,0 +1,26 @@
+/* Global */
+/********************/
+.wrapper {
+  margin: 40px;
+}
+
+.pageTitle {
+  text-align: center;
+}
+/*******************/
+
+.wrapper {
+  text-align: left;
+}
+
+.shortInput {
+  width: 50%;
+}
+
+.longInput {
+  width: 70%;
+}
+
+.submitButton {
+  text-align: right;
+}
