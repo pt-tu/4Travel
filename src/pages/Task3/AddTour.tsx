@@ -1,7 +1,46 @@
-import React from "react";
+import "./Form.css";
+import { Col, Row, Button, DatePicker, Form, Input, Select } from "antd";
+
+const { TextArea } = Input;
 
 function AddTour() {
-  return <div>AddTour</div>;
+  return (
+    <div className="wrapper">
+      <h3>Quay lại</h3>
+      <h1 className="pageTitle">THÔNG TIN TOUR</h1>
+      <Form labelCol={{ span: 3 }} labelAlign="left">
+        <Form.Item name={"name"} required label="Tên tour">
+          <Input />
+        </Form.Item>
+        <Form.Item name={"tgid"} required label="Mã hướng dẫn viên">
+          <Input className="shortInput" />
+        </Form.Item>
+        <Form.Item name={"tgname"} label="Tên hướng dẫn viên">
+          <Input disabled className="shortInput" />
+        </Form.Item>
+        <Form.Item name={"origin"} required label="Điểm đi">
+          <Select placeholder="Địa điểm" />
+        </Form.Item>
+        <Form.Item name={"destination"} required label="Điểm đến">
+          <Select placeholder="Địa điểm" />
+        </Form.Item>
+        <Form.Item name={"hotel"} required label="Khách sạn">
+          <Input className="shortInput" />
+        </Form.Item>
+        <Form.Item name={"bday"} required label="Ngày sinh">
+          <DatePicker placeholder="DD/MM/YY" format={"DD/MM/YY"} />
+        </Form.Item>
+        <Form.Item name={"note"} label="Ghi chú">
+          <TextArea rows={5} />
+        </Form.Item>
+        <Form.Item className="submitButton">
+          <Button type="primary" htmlType="submit">
+            Xác nhận
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
+  );
 }
 
 export default AddTour;
