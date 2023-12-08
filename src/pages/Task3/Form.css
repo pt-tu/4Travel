@@ -6,6 +6,12 @@
 
 .pageTitle {
   text-align: center;
+  text-transform: uppercase;
+}
+
+.submitButton {
+  text-align: right;
+  /* submit button styles */
 }
 /*******************/
 
@@ -19,8 +25,4 @@
 
 .longInput {
   width: 70%;
-}
-
-.submitButton {
-  text-align: right;
 }

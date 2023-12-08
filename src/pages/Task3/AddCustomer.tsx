@@ -7,7 +7,7 @@ function AddCustomer() {
   return (
     <div className="wrapper">
       <h3>Quay lại</h3>
-      <h1 className="pageTitle">THÔNG TIN KHÁCH HÀNG</h1>
+      <h1 className="pageTitle">Thông tin khách hàng</h1>
       <Form labelCol={{ span: 3 }} labelAlign="left">
         <Row justify={"space-between"}>
           <Col span={12}>
@@ -45,12 +45,7 @@ function AddCustomer() {
             </Form.Item>
           </Col>
           <Col span={11}>
-            <Form.Item
-              labelCol={{ span: 6 }}
-              name={"email"}
-              required
-              label="Email"
-            >
+            <Form.Item labelCol={{ span: 6 }} name={"email"} label="Email">
               <Input />
             </Form.Item>
           </Col>
