@@ -8,7 +8,7 @@ function ContactInfo() {
   return (
     <div className="contact">
       <h3>Thông tin liên lạc</h3>
-      <Form style={contactForm} layout="vertical" labelAlign="left">
+      <Form style={contactForm} layout="vertical">
         <Row>
           <Col span={12} style={padRight}>
             <Form.Item name={"name"} required label="Họ và tên">
