@@ -11,19 +11,31 @@ function ContactInfo() {
       <Form style={contactForm} layout="vertical">
         <Row>
           <Col span={12} style={padRight}>
-            <Form.Item name={"name"} required label="Họ và tên">
+            <Form.Item
+              name={"name"}
+              rules={[{ required: true, message: "Nhập họ tên" }]}
+              label="Họ và tên"
+            >
               <Input />
             </Form.Item>
           </Col>
           <Col span={12} style={padLeft}>
-            <Form.Item name={"cic"} required label="CMND/CCCD">
+            <Form.Item
+              name={"cic"}
+              rules={[{ required: true, message: "Nhập CMND/CCCD" }]}
+              label="CMND/CCCD"
+            >
               <Input />
             </Form.Item>
           </Col>
         </Row>
         <Row>
           <Col span={12} style={padRight}>
-            <Form.Item name={"phone"} required label="Số điện thoại">
+            <Form.Item
+              name={"phone"}
+              rules={[{ required: true, message: "Nhập số điện thoại" }]}
+              label="Số điện thoại"
+            >
               <Input />
             </Form.Item>
           </Col>
