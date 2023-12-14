@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import { Button, ConfigProvider, Input, Table } from 'antd'
-import { FilterFilled, DeleteOutlined, FormOutlined } from '@ant-design/icons';
+import { Button, ConfigProvider, Input, Table, Space } from 'antd'
+import { ArrowLeftOutlined, DeleteOutlined, FormOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import "../../components/Task2Component/TourStyle.css"
 import "../../components/Task2Component/CustomerDevice.css"
@@ -98,9 +98,13 @@ function CustomerList() {
 
         <Search placeholder="Nhập tên, mã tour hoặc khách hàng bạn muốn" className="SearchBar" allowClear enterButton size="large" />
         <div style={{ width: '80%', display: 'flex', justifyContent: "space-between" }}>
-          <Button icon={<FilterFilled />} className="ButtonUp"> Lọc</Button>
+          <Button type='text' icon={<ArrowLeftOutlined />} className="ButtonUp"> <b>Quay lại</b></Button>
+          <Button icon={<PlusOutlined />} className="ButtonUp"></Button>
         </div>
-
+        <div>
+            <h2>DANH SÁCH KHÁCH HÀNG</h2>
+        </div>
+        <Space></Space>
         <Table
           rowSelection={{
             type: selectionType,
