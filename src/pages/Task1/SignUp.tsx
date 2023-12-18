@@ -1,7 +1,10 @@
 import React from "react";
+import '../Task1/Style.css'
 
-function SignUp() {
-  return <div>SignUp</div>;
+export default function Component() {
+  return (
+    <div>
+      
+    </div>
+  );
 }
-
-export default SignUp;

@@ -1,20 +1,57 @@
-import React from 'react';
+import React from "react";
+import '../Task1/Style.css';
+import logo4T from '../Task1/logo4T.png';
 
-const Login = () => {
-    return (
-        <div className="login-container">
-            <form className="login-form">
-                <h2>Đăng Nhập</h2>
-                <label htmlFor="username">Tên Truy Cập:</label>
-                <input type="text" id="username" name="username" />
+export default function Login() {
+  return (
+    <div className="LoginPage">
+      <header className="Background">
+        <img
+          src= {logo4T}
+          alt="Logo"
+          className="LogoImg"
+        />
+      </header>
 
-                <label htmlFor="password">Mật Khẩu:</label>
-                <input type="password" id="password" name="password" />
+      <main className="MainForm">
 
-                <button type="submit">Đăng Nhập</button>
-            </form>
+        <div className="LoginField">
+        <h1 className="H1Travel">4TRAVEL</h1>
+
+          <label className="LabelEmail">
+            <span className="SpanEmail">Email</span>
+            <div></div>
+            <input
+              type="email"
+              className="InputEmail"
+              placeholder="Nhập địa chỉ Email"
+            />
+          </label>
+
+          <label className="LabelPassword">
+            <span className="SpanPassword">Mật Khẩu</span>
+            <div></div>
+            <input
+              type="password"
+              className="InputPassword"
+              placeholder="Nhập mật khẩu"
+            />
+          </label>
+
+        <button
+          className="BtnLogin">
+          Đăng Nhập
+        </button>
+
+        <div className="ForgotPass">
+          <a href="#" className="anchorForgotPass">Quên Mật Khẩu?</a>
         </div>
-    );
-};
+        <div>
+        <a href="#" className="anchorHaventHaveUsername">Chưa có tài khoản?</a>
+        </div>
 
-export default Login;
+        </div>
+      </main>
+    </div>
+  );
+}

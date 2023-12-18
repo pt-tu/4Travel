@@ -1,15 +1,46 @@
-.login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+.Background{
+    background-color: #7200E4;
+    width: 100%;
 }
 
-.login-form {
-    border: 1px solid #ccc;
-    padding: 20px;
+.LogoImg{
+    margin-right: 1500px;
+}
+
+.H1Travel{
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
+.LoginField{
+    width: 40%;
     border-radius: 5px;
-    width: 300px;
+    background-color: aliceblue;
+    margin-left: 450px;
+    margin-top: 50px;
+}
+
+.SpanEmail{
+    margin-right: 420px;
+}
+
+.ForgotPass{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.anchorForgotPass{
+    color: #7200E4;
+    font-weight: bold;
+}
+
+.anchorHaventHaveUsername{
+    color: #7200E4;
+    font-weight: bold;
+}
+
+h1 {
+    color: #7200E4;
 }
 
 h2 {
@@ -18,22 +49,27 @@ h2 {
 
 label {
     display: block;
-    margin-bottom: 5px;
-}
-
-input {
-    width: 100%;
-    padding: 8px;
     margin-bottom: 10px;
 }
 
+span {
+margin-right:400px;
+}
+
+input {
+    width: 450px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
 button {
-    width: 100%;
+    width: 300px;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #7200E4;
     color: white;
     border: none;
-    border-radius: 3px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
