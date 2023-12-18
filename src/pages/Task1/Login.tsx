@@ -1,13 +1,13 @@
 import React from "react";
 import '../Task1/Style.css';
-import logo4T from '../Task1/logo4T.png';
+import Logo4T from "../../images/logo4T.png";
 
 export default function Login() {
   return (
     <div className="LoginPage">
       <header className="Background">
         <img
-          src= {logo4T}
+          src= {Logo4T}
           alt="Logo"
           className="LogoImg"
         />
@@ -18,7 +18,7 @@ export default function Login() {
         <div className="LoginField">
         <h1 className="H1Travel">4TRAVEL</h1>
 
-          <label className="LabelEmail">
+          <label className="EmailField">
             <span className="SpanEmail">Email</span>
             <div></div>
             <input

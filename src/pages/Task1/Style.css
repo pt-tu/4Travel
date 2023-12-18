@@ -12,6 +12,41 @@
     font-weight: bold;
 }
 
+/*Phần trên này là phần chung của Login và Signup*/
+
+.SignUpField{
+    width: 40%;
+    border-radius: 5px;
+    background-color: aliceblue;
+    margin-left: 450px;
+    margin-top: 50px;
+}
+
+.SpanReEnterPassword{
+    margin-left: 60px;
+}
+
+.BtnSignUp{
+    width: 130px;
+    padding: 10px;
+    font-weight: bold;
+    font-size:medium;
+    background-color: #7200E4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.HasAccount{
+    margin-top: 10px;
+    font-weight: medium;
+}
+
+/*Phần trên là CSS của SignUp*/
+
+/*CSS của Login ở dưới*/
+
 .LoginField{
     width: 40%;
     border-radius: 5px;
@@ -63,9 +98,11 @@ input {
     border-radius: 5px;
 }
 
-button {
-    width: 300px;
+.BtnLogin {
+    width: 100px;
     padding: 10px;
+    font-weight: bold;
+    font-size:medium;
     background-color: #7200E4;
     color: white;
     border: none;

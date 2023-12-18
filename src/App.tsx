@@ -37,7 +37,7 @@ function App() {
         </Routes>
       </Router>
       <Footer />
-      <Login />
+      <SignUp/>
     </div>
   );
 }
