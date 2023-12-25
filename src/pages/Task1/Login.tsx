@@ -1,5 +1,5 @@
 import React from "react";
-import '../Task1/Style.css';
+import "./Style.css"
 import Logo4T from "../../images/logo4T.png";
 
 export default function Login() {
