@@ -37,7 +37,6 @@ function App() {
         </Routes>
       </Router>
       <Footer />
-      <HomePage></HomePage>
     </div>
   );
 }
