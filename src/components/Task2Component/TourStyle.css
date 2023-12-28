@@ -1,0 +1,91 @@
+.CenterContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.card {
+    height: 150px;
+    width: 80%;
+    background-color: rgba(0, 0, 0, 0.05);
+    margin-bottom: 10px;
+}
+.GridContainer {
+    display: grid;
+    column-gap: 0px;
+    grid-template-columns: 130px auto 150px;
+}
+.cardImg {
+    height: 140px;
+    width: 120px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+div {
+    font-family: Arial, Helvetica, sans-serif;
+}
+.title {
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+.normal {
+    color: #000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    line-height: 2;
+}
+.NameBold {
+    color: #000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    line-height: 2;
+
+}
+.ButtonNext {
+    width: 151px;
+    height: 49px;
+    border-radius: 5px;
+    font-size: large;
+    font-weight: bold;
+}
+.ButtonUp{
+    margin-bottom: 10px;
+}
+.SearchBar{
+    height: 45px;
+    width: 60%;
+    margin-bottom: 10px;
+}
+.LocateDateBar{
+    height: 56px;
+    width: 80%;
+    display: grid;
+    grid-template-columns: 42.5% 42.5% 15%;
+    background-color: #FFB700;
+    margin-bottom: 30px;
+    border-radius: 5px;
+}
+.fitterDiv{
+    height: inherit;
+    width: 100%;
+}
+.fitter{
+    height: 50px;
+    width: calc(100% - 3px);
+    margin-top: 3px;
+    margin-bottom: 3px;
+    border-Radius: 4px;
+    margin-Left: 3px;
+}
+.Selector{
+    height: inherit;
+    width: 40%;
+    font-weight: bolder;
+}
