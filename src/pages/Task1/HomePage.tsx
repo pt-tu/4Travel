@@ -13,6 +13,7 @@ import VungTau from "../../images/bds-vungtau-1514295777.jpg"
 import HaNoi from "../../images/hanoi.jpg"
 import DaLat from "../../images/Da-Lat-City.jpg"
 import HoiAn from "../../images/hoian.jpg"
+import SixIcons from "../../images/6Icons.png"
 
 
 export default function HomePage() {
@@ -235,6 +236,41 @@ export default function HomePage() {
 
             </div>
           </section>
+
+          <section className="Section3">
+            <h2 className="S3H2IntroText">
+              VÌ SAO NÊN CHỌN 4TRAVEL
+            </h2>
+
+            <div className="Div6Icons">
+              <img
+                src={SixIcons}
+                alt="Deal"
+                className="Sec3Img" />
+            </div>
+
+          </section>
+
+          <div className="DivLastEmail">
+
+            <div className="TextLeaveEmail">
+              ĐỂ LẠI EMAIL CỦA BẠN ĐỂ NHẬN THÔNG BÁO VỀ KHUYẾN MÃI CỦA CHÚNG TÔI
+            </div>
+
+            <div className="DivInputLastEmail">
+              <input className="InputLastEmail"
+                type="text"
+                placeholder="EMAIL CỦA BẠN" />
+            </div>
+
+            <div className="DivBtnRegistry">
+              <button className="BtnRegistry">
+                ĐĂNG KÝ
+              </button>
+            </div>
+
+          </div>
+
         </div>
       </div>
 
