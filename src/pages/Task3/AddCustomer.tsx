@@ -15,8 +15,8 @@ function AddCustomer() {
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 17 }}
               name={"name"}
-              required
               label="Họ và tên"
+              rules={[{ required: true, message: "Nhập họ tên" }]}
             >
               <Input />
             </Form.Item>
@@ -25,8 +25,8 @@ function AddCustomer() {
             <Form.Item
               labelCol={{ span: 6 }}
               name={"cic"}
-              required
               label="CMND/CCCD"
+              rules={[{ required: true, message: "Nhập CMND/CCCD" }]}
             >
               <Input />
             </Form.Item>
@@ -38,8 +38,8 @@ function AddCustomer() {
               labelCol={{ span: 6 }}
               wrapperCol={{ span: 17 }}
               name={"phone"}
-              required
               label="Số điện thoại"
+              rules={[{ required: true, message: "Nhập số điện thoại" }]}
             >
               <Input />
             </Form.Item>
@@ -50,10 +50,18 @@ function AddCustomer() {
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item name={"bday"} required label="Ngày sinh">
+        <Form.Item
+          name={"bday"}
+          label="Ngày sinh"
+          rules={[{ required: true, message: "Nhập ngày sinh" }]}
+        >
           <DatePicker placeholder="DD/MM/YY" format={"DD/MM/YY"} />
         </Form.Item>
-        <Form.Item name={"address"} required label="Địa chỉ">
+        <Form.Item
+          name={"address"}
+          label="Địa chỉ"
+          rules={[{ required: true, message: "Nhập địa chỉ" }]}
+        >
           <Input className="longInput" />
         </Form.Item>
         <Form.Item name={"note"} label="Ghi chú">
