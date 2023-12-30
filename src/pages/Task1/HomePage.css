@@ -42,8 +42,7 @@
 .DivTwoBtn {
     padding-left: 0px;
     height: 45px;
-    width: 240px;
-    /*background-color: bisque;*/
+    width: 270px;
     margin-left: 1150px;
     margin-top: -40px;
 }
@@ -170,4 +169,48 @@
     display: flex;
     height: 30%;
     width: 100%;
+}
+
+.S3H2IntroText{
+font-weight: bold;
+height: 40px;
+width: 360px;
+/*background-color: yellow;*/
+}
+
+.DivLastEmail{
+    height: 200px;
+    width: 100%;
+    background-color: #4B268F;
+}
+
+.TextLeaveEmail{
+    height: 50px;
+    width: 700px;
+    /*background-color: red;*/
+    color: white;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    margin-left: 400px;
+    padding-top: 50px;
+}
+
+.InputLastEmail{
+    height: 30px;
+    background-color: #D9D9D9;
+}
+
+.BtnRegistry{
+    height: 30px;
+    width: 120px;
+    background-color: #7200E4;
+    color: white;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    border-radius: 5px;
+}
+
+.BtnRegistry:hover{
+border-color: white;
+cursor: pointer;
 }
