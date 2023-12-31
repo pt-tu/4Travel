@@ -84,10 +84,11 @@
 }
 
 .DivBG {
-    height: 50vh;
+    height: 45vh;
     width: 100%-50px;
     /*background-color: red;*/
     background:  url("../../images/background Bitexco.png") no-repeat  ;
+    background-size: 100%;
 
     display :flex;
 justify-content: start;

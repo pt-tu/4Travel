@@ -75,19 +75,25 @@ export default function HomePage() {
 
         <div style={{ marginLeft: 35, marginRight: 35 }}>
           <h2 style={{ fontSize: 18, textAlign: "start" }}>ƯU ĐÃI CHO BẠN</h2>
-          <div style={{ display: "flex", alignItems: "start" }}>
-            <Row gutter={12}>
-              <Col span={8}>
-                <img src={DLMienTrung} style={{ width: "100%" }} />
-              </Col>
-              <Col span={8}>
-                <img src={DLMienBac} style={{ width: "100%" }} />
-              </Col>
-              <Col span={8}>
-                <img src={DLDubai} style={{ width: "100%" }} />
-              </Col>
-            </Row>
-          </div>
+
+          <Row
+            gutter={12}
+            style={{
+              display: "flex",
+              alignItems: "start",
+            }}
+          >
+            <Col span={8}>
+              <img src={DLMienTrung} style={{ width: "100%" }} />
+            </Col>
+            <Col span={8}>
+              <img src={DLMienBac} style={{ width: "100%" }} />
+            </Col>
+            <Col span={8}>
+              <img src={DLDubai} style={{ width: "100%" }} />
+            </Col>
+          </Row>
+
           <h2 style={{ fontSize: 18, textAlign: "start" }}>
             ĐỊA ĐIỂM PHỔ BIẾN
           </h2>
