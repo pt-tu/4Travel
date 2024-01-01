@@ -19,10 +19,10 @@ function AddTour() {
           <Input disabled className="shortInput" />
         </Form.Item>
         <Form.Item name={"origin"} required label="Điểm đi">
-          <Select placeholder="Địa điểm" />
+          <Select placeholder="Địa điểm" mode="multiple" />
         </Form.Item>
         <Form.Item name={"destination"} required label="Điểm đến">
-          <Select placeholder="Địa điểm" />
+          <Select placeholder="Địa điểm" mode="multiple" />
         </Form.Item>
         <Form.Item name={"hotel"} required label="Khách sạn">
           <Input className="shortInput" />
@@ -58,6 +58,7 @@ function AddTour() {
           </Button>
         </Form.Item>
       </Form>
+      {/*thêm upload ảnh tour, */}
     </div>
   );
 }

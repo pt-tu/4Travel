@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./Form.css";
 import { Col, Row, Button, DatePicker, Form, Input } from "antd";
 
@@ -6,7 +7,9 @@ const { TextArea } = Input;
 function AddCustomer() {
   return (
     <div className="wrapper">
-      <h3>Quay lại</h3>
+      <Link to="/danh-sach-khach-hang">
+        <h3>Quay lại</h3>
+      </Link>
       <h1 className="pageTitle">Thông tin khách hàng</h1>
       <Form labelCol={{ span: 3 }} labelAlign="left">
         <Row justify={"space-between"}>

@@ -16,35 +16,48 @@ import AddCustomer from "./pages/Task3/AddCustomer";
 import AddTour from "./pages/Task3/AddTour";
 import ConfirmBooking from "./pages/Task3/ConfirmBooking";
 import { ConfigProvider } from "antd";
+import { QueryClient, QueryClientProvider } from "react-query";
+import Test from "./pages/Test";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 0,
+    },
+  },
+});
 
 function App() {
   return (
-    <ConfigProvider
-      theme={{
-        token: {},
-      }}
-    >
-      <div className="App">
-        <Router>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/dang-nhap" element={<Login />} />
-            <Route path="/dang-ky" element={<SignUp />} />
-            <Route path="/quen-mat-khau" element={<ForgotPassword />} />
-            <Route path="/dat-tour" element={<BookingTour />} />
-            <Route path="/lich-su-dat" element={<BookingTourHistory />} />
-            <Route path="/danh-sach-khach-hang" element={<CustomerList />} />
-            <Route path="/danh-sach-nguon-luc" element={<DeviceList />} />
-            <Route path="/quan-ly-tour" element={<TourManagement />} />
-            <Route path="/them-moi-khach-hang" element={<AddCustomer />} />
-            <Route path="/them-moi-tour" element={<AddTour />} />
-            <Route path="/xac-nhan-dat-tour" element={<ConfirmBooking />} />
-          </Routes>
-          <Footer />
-        </Router>
-      </div>
-    </ConfigProvider>
+    <QueryClientProvider client={queryClient}>
+      <ConfigProvider
+        theme={{
+          token: {},
+        }}
+      >
+        <div className="App">
+          <Router>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/dang-nhap" element={<Login />} />
+              <Route path="/dang-ky" element={<SignUp />} />
+              <Route path="/quen-mat-khau" element={<ForgotPassword />} />
+              <Route path="/dat-tour" element={<BookingTour />} />
+              <Route path="/lich-su-dat" element={<BookingTourHistory />} />
+              <Route path="/danh-sach-khach-hang" element={<CustomerList />} />
+              <Route path="/danh-sach-nguon-luc" element={<DeviceList />} />
+              <Route path="/quan-ly-tour" element={<TourManagement />} />
+              <Route path="/them-moi-khach-hang" element={<AddCustomer />} />
+              <Route path="/them-moi-tour" element={<AddTour />} />
+              <Route path="/xac-nhan-dat-tour" element={<ConfirmBooking />} />
+              <Route path="/test" element={<Test />} />
+            </Routes>
+            <Footer />
+          </Router>
+        </div>
+      </ConfigProvider>
+    </QueryClientProvider>
   );
 }
 
