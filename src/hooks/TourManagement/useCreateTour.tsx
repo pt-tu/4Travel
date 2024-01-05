@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 interface Tour {
   name: string;
   tourguide_id: string;
-  bia: string;
+  bia: any;
   diemdi: string;
   diemden: string;
   hotel: string;
