@@ -58,7 +58,7 @@ function AddTour() {
           </Button>
         </Form.Item>
       </Form>
-      {/*thêm upload ảnh tour, */}
+      {/*thêm upload ảnh tour*/}
     </div>
   );
 }
