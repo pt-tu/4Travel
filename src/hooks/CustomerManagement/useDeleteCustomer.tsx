@@ -1,20 +1,11 @@
 import { useMutation } from "react-query";
 import supabase from "../../app/supabase";
 
-const deleteCustomer = async (id: string[]) => {
-  for (const customerId of id) {
-    try {
-      const { error: customerError } = await supabase
-        .from("customer")
-        .delete()
-        .eq("id", customerId);
+const deleteCustomer = async (id: string) => {
+  const { error } = await supabase.from("customer").delete().eq("id", id);
 
-      if (customerError) {
-        throw customerError;
-      }
-    } catch (error) {
-      console.error("Error deleting:", error);
-    }
+  if (error) {
+    throw error;
   }
 };
 
