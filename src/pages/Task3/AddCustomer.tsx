@@ -106,11 +106,7 @@ function AddCustomer() {
           label="Ngày sinh"
           rules={[{ required: true, message: "Nhập ngày sinh" }]}
         >
-          <DatePicker
-            placeholder="DD/MM/YY"
-            format={"DD/MM/YY"}
-            onChange={(e) => setngaysinh(e?.toISOString() ?? "")}
-          />
+          <DatePicker placeholder="DD/MM/YY" format={"DD/MM/YY"} />
         </Form.Item>
         <Form.Item
           name={"address"}
