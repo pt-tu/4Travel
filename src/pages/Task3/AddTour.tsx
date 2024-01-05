@@ -26,13 +26,6 @@ function AddTour() {
         <Form.Item name={"tgname"} label="Tên hướng dẫn viên">
           <Input disabled className="shortInput" />
         </Form.Item>
-<<<<<<< HEAD
-        <Form.Item name={"origin"} required label="Điểm đi">
-          <Select placeholder="Địa điểm" mode="multiple" />
-        </Form.Item>
-        <Form.Item name={"destination"} required label="Điểm đến">
-          <Select placeholder="Địa điểm" mode="multiple" />
-=======
         <Form.Item
           name={"origin"}
           label="Điểm đi"
@@ -46,7 +39,6 @@ function AddTour() {
           rules={[{ required: true, message: "Nhập điểm đến" }]}
         >
           <Select placeholder="Địa điểm" />
->>>>>>> origin/task-3
         </Form.Item>
         <Form.Item
           name={"hotel"}
