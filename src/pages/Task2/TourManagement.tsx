@@ -2,8 +2,8 @@ import React from "react";
 import { TourManagementCard } from "../../components/Task2Component/TourManagementCard"
 import "../../components/Task2Component/TourStyle.css"
 import { Button } from 'antd';
-import { ArrowRightOutlined, FilterFilled, ReloadOutlined } from '@ant-design/icons';
-import { Input, Space, ConfigProvider, DatePicker, Select } from 'antd';
+import { ArrowRightOutlined, FilterFilled} from '@ant-design/icons';
+import { Input, Space, ConfigProvider} from 'antd';
 
 
 function TourManagement() {
@@ -21,7 +21,7 @@ function TourManagement() {
     >
       <div className="CenterContainer">
 
-        <Search placeholder="Nhập tên, mã tour hoặc khách hàng bạn muốn" className="SearchBar" allowClear enterButton size="large" />
+        <Search placeholder="Nhập tên, mã tour hoặc khách hàng bạn muốn" className="SearchBar" allowClear enterButton size="large" style={{marginTop: "30px"}}/>
         <div style={{ width: '80%', display: 'flex', justifyContent: "space-between" }}>
           <Button icon={<FilterFilled />} className="ButtonUp"> Lọc</Button>
 

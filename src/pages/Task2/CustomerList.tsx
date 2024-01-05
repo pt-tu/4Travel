@@ -1,6 +1,6 @@
 import React from "react";
-import { useState } from "react";
-import { Button, ConfigProvider, Input, Table, Space } from "antd";
+import { useState, useEffect } from "react";
+import { Button, ConfigProvider, Input, Table, Space, Popconfirm } from "antd";
 import {
   ArrowLeftOutlined,
   DeleteOutlined,
@@ -11,21 +11,51 @@ import type { ColumnsType } from "antd/es/table";
 import "../../components/Task2Component/TourStyle.css";
 import "../../components/Task2Component/CustomerDevice.css";
 import { Link } from "react-router-dom";
+import useGetCustomerList from "../../hooks/CustomerManagement/useGetCustomerList";
+import useDeleteCustomer from "../../hooks/CustomerManagement/useDeleteCustomer";
+import { UseQueryResult } from "react-query";
+import supabase from "../../app/supabase";
 
 function CustomerList() {
+
   const { Search } = Input;
-  interface CustomerType {
-    key: React.Key;
-    name: string;
-    cccd: string;
-    address: string;
-    phoneNumber: string;
+  const [DeleteID, setDeleteID] = useState("");
+  const CustomerList1 = useGetCustomerList();
+  const DeleteMutate = useDeleteCustomer(DeleteID);
+
+  /* //Test useState hook to re-render list after delete 
+  const [CustomerListData, setCustomerListData] = useState<Customer[] | null>(null);
+  useEffect(() => {
+    GetCustomerList();
+  }, [])
+  async function GetCustomerList()  {
+    const { data } = await supabase
+      .from("customer")
+      .select();
+      setCustomerListData(data);
+  }*/
+  
+  const DeleteUser = () => {
+    DeleteMutate.mutate();
+    //CustomerList1.refetch();
+    //setCustomerListData(CustomerList1);
   }
-  const columns: ColumnsType<CustomerType> = [
+  interface Customer {
+    id: string;
+    hoten: string;
+    cccd: string;
+    sdt: string;
+    email: string;
+    ngaysinh: string;
+    diachi: string;
+    ghichu: string;
+    yeucau: string;
+  }
+  const columns: ColumnsType<Customer> = [
     {
       title: "Họ tên",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "hoten",
+      key: "hoten",
     },
     {
       title: "CMND/CCCD",
@@ -34,18 +64,18 @@ function CustomerList() {
     },
     {
       title: "Địa chỉ",
-      dataIndex: "address",
-      key: "address",
+      dataIndex: "diachi",
+      key: "diachi",
     },
     {
       title: "Số điện thoại",
-      dataIndex: "phoneNumber",
-      key: "phoneNumber",
+      dataIndex: "sdt",
+      key: "sdt",
     },
     {
       title: "",
-      key: "key",
-      dataIndex: "key",
+      key: "id",
+      dataIndex: "id",
       width: 50,
       render: (text, record) => (
         <Link to="/them-moi-khach-hang">
@@ -56,48 +86,45 @@ function CustomerList() {
     },
     {
       title: "",
-      key: "key",
-      dataIndex: "key",
+      key: "id",
+      dataIndex: "id",
       width: 50,
       render: (text, record) => (
-        <Button
-          icon={<DeleteOutlined />}
-          danger
-          onClick={() => {
-            alert(`Bạn đã chọn xóa ${record.name}`);
-          }}
-        ></Button>
+        <Popconfirm
+          title="Xác nhận?"
+          description={"Xóa người dùng " + record.hoten}
+          onConfirm={DeleteUser}
+        >
+
+          <Button
+            icon={<DeleteOutlined />}
+            danger
+            onClick={() => {
+              setDeleteID(record.id);
+
+            }}
+          ></Button>
+        </Popconfirm>
+
       ),
     },
   ];
-  const Customer: CustomerType[] = [];
-
-  for (let i = 0; i < 46; i++) {
-    Customer.push({
-      key: i,
-      name: `Thái Dương ${i}`,
-      cccd: `1111111${i}`,
-      address: "TP HCM",
-      phoneNumber: "0999000999",
-    });
-  }
 
   const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: CustomerType[]) => {
+
+    onChange: (selectedRowKeys: React.Key[], selectedRows: Customer[]) => {
       console.log(
         `selectedRowKeys: ${selectedRowKeys}`,
         "selectedRows: ",
         selectedRows
       );
     },
-    getCheckboxProps: (record: CustomerType) => ({
-      disabled: record.name === "Disabled User", // Column configuration not to be checked
-      name: record.name,
+    getCheckboxProps: (record: Customer) => ({
+      disabled: record.hoten === "Disabled User", // Column configuration not to be checked
+      name: record.hoten,
     }),
   };
-  const [selectionType, setSelectionType] = useState<"checkbox" | "radio">(
-    "checkbox"
-  );
+
   return (
     <div>
       <ConfigProvider
@@ -114,6 +141,7 @@ function CustomerList() {
             allowClear
             enterButton
             size="large"
+            style={{ marginTop: "30px" }}
           />
           <div
             style={{
@@ -142,12 +170,12 @@ function CustomerList() {
           <Space></Space>
           <Table
             rowSelection={{
-              type: selectionType,
               ...rowSelection,
             }}
             columns={columns}
-            dataSource={Customer}
+            dataSource={CustomerList1.data}
             className="tableFilter"
+            rowKey="id"
           />
         </div>
       </ConfigProvider>

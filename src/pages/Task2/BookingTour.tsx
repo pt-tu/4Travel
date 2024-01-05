@@ -24,7 +24,7 @@ function BookingTour() {
         }}
       >
         <div className="CenterContainer">
-          <div className="LocateDateBar">
+          <div className="LocateDateBar" style={{marginTop: "30px"}}>
             <div className="fitterDiv">
               <div
                 className="fitter"

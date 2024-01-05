@@ -116,6 +116,7 @@ function DeviceList() {
             allowClear
             enterButton
             size="large"
+            style={{marginTop: "30px"}}
           />
           <div
             style={{
