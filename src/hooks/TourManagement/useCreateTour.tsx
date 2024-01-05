@@ -35,19 +35,17 @@ const createTour = async (tour: Tour, id: string) => {
     }
     return data;
   } else {
-    const fileanhbia = uuidv4();
-
-    const { data: idata, error } = await supabase.storage
+    const { data: img, error } = await supabase.storage
       .from("anhbia")
-      .upload("public/" + fileanhbia + ".jpg", tour.bia);
+      .upload("public/" + id + ".jpg", tour.bia);
 
     const { data, error: InsertError } = await supabase.from("tour").upsert({
       id: id,
       name: tour.name,
       tourguide_id: tour.tourguide_id,
       bia:
-        "https://iefaqndqhivmuelkgvvt.supabase.co/storage/v1/object/sign/anhbia/" +
-        tour.bia +
+        "https://iefaqndqhivmuelkgvvt.supabase.co/storage/v1/object/public/anhbia/public" +
+        id +
         ".jpg",
       diemdi: tour.diemdi,
       diemden: tour.diemden,
