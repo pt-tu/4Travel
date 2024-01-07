@@ -1,26 +1,65 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Button, ConfigProvider, Input, Table, Space } from "antd";
-import {
-  ArrowLeftOutlined,
-  DeleteOutlined,
-  FormOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { ArrowLeftOutlined, HistoryOutlined } from "@ant-design/icons";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import type { ColumnsType } from "antd/es/table";
 import "../../components/Task2Component/TourStyle.css";
 import "../../components/Task2Component/CustomerDevice.css";
 import { Link } from "react-router-dom";
+import useGetBookingList from "../../hooks/BookingManagement/useGetBookingList";
+import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
+import useGetTourByTID from "../../hooks/TourManagement/useGetTourByTID";
+import useGetBookingForBill from "../../hooks/Bill/useGetBookingForBill";
+//chuyen lay gio phut giay
+function convertToVietnameseFormat(dateTimeString: any) {
+  // Chuyển đổi thành đối tượng Date
+  const originalDate = new Date(dateTimeString);
+
+  // Đặt múi giờ Việt Nam (UTC+7)
+  const options = { timeZone: "Asia/Ho_Chi_Minh" };
+
+  // Format the date and time using the Vietnamese locale and the specified options
+  const vietnameseFormat = originalDate.toLocaleString("vi-VN", options);
+
+  return vietnameseFormat;
+}
+
+//chuyen khong lay gio phut giay
+function convertToVietnameseDateFormat(dateTimeString: any) {
+  // Chuyển đổi thành đối tượng Date
+  const originalDate = new Date(dateTimeString);
+
+  // Đặt múi giờ Việt Nam (UTC+7)
+  const options: Intl.DateTimeFormatOptions = {
+    timeZone: "Asia/Ho_Chi_Minh",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  };
+
+  // Format the date using the Vietnamese locale and the specified options
+  const vietnameseDateFormat = originalDate.toLocaleDateString(
+    "vi-VN",
+    options
+  );
+
+  return vietnameseDateFormat;
+}
 
 function BookingDaThanhToan() {
   const { Search } = Input;
+  const getbookinglist = useGetBookingForBill();
+  if (getbookinglist.isSuccess) {
+    console.log(getbookinglist.data.datadone);
+  }
+
   interface CustomerType {
     key: React.Key;
-    cusName: string;
-    tourName: string;
+    cusName: any;
+    tourName: any;
     numPeople: number;
-    startDay: string;
+    startDay: any;
     endDay: string;
   }
   const columns: ColumnsType<CustomerType> = [
@@ -66,16 +105,16 @@ function BookingDaThanhToan() {
   ];
   const Customer: CustomerType[] = [];
 
-  for (let i = 0; i < 46; i++) {
+  getbookinglist.data?.datadone.map((item, i) => {
     Customer.push({
       key: i,
-      cusName: `Thái Dương ${i}`, // Fix the property name here
-      tourName: `1111111${i}`,
-      numPeople: 10,
-      startDay: "1/1/2023", // Month is 0-indexed
-      endDay: "1/1/2023",
+      cusName: item.cus_id["hoten" as any], // Fix the property name here
+      tourName: item.tour_id["name" as any],
+      numPeople: item.hanhkhach ? item.hanhkhach.length : 0, //có thể bug nếu hanhkhach null
+      startDay: convertToVietnameseDateFormat(item.tour_id["start" as any]), // Month is 0-indexed
+      endDay: convertToVietnameseDateFormat(item.tour_id["end" as any]), // Month is 0-indexed,
     });
-  }
+  });
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: CustomerType[]) => {
@@ -117,7 +156,7 @@ function BookingDaThanhToan() {
               justifyContent: "space-between",
             }}
           >
-            <Link to="/">
+            <Link to="/booking-can-thanh-toan">
               <Button
                 type="text"
                 icon={<ArrowLeftOutlined />}
@@ -127,13 +166,10 @@ function BookingDaThanhToan() {
                 <b>Quay lại</b>
               </Button>
             </Link>
-            <Link to="/them-moi-khach-hang">
-              <Button icon={<PlusOutlined />} className="ButtonUp"></Button>
-            </Link>
           </div>
           <div>
             <h2 style={{ fontSize: 18 }}>
-              DANH SÁCH CÁC BOOKING CẦN THANH TOÁN
+              DANH SÁCH CÁC BOOKING ĐÃ THANH TOÁN
             </h2>
           </div>
           <Space></Space>

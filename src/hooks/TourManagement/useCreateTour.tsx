@@ -1,6 +1,5 @@
 import { useMutation } from "react-query";
 import supabase from "../../app/supabase";
-import { v4 as uuidv4 } from "uuid";
 
 interface Tour {
   name: string;
@@ -12,52 +11,123 @@ interface Tour {
   start: string;
   end: string;
   chitiet: string;
+  price: number;
 }
 
 const createTour = async (tour: Tour, id: string) => {
   if (!id) {
-    id = uuidv4();
-  }
-  if (tour.bia == null) {
-    const { data, error: InsertError } = await supabase.from("tour").upsert({
-      id: id,
-      name: tour.name,
-      tourguide_id: tour.tourguide_id,
-      diemdi: tour.diemdi,
-      diemden: tour.diemden,
-      hotel: tour.hotel,
-      start: tour.start,
-      end: tour.end,
-      chitiet: tour.chitiet,
-    });
-    if (InsertError) {
-      throw InsertError;
-    }
-    return data;
-  } else {
-    const { data: img, error } = await supabase.storage
-      .from("anhbia")
-      .upload("public/" + id + ".jpg", tour.bia);
+    if (tour.bia == null) {
+      const { data, error: InsertError } = await supabase
+        .from("tour")
+        .insert({
+          name: tour.name,
+          tourguide_id: tour.tourguide_id,
+          diemdi: tour.diemdi,
+          diemden: tour.diemden,
+          hotel: tour.hotel,
+          start: tour.start,
+          end: tour.end,
+          chitiet: tour.chitiet,
+          price: tour.price,
+        })
+        .select();
+      if (InsertError) {
+        throw InsertError;
+      }
+      return data;
+    } else {
+      const { data, error: InsertError } = await supabase
+        .from("tour")
+        .insert({
+          name: tour.name,
+          tourguide_id: tour.tourguide_id,
+          diemdi: tour.diemdi,
+          diemden: tour.diemden,
+          hotel: tour.hotel,
+          start: tour.start,
+          end: tour.end,
+          chitiet: tour.chitiet,
+          price: tour.price,
+        })
+        .select();
 
-    const { data, error: InsertError } = await supabase.from("tour").upsert({
-      id: id,
-      name: tour.name,
-      tourguide_id: tour.tourguide_id,
-      bia:
-        "https://iefaqndqhivmuelkgvvt.supabase.co/storage/v1/object/public/anhbia/public" +
-        id +
-        ".jpg",
-      diemdi: tour.diemdi,
-      diemden: tour.diemden,
-      hotel: tour.hotel,
-      start: tour.start,
-      end: tour.end,
-      chitiet: tour.chitiet,
-    });
-    if (InsertError) {
-      throw InsertError;
+      id = data ? data[0].id : undefined;
+
+      const { data: img, error } = await supabase.storage
+        .from("anhbia")
+        .upload("public/" + id + ".jpg", tour.bia);
+
+      const { data: data2, error: UpdateError } = await supabase
+        .from("tour")
+        .update({
+          bia:
+            "https://iefaqndqhivmuelkgvvt.supabase.co/storage/v1/object/public/anhbia/public/" +
+            id +
+            ".jpg",
+        })
+        .eq("id", id)
+        .select();
+
+      if (InsertError) {
+        throw InsertError;
+      }
+
+      if (UpdateError) {
+        throw UpdateError;
+      }
+
+      return data2;
     }
-    return data;
+  } else {
+    if (tour.bia == null) {
+      const { data, error: InsertError } = await supabase
+        .from("tour")
+        .upsert({
+          id: id,
+          name: tour.name,
+          tourguide_id: tour.tourguide_id,
+          diemdi: tour.diemdi,
+          diemden: tour.diemden,
+          hotel: tour.hotel,
+          start: tour.start,
+          end: tour.end,
+          chitiet: tour.chitiet,
+          price: tour.price,
+        })
+        .select();
+      if (InsertError) {
+        throw InsertError;
+      }
+      return data;
+    } else {
+      const { data: img, error } = await supabase.storage
+        .from("anhbia")
+        .upload("public/" + id + ".jpg", tour.bia);
+
+      const { data, error: InsertError } = await supabase
+        .from("tour")
+        .upsert({
+          id: id,
+          name: tour.name,
+          tourguide_id: tour.tourguide_id,
+          bia:
+            "https://iefaqndqhivmuelkgvvt.supabase.co/storage/v1/object/public/anhbia/public/" +
+            id +
+            ".jpg",
+          diemdi: tour.diemdi,
+          diemden: tour.diemden,
+          hotel: tour.hotel,
+          start: tour.start,
+          end: tour.end,
+          chitiet: tour.chitiet,
+          price: tour.price,
+        })
+        .select();
+      if (InsertError) {
+        throw InsertError;
+      }
+      return data;
+    }
   }
 };
 

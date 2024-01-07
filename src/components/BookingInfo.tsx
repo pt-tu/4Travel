@@ -1,16 +1,59 @@
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Col, Row, Form, Input, Space, Select, DatePicker } from "antd";
+import {
+  Button,
+  Col,
+  Row,
+  Form,
+  Input,
+  Space,
+  Select,
+  DatePicker,
+  FormInstance,
+} from "antd";
+import { useWatch } from "antd/es/form/Form";
+import React, { useEffect } from "react";
+import { useImperativeHandle, useRef } from "react";
 
-function BookingInfo() {
+function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
+  // This is confusing, but for now it's the only way to get the form instance
+  const [form] = Form.useForm(); // Form instance used inside this component to get validation status
+  const bookingInfo = useRef<FormInstance>(); // Form instance referenced by parent component to trigger form validation
+  const hanhkhach = useWatch("passengers", form);
+
+  useImperativeHandle(ref, () => bookingInfo.current);
   // use global color variables
   const listForm = { backgroundColor: "#d9d9d9", padding: 10 };
   const padLeftRight = { padding: "0 5px" };
   const padLeft = { paddingLeft: 5 };
   const padRight = { paddingRight: 5 };
+  const { Option } = Select;
+
+  useEffect(() => {
+    props.sethanhkhach(hanhkhach);
+  }, [hanhkhach]);
+
+  function handleSubmit() {
+    const validationerror = form
+      .getFieldsError()
+      .filter(({ errors }) => errors.length).length;
+    if (!!validationerror) {
+      return;
+    } else {
+      props.onBookingInfoFinish();
+    }
+  }
+
   return (
     <div className="list">
       <h3>Thông tin hành khách</h3>
-      <Form style={listForm} layout="vertical">
+      <Form
+        form={form}
+        ref={bookingInfo as React.Ref<FormInstance>}
+        style={listForm}
+        onFinish={handleSubmit}
+        layout="vertical"
+        initialValues={{ passengers: props.hanhkhach }}
+      >
         <Form.List name="passengers">
           {(fields, { add, remove }) => (
             <div>
@@ -20,7 +63,7 @@ function BookingInfo() {
                     <Col span={7} style={padRight}>
                       <Form.Item
                         {...restField}
-                        name={[name, "name"]}
+                        name={[name, "hoten"]}
                         rules={[{ required: true, message: "Nhập họ tên" }]}
                         label="Họ và tên"
                       >
@@ -30,17 +73,20 @@ function BookingInfo() {
                     <Col style={padLeftRight}>
                       <Form.Item
                         {...restField}
-                        name={[name, "gender"]}
+                        name={[name, "gioitinh"]}
                         rules={[{ required: true, message: "Nhập giới tính" }]}
                         label="Giới tính"
                       >
-                        <Select />
+                        <Select>
+                          <Option value="Nam">Nam</Option>
+                          <Option value="Nữ">Nữ</Option>
+                        </Select>
                       </Form.Item>
                     </Col>
                     <Col style={padLeftRight}>
                       <Form.Item
                         {...restField}
-                        name={[name, "bday"]}
+                        name={[name, "ngaysinh"]}
                         rules={[{ required: true, message: "Nhập ngày sinh" }]}
                         label="Ngày sinh"
                       >
@@ -53,7 +99,7 @@ function BookingInfo() {
                     <Col flex={"auto"} style={padLeftRight}>
                       <Form.Item
                         {...restField}
-                        name={[name, "note"]}
+                        name={[name, "ghichu"]}
                         label="Ghi chú"
                       >
                         <Input />
@@ -84,4 +130,4 @@ function BookingInfo() {
   );
 }
 
-export default BookingInfo;
+export default React.forwardRef(BookingInfo);

@@ -1,20 +1,24 @@
 import { Button, Form, Input, message } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import useSendmail from "../../hooks/accountsystem/useSendMail";
+import { Link, useNavigate } from "react-router-dom";
+import useResetPassword from "../../hooks/accountsystem/useResetPassword";
 
-function ForgotPassword() {
-  const [mail, setMail] = useState("");
-  const sendmail = useSendmail(mail);
-  if (sendmail.isSuccess) {
-    message.success(
-      "Hướng dẫn khôi phục tài khoản đã được gửi đến mail của bạn"
-    );
-  }
+function DoiMatKhau() {
+  const navigate = useNavigate();
+  const [password, setPassword] = useState("");
+  const resetpassword = useResetPassword(password);
   let message1 = "";
-  if (sendmail.isError) {
-    message1 = (sendmail.error as any).message;
+  if (resetpassword.isSuccess) {
+    message.success("Đổi mật khẩu thành công, bạn sẽ quay lại trang chủ");
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
+    navigate("/");
+  }
+
+  if (resetpassword.error) {
+    message1 = (resetpassword.error as any).message;
   }
   return (
     <div>
@@ -28,14 +32,15 @@ function ForgotPassword() {
         }}
       >
         <Form layout="vertical">
-          <FormItem label="Nhập email của bạn" style={{ fontSize: 20 }}>
+          <FormItem label="Nhập mật khẩu mới" style={{ fontSize: 20 }}>
             <Input
               onChange={(e) => {
-                setMail(e.target.value);
+                setPassword(e.target.value);
               }}
             ></Input>
           </FormItem>
           {message1}
+
           <div
             style={{
               display: "flex",
@@ -53,7 +58,7 @@ function ForgotPassword() {
                 fontWeight: "bold",
               }}
               onClick={() => {
-                sendmail.mutate();
+                resetpassword.mutate();
               }}
             >
               Xác nhận
@@ -68,4 +73,4 @@ function ForgotPassword() {
   );
 }
 
-export default ForgotPassword;
+export default DoiMatKhau;

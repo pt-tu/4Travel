@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useCreateCustomer from "../../hooks/CustomerManagement/useCreateCustomer";
 import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
 import "./Form.css";
@@ -9,26 +9,18 @@ import dayjs from 'dayjs';
 
 const { TextArea } = Input;
 
-function AddCustomer() {
+function AddCustomer({ id = "" }) {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
-  const { id } = useParams();
-  const CustomerData = useGetCustomerByCID(id ?? "");
-  
-  
-
-  const [hoten, sethoten] = useState(CustomerData.data?.hoten);
-  const [cccd, setcccd] = useState(CustomerData.data?.cccd);
-  const [sdt, setsdt] = useState(CustomerData.data?.sdt);
-  const [email, setemail] = useState(CustomerData.data?.email);
-  const [ngaysinh, setngaysinh] = useState(CustomerData.data?.ngaysinh);
-  const [diachi, setdiachi] = useState(CustomerData.data?.diachi);
-  const [ghichu, setghichu] = useState(CustomerData.data?.ghichu);
-  const [yeucau, setyeucau] = useState(CustomerData.data?.yeucau);
-
- 
-
+  const [hoten, sethoten] = useState("");
+  const [cccd, setcccd] = useState("");
+  const [sdt, setsdt] = useState("");
+  const [email, setemail] = useState("");
+  const [ngaysinh, setngaysinh] = useState("");
+  const [diachi, setdiachi] = useState("");
+  const [ghichu, setghichu] = useState("");
+  const [yeucau, setyeucau] = useState("");
 
   const createCustomer = useCreateCustomer(
     {
@@ -41,7 +33,7 @@ function AddCustomer() {
       ghichu: ghichu,
       yeucau: yeucau,
     },
-    id ?? ""
+    id
   );
 
   if (createCustomer.isSuccess) {

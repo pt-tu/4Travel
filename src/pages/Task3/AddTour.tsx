@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./Form.css";
 import useCreateTour from "../../hooks/TourManagement/useCreateTour";
@@ -17,10 +17,9 @@ import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
-function AddTour() {
+function AddTour({ id = "" }) {
   const navigate = useNavigate();
 
-  const { id } = useParams();
   const [name, setname] = useState("");
   const [tourguide_id, settourguide_id] = useState("");
   const [bia, setbia] = useState<Blob | null>(null);
@@ -43,7 +42,7 @@ function AddTour() {
       end: end,
       chitiet: chitiet,
     },
-    id ?? ""
+    id
   );
 
   if (createTour.isSuccess) {
@@ -62,7 +61,7 @@ function AddTour() {
   // prettier-ignore
   const diaDiem = ["An Giang", "Bà Rịa – Vũng Tàu", "Bắc Giang", "Bắc Kạn", "Bạc Liêu", "Bắc Ninh", "Bến Tre", "Bình Định", "Bình Dương", "Bình Phước", "Bình Thuận", "Cà Mau", "Cần Thơ", "Cao Bằng", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Điện Biên", "Đồng Nai", "Đồng Tháp", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hậu Giang", "Hòa Bình", "Hưng Yên", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lâm Đồng", "Lạng Sơn", "Lào Cai", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thành phố Hồ Chí Minh", "Thừa Thiên Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"];
   const { Option } = Select;
-  
+
   return (
     <div className="wrapper">
       <Button
