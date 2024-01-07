@@ -4,9 +4,11 @@ import { useParams } from "react-router-dom";
 import useGetTourByTID from "../../hooks/TourManagement/useGetTourByTID";
 import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
 import useGetBookingByPK from "../../hooks/Bill/useGetBookingByPK";
+import useUser from "../../hooks/accountsystem/useUser";
+import BookingDaThanhToan from "./BookingDaThanhToan";
 
 const invoiceStyles: React.CSSProperties = {
-  width: "600px",
+  width: "500px",
   margin: "20px auto",
   padding: "30px",
   border: "1px solid #ccc",
@@ -14,15 +16,26 @@ const invoiceStyles: React.CSSProperties = {
 
 const text: React.CSSProperties = {
   fontSize: 16,
-  paddingBottom: 5,
+  paddingBottom: 15,
   paddingLeft: 18,
   textAlign: "start",
   margin: 0,
 };
 
+const text2: React.CSSProperties = {
+  fontSize: 16,
+
+  paddingLeft: 16,
+  textAlign: "start",
+  marginBottom: 20,
+  margin: 0,
+
+  color: "#4B268F",
+};
+
 const headerStyles: React.CSSProperties = {
   textAlign: "center",
-  marginBottom: "30px",
+  marginBottom: "20px",
 };
 
 const tableStyles: React.CSSProperties = {
@@ -32,6 +45,11 @@ const tableStyles: React.CSSProperties = {
 };
 
 const rowStyles: React.CSSProperties = {
+  borderBottom: "1px solid #ddd",
+};
+
+const rowStyles1: React.CSSProperties = {
+  height: 35,
   borderBottom: "1px solid #ddd",
 };
 
@@ -54,6 +72,7 @@ const seconds = currentDateTime.getSeconds().toString().padStart(2, "0");
 const formattedTime = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 
 const Bill: React.FC = () => {
+  const user = useUser();
   const { cid, tid } = useParams();
   const tour = useGetTourByTID(tid as any);
   const cus = useGetCustomerByCID(cid as any);
@@ -62,6 +81,7 @@ const Bill: React.FC = () => {
   let hoten = "";
   let sdt = "";
   let email = "";
+
   if (cus.isSuccess) {
     hoten = cus.data.hoten;
     sdt = cus.data.sdt;
@@ -70,9 +90,20 @@ const Bill: React.FC = () => {
   console.log(date);
   return (
     <div style={invoiceStyles}>
+      <h1
+        style={{
+          textAlign: "start",
+          marginTop: 20,
+          marginLeft: 30,
+          paddingBottom: 10,
+        }}
+      >
+        4T
+      </h1>
       <div style={headerStyles}>
-        <h2 style={{ marginBottom: 10, color: "#4B268F" }}> HÓA ĐƠN</h2>
+        <h2 style={{ marginBottom: 0, color: "#4B268F" }}> HÓA ĐƠN</h2>
       </div>
+      <p style={text2}>Tên tour: {tour.data.name} </p>
       <Flex>
         <div style={{ width: "50%" }}>
           {/* Red section content */}
@@ -80,7 +111,7 @@ const Bill: React.FC = () => {
             <p
               style={{
                 fontSize: 16,
-                paddingBottom: 5,
+                paddingBottom: 15,
                 textAlign: "start",
                 margin: 0,
                 paddingLeft: 18,
@@ -101,7 +132,7 @@ const Bill: React.FC = () => {
             <p
               style={{
                 fontSize: 16,
-                paddingBottom: 5,
+                paddingBottom: 15,
                 textAlign: "start",
                 margin: 0,
                 color: "#4B268F",
@@ -112,36 +143,44 @@ const Bill: React.FC = () => {
               Chi tiết hóa đơn:
             </p>
             <p style={text}>Vào lúc: {formattedTime} </p>
-            <p style={text}>Bởi:</p>
-            <p style={text}>Số tiền:</p>
+            <p style={text}>Bởi: {user.data?.user_metadata.ten}</p>
           </div>
         </div>
       </Flex>
+
       <table style={tableStyles}>
         <thead>
-          <tr style={rowStyles}>
+          <tr style={rowStyles1}>
             <th>Số thứ tự</th>
             <th>Hành khách</th>
-            <th>Điểm đón</th>
+            <th>Điểm đến</th>
 
             <th>Giá vé</th>
-            <th>Tổng tiền</th>
           </tr>
         </thead>
         <tbody>
-          <tr style={rowStyles}>
-            <td>1</td>
-            <td>Product A</td>
-            <td>2</td>
-            <td>$10.00</td>
-            <td>$20.00</td>
-          </tr>
+          {booking.data.hanhkhach.map((item: any, key: any) => (
+            <tr style={rowStyles}>
+              <td>{key + 1}</td>
+              <td>{item.ten}</td>
+              <td>{tour.data.diemden}</td>
+              <td>${tour.data.price}</td>
+            </tr>
+          ))}
+
           {/* Add more rows as needed */}
           <tr style={lastRowStyles}>
-            <td colSpan={4} style={{ textAlign: "right" }}>
+            <td
+              colSpan={4}
+              style={{
+                textAlign: "right",
+                marginTop: 50,
+                height: 80,
+              }}
+            >
               <strong>Total:</strong>
             </td>
-            <td>$20.00</td>
+            <td>{booking.data.hanhkhach.length * tour.data.price}</td>
           </tr>
         </tbody>
       </table>

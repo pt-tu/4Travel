@@ -20,5 +20,5 @@ const GetBookingByPK = async (cid: string, tid: string) => {
   return data[0];
 };
 export default function useGetBookingByPK(cid: string, tid: string) {
-  return useQuery("customer" + cid, () => GetBookingByPK(cid, tid));
+  return useQuery("booking" + cid + tid, () => GetBookingByPK(cid, tid));
 }
