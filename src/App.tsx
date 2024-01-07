@@ -55,7 +55,7 @@ function App() {
               <Route path="/them-moi-tour" element={<AddTour />} />
               <Route path="/xac-nhan-dat-tour" element={<ConfirmBooking />} />
               <Route path="/test" element={<Test />} />
-              <Route path="/hoa-don" element={<Bill />} />
+              <Route path="/hoa-don/:cid/:tid" element={<Bill />} />
               <Route
                 path="/booking-can-thanh-toan"
                 element={<BookingCanThanhToan />}
