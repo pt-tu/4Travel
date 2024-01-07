@@ -5,7 +5,7 @@ import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerBy
 import "./Form.css";
 import { Col, Row, Button, DatePicker, Form, Input, message } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 
 const { TextArea } = Input;
 
@@ -44,7 +44,6 @@ function AddCustomer({ id = "" }) {
     message.error("Thêm thất bại. Lỗi: " + createCustomer.error.message);
   }
 
-
   return (
     <div className="wrapper">
       <Button
@@ -72,7 +71,6 @@ function AddCustomer({ id = "" }) {
               wrapperCol={{ span: 17 }}
               name={"name"}
               label="Họ và tên"
-              initialValue={CustomerData.data?.hoten}
               rules={[{ required: true, message: "Nhập họ tên" }]}
             >
               <Input onChange={(e) => sethoten(e.target.value)} />
@@ -107,7 +105,12 @@ function AddCustomer({ id = "" }) {
           </Col>
 
           <Col span={11}>
-            <Form.Item labelCol={{ span: 6 }} name={"email"} label="Email" initialValue={email}>
+            <Form.Item
+              labelCol={{ span: 6 }}
+              name={"email"}
+              label="Email"
+              initialValue={email}
+            >
               <Input onChange={(e) => setemail(e.target.value)} />
             </Form.Item>
           </Col>
@@ -142,7 +145,11 @@ function AddCustomer({ id = "" }) {
           <TextArea rows={5} onChange={(e) => setghichu(e.target.value)} />
         </Form.Item>
 
-        <Form.Item name={"adhocreq"} label="Yêu cầu đặc biệt" initialValue={yeucau}>
+        <Form.Item
+          name={"adhocreq"}
+          label="Yêu cầu đặc biệt"
+          initialValue={yeucau}
+        >
           <TextArea rows={5} onChange={(e) => setyeucau(e.target.value)} />
         </Form.Item>
 

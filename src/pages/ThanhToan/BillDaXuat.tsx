@@ -8,6 +8,7 @@ import useUser from "../../hooks/accountsystem/useUser";
 import BookingDaThanhToan from "./BookingDaThanhToan";
 import useCheckOut from "../../hooks/Bill/useCheckOut";
 import { v4 as uuidv4 } from "uuid";
+import useGetBillByBID from "../../hooks/Bill/useGetBillByBID";
 
 const invoiceStyles: React.CSSProperties = {
   width: "500px",
@@ -62,74 +63,32 @@ const lastRowStyles: React.CSSProperties = {
 
 const currentDateTime = new Date();
 
-// Lấy các thành phần ngày, tháng, năm, giờ, phút, giây
-const day = currentDateTime.getDate().toString().padStart(2, "0");
-const month = (currentDateTime.getMonth() + 1).toString().padStart(2, "0");
-const year = currentDateTime.getFullYear().toString().slice(-2);
-const hours = currentDateTime.getHours().toString().padStart(2, "0");
-const minutes = currentDateTime.getMinutes().toString().padStart(2, "0");
-const seconds = currentDateTime.getSeconds().toString().padStart(2, "0");
-
-// Tạo chuỗi định dạng dd/mm/yy hh/mm/ss
-const formattedTime = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
-
-const Bill: React.FC = () => {
+const BillDaXuat: React.FC = () => {
   const user = useUser();
-  const bid = uuidv4();
-  const { cid, tid } = useParams();
-  const tour = useGetTourByTID(tid as any);
-  const cus = useGetCustomerByCID(cid as any);
-  const booking = useGetBookingByPK(cid as any, tid as any);
-  const date = Date();
-  let hoten = "";
+  let { bid } = useParams();
+  let bill = useGetBillByBID(bid);
+  let cusname = "";
+  let tourname = "";
   let sdt = "";
   let email = "";
-  let name = "";
+  let time = "";
+  let by = "";
   let hanhkhach = [""];
+  let total = "";
   let diemden = "";
-  let status = "";
-  let price = 0;
-
-  if (cus.isSuccess) {
-    hoten = cus.data.hoten;
-    sdt = cus.data.sdt;
-    email = cus.data.email;
+  let price = "";
+  if (bill.isSuccess) {
+    cusname = bill.data.cusname;
+    tourname = bill.data.tourname;
+    sdt = bill.data.sdt;
+    email = bill.data.email;
+    time = bill.data.time;
+    by = bill.data.by;
+    hanhkhach = bill.data.hanhkhach;
+    total = bill.data.total;
+    diemden = bill.data.diemden;
+    price = bill.data.price;
   }
-  if (tour.isSuccess) {
-    name = tour.data.name;
-    diemden = tour.data.diemden;
-    price = tour.data.price;
-  }
-  if (booking.isSuccess) {
-    hanhkhach = booking.data.hanhkhach;
-    status = booking.data.status;
-  }
-  console.log(date);
-  const checkout = useCheckOut(
-    {
-      cus_id: cid ? cid : "",
-      tour_id: tid ? tid : "",
-      hanhkhach: hanhkhach,
-    },
-    {
-      id: bid,
-      tourname: name,
-      cusname: hoten,
-      sdt: sdt,
-      email: email,
-      time: formattedTime,
-      by: user.data?.user_metadata.ten,
-      hanhkhach: hanhkhach,
-      total: hanhkhach.length * price,
-      price: price,
-      diemden: diemden,
-    }
-  );
-  useEffect(() => {
-    if (hanhkhach[0] != "" && hoten != "" && booking.data.status != "done") {
-      checkout.mutate();
-    }
-  }, [tour.data, cus.data]); //bug khi reload
   return (
     <div style={invoiceStyles}>
       <h1
@@ -145,7 +104,7 @@ const Bill: React.FC = () => {
       <div style={headerStyles}>
         <h2 style={{ marginBottom: 0, color: "#4B268F" }}> HÓA ĐƠN</h2>
       </div>
-      <p style={text2}>Tên tour: {name} </p>
+      <p style={text2}>Tên tour: {tourname} </p>
       <Flex>
         <div style={{ width: "50%" }}>
           {/* Red section content */}
@@ -163,7 +122,7 @@ const Bill: React.FC = () => {
             >
               Đến:
             </p>
-            <p style={text}>Ông/Bà: {hoten}</p>
+            <p style={text}>Ông/Bà: {cusname}</p>
             <p style={text}>Số điện thoại: {sdt}</p>
             <p style={text}>Email: {email}</p>
           </div>
@@ -184,8 +143,8 @@ const Bill: React.FC = () => {
             >
               Chi tiết hóa đơn:
             </p>
-            <p style={text}>Vào lúc: {formattedTime} </p>
-            <p style={text}>Bởi: {user.data?.user_metadata.ten}</p>
+            <p style={text}>Vào lúc: {time} </p>
+            <p style={text}>Bởi: {by}</p>
           </div>
         </div>
       </Flex>
@@ -222,7 +181,7 @@ const Bill: React.FC = () => {
             >
               <strong>Total:</strong>
             </td>
-            <td>${hanhkhach.length * price}</td>
+            <td>${total}</td>
           </tr>
         </tbody>
       </table>
@@ -230,4 +189,4 @@ const Bill: React.FC = () => {
   );
 };
 
-export default Bill;
+export default BillDaXuat;

@@ -12,6 +12,7 @@ import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerBy
 import useGetTourByTID from "../../hooks/TourManagement/useGetTourByTID";
 import useGetBookingForBill from "../../hooks/Bill/useGetBookingForBill";
 //chuyen lay gio phut giay
+
 function convertToVietnameseFormat(dateTimeString: any) {
   // Chuyển đổi thành đối tượng Date
   const originalDate = new Date(dateTimeString);
@@ -134,6 +135,7 @@ function BookingCanThanhToan() {
   const [selectionType, setSelectionType] = useState<"checkbox" | "radio">(
     "checkbox"
   );
+
   return (
     <div>
       <ConfigProvider

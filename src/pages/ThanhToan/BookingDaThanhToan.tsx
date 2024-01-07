@@ -11,6 +11,7 @@ import useGetBookingList from "../../hooks/BookingManagement/useGetBookingList";
 import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
 import useGetTourByTID from "../../hooks/TourManagement/useGetTourByTID";
 import useGetBookingForBill from "../../hooks/Bill/useGetBookingForBill";
+import useGetBillList from "../../hooks/Bill/useGetBillList";
 //chuyen lay gio phut giay
 function convertToVietnameseFormat(dateTimeString: any) {
   // Chuyển đổi thành đối tượng Date
@@ -53,48 +54,47 @@ function BookingDaThanhToan() {
   if (getbookinglist.isSuccess) {
     console.log(getbookinglist.data.datadone);
   }
+  const bill = useGetBillList();
 
   interface CustomerType {
+    bid: any;
     key: React.Key;
     cusName: any;
     tourName: any;
-    numPeople: number;
-    startDay: any;
-    endDay: string;
+    by: any;
+    time: any;
   }
   const columns: ColumnsType<CustomerType> = [
+    {
+      title: "Tên tour",
+      dataIndex: "tourName",
+      key: "tourName",
+      width: 250,
+    },
     {
       title: "Khách hàng",
       dataIndex: "cusName",
       key: "cusName",
     },
+
     {
-      title: "Tên tour",
-      dataIndex: "tourName",
-      key: "tourName",
+      title: "Người thu",
+      dataIndex: "by",
+      key: "by",
     },
     {
-      title: "Số người",
-      dataIndex: "numPeople",
-      key: "numPeople",
+      title: "Ngày thanh toán",
+      dataIndex: "time",
+      key: "time",
     },
-    {
-      title: "Ngày bắt đầu",
-      dataIndex: "startDay",
-      key: "startDay",
-    },
-    {
-      title: "Ngày kết thúc",
-      dataIndex: "endDay",
-      key: "endDay",
-    },
+
     {
       title: "",
       key: "key",
       dataIndex: "key",
       width: 30,
       render: (text, record) => (
-        <Link to="/hoa-don">
+        <Link to={`/hoa-don-da-xuat/${record.bid}`}>
           <Button
             icon={<LiaFileInvoiceDollarSolid style={{ fontSize: 18 }} />}
           ></Button>
@@ -105,14 +105,14 @@ function BookingDaThanhToan() {
   ];
   const Customer: CustomerType[] = [];
 
-  getbookinglist.data?.datadone.map((item, i) => {
+  bill.data?.map((item, i) => {
     Customer.push({
       key: i,
-      cusName: item.cus_id["hoten" as any], // Fix the property name here
-      tourName: item.tour_id["name" as any],
-      numPeople: item.hanhkhach ? item.hanhkhach.length : 0, //có thể bug nếu hanhkhach null
-      startDay: convertToVietnameseDateFormat(item.tour_id["start" as any]), // Month is 0-indexed
-      endDay: convertToVietnameseDateFormat(item.tour_id["end" as any]), // Month is 0-indexed,
+      bid: item.id,
+      cusName: item.cusname, // Fix the property name here
+      tourName: item.tourname,
+      by: item.by,
+      time: item.time,
     });
   });
 
@@ -169,7 +169,7 @@ function BookingDaThanhToan() {
           </div>
           <div>
             <h2 style={{ fontSize: 18 }}>
-              DANH SÁCH CÁC BOOKING ĐÃ THANH TOÁN
+              DANH SÁCH CÁC HÓA ĐƠN ĐÃ THANH TOÁN
             </h2>
           </div>
           <Space></Space>
