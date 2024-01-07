@@ -22,6 +22,7 @@ import Bill from "./pages/ThanhToan/Bill";
 import BookingCanThanhToan from "./pages/ThanhToan/BookingCanThanhToan";
 import BookingDaThanhToan from "./pages/ThanhToan/BookingDaThanhToan";
 import DoiMatKhau from "./pages/Task1/DoiMatKhau";
+import BaoCao from "./pages/BaoCao";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,13 +37,15 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ConfigProvider
         theme={{
-          token: {},
+          token: { colorPrimaryHover: "none" },
           components: {
             Button: {
               primaryColor: "#4B268F ",
+              boxShadow: "none",
             },
             Input: {
               activeBorderColor: "#4B268F ",
+
               activeShadow: "#4B268F ",
               hoverBorderColor: "#4B268F ",
             },
@@ -72,6 +75,7 @@ function App() {
                 path="/booking-can-thanh-toan"
                 element={<BookingCanThanhToan />}
               />
+              <Route path="/bao-cao" element={<BaoCao />} />
               <Route
                 path="/booking-da-thanh-toan"
                 element={<BookingDaThanhToan />}

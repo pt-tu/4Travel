@@ -43,6 +43,10 @@
   background-color: transparent;
   border:none;
 }
+
+.navbutton.active{
+  border: 1px solid white;
+}
 body {
   font-family: Arial, Helvetica, sans-serif;
 }

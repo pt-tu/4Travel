@@ -177,26 +177,73 @@ function Navbar() {
       </Row>
       <div style={{ display: "flex", justifyContent: "start", marginLeft: 30 }}>
         <Link to="/">
-          <Button className="navbutton">TRANG CHỦ</Button>
+          <Button className={p === "/" ? "navbutton active" : "navbutton"}>
+            TRANG CHỦ
+          </Button>
         </Link>
         <Link to="/dat-tour">
-          <Button className="navbutton">ĐẶT TOUR</Button>
+          <Button
+            className={p === "/dat-tour" ? "navbutton active" : "navbutton"}
+          >
+            ĐẶT TOUR
+          </Button>
         </Link>
-        <Link to="/danh-sach-khach-hang">
-          <Button className="navbutton">KHÁCH HÀNG</Button>
-        </Link>
-        <Link to="/quan-ly-tour">
-          <Button className="navbutton">QUẢN LÝ TOUR</Button>
-        </Link>
-        <Link to="/danh-sach-nguon-luc">
-          <Button className="navbutton">THIẾT BỊ</Button>
-        </Link>
-        <Link to="/booking-can-thanh-toan">
-          <Button className="navbutton">HÓA ĐƠN</Button>
-        </Link>
-        <Link to="">
-          <Button className="navbutton">BÁO CÁO</Button>
-        </Link>
+        {user.data?.user_metadata.role == "user" ? (
+          <>
+            {" "}
+            <Link to="/danh-sach-khach-hang">
+              <Button
+                className={
+                  p === "/danh-sach-khach-hang"
+                    ? "navbutton active"
+                    : "navbutton"
+                }
+              >
+                KHÁCH HÀNG
+              </Button>
+            </Link>
+            <Link to="/quan-ly-tour">
+              <Button
+                className={
+                  p === "/quan-ly-tour" ? "navbutton active" : "navbutton"
+                }
+              >
+                QUẢN LÝ TOUR
+              </Button>
+            </Link>
+            <Link to="/danh-sach-nguon-luc">
+              <Button
+                className={
+                  p === "/danh-sach-nguon-luc"
+                    ? "navbutton active"
+                    : "navbutton"
+                }
+              >
+                THIẾT BỊ
+              </Button>
+            </Link>
+            <Link to="/booking-can-thanh-toan">
+              <Button
+                className={
+                  p === "/booking-can-thanh-toan"
+                    ? "navbutton active"
+                    : "navbutton"
+                }
+              >
+                HÓA ĐƠN
+              </Button>
+            </Link>
+            <Link to="/bao-cao">
+              <Button
+                className={p === "/bao-cao" ? "navbutton active" : "navbutton"}
+              >
+                BÁO CÁO
+              </Button>
+            </Link>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
