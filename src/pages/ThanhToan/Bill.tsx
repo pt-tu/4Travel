@@ -81,11 +81,23 @@ const Bill: React.FC = () => {
   let hoten = "";
   let sdt = "";
   let email = "";
+  let name = "";
+  let hanhkhach = [""];
+  let diemden = "";
+  let price = 0;
 
   if (cus.isSuccess) {
     hoten = cus.data.hoten;
     sdt = cus.data.sdt;
     email = cus.data.email;
+  }
+  if (tour.isSuccess) {
+    name = tour.data.name;
+    diemden = tour.data.diemden;
+    price = tour.data.price;
+  }
+  if (booking.isSuccess) {
+    hanhkhach = booking.data.hanhkhach;
   }
   console.log(date);
   return (
@@ -103,7 +115,7 @@ const Bill: React.FC = () => {
       <div style={headerStyles}>
         <h2 style={{ marginBottom: 0, color: "#4B268F" }}> HÓA ĐƠN</h2>
       </div>
-      <p style={text2}>Tên tour: {tour.data.name} </p>
+      <p style={text2}>Tên tour: {name} </p>
       <Flex>
         <div style={{ width: "50%" }}>
           {/* Red section content */}
@@ -159,12 +171,12 @@ const Bill: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {booking.data.hanhkhach.map((item: any, key: any) => (
+          {hanhkhach.map((item: any, key: any) => (
             <tr style={rowStyles}>
               <td>{key + 1}</td>
               <td>{item.ten}</td>
-              <td>{tour.data.diemden}</td>
-              <td>${tour.data.price}</td>
+              <td>{diemden}</td>
+              <td>${price}</td>
             </tr>
           ))}
 
@@ -180,7 +192,7 @@ const Bill: React.FC = () => {
             >
               <strong>Total:</strong>
             </td>
-            <td>{booking.data.hanhkhach.length * tour.data.price}</td>
+            <td>{hanhkhach.length * price}</td>
           </tr>
         </tbody>
       </table>
