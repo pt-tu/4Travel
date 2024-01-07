@@ -22,6 +22,10 @@ function CustomerList() {
   const [DeleteID, setDeleteID] = useState("");
   const CustomerList1 = useGetCustomerList();
   const DeleteMutate = useDeleteCustomer(DeleteID);
+  if(DeleteMutate.isSuccess)
+  {
+    window.location.reload();
+  }
 
   /* //Test useState hook to re-render list after delete 
   const [CustomerListData, setCustomerListData] = useState<Customer[] | null>(null);
@@ -39,6 +43,7 @@ function CustomerList() {
     DeleteMutate.mutate();
     //CustomerList1.refetch();
     //setCustomerListData(CustomerList1);
+ 
   }
   interface Customer {
     id: string;
@@ -78,7 +83,7 @@ function CustomerList() {
       dataIndex: "id",
       width: 50,
       render: (text, record) => (
-        <Link to="/them-moi-khach-hang">
+        <Link to={'/them-moi-khach-hang/'+record.id}>
           <Button icon={<FormOutlined />}></Button>
         </Link>
         //khi chọn chỉnh sửa sẽ load trang chỉnh sửa, lúc này trang chỉnh sửa input sẽ là dữ liệu của khách hàng được chọn. tham khảo useParams để truyền id khách hàng vào trang chỉnh sửa để query: https://ui.dev/react-router-url-parameters?fbclid=IwAR3grGeq74ae9OoC9xyeMVStoe2agUV-hLT2MnipjCJnK5GyHRXoRvKZEvI, nếu khó quá có thể tách thêm mới khách và chỉnh sửa khách ra 2 page khác nhau

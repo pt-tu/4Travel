@@ -52,6 +52,9 @@ function App() {
               <Route path="/danh-sach-nguon-luc" element={<DeviceList />} />
               <Route path="/quan-ly-tour" element={<TourManagement />} />
               <Route path="/them-moi-khach-hang" element={<AddCustomer />} />
+
+              <Route path="/them-moi-khach-hang/:id" element={<AddCustomer />} />
+
               <Route path="/them-moi-tour" element={<AddTour />} />
               <Route path="/xac-nhan-dat-tour" element={<ConfirmBooking />} />
               <Route path="/test" element={<Test />} />
