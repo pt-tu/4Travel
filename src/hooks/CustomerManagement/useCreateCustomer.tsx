@@ -15,23 +15,43 @@ interface Customer {
 
 const createCustomer = async (customer: Customer, id: string) => {
   if (!id) {
-    id = uuidv4();
+    const { data, error: InsertError } = await supabase
+      .from("customer")
+      .insert({
+        hoten: customer.hoten,
+        cccd: customer.cccd,
+        sdt: customer.sdt,
+        email: customer.email,
+        ngaysinh: customer.ngaysinh,
+        diachi: customer.diachi,
+        ghichu: customer.ghichu,
+        yeucau: customer.yeucau,
+      })
+      .select();
+    if (InsertError) {
+      throw InsertError;
+    }
+    return data;
+  } else {
+    const { data, error: InsertError } = await supabase
+      .from("customer")
+      .upsert({
+        id: id,
+        hoten: customer.hoten,
+        cccd: customer.cccd,
+        sdt: customer.sdt,
+        email: customer.email,
+        ngaysinh: customer.ngaysinh,
+        diachi: customer.diachi,
+        ghichu: customer.ghichu,
+        yeucau: customer.yeucau,
+      })
+      .select();
+    if (InsertError) {
+      throw InsertError;
+    }
+    return data;
   }
-  const { data, error: InsertError } = await supabase.from("customer").upsert({
-    id: id,
-    hoten: customer.hoten,
-    cccd: customer.cccd,
-    sdt: customer.sdt,
-    email: customer.email,
-    ngaysinh: customer.ngaysinh,
-    diachi: customer.diachi,
-    ghichu: customer.ghichu,
-    yeucau: customer.yeucau,
-  });
-  if (InsertError) {
-    throw InsertError;
-  }
-  return data;
 };
 
 export default function useCreateCustomer(customer: Customer, id: string) {
