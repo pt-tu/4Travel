@@ -204,7 +204,7 @@ const Bill: React.FC = () => {
           {hanhkhach.map((item: any, key: any) => (
             <tr style={rowStyles}>
               <td>{key + 1}</td>
-              <td>{item.ten}</td>
+              <td>{item.hoten}</td>
               <td>{diemden}</td>
               <td>${price}</td>
             </tr>
