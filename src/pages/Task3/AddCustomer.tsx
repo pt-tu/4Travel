@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useCreateCustomer from "../../hooks/CustomerManagement/useCreateCustomer";
 import "./Form.css";
 import { Col, Row, Button, DatePicker, Form, Input, message } from "antd";
@@ -7,11 +7,10 @@ import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
-function AddCustomer() {
+function AddCustomer({ id }: any = "") {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
-  const { id } = useParams();
   const [hoten, sethoten] = useState("");
   const [cccd, setcccd] = useState("");
   const [sdt, setsdt] = useState("");
@@ -32,7 +31,7 @@ function AddCustomer() {
       ghichu: ghichu,
       yeucau: yeucau,
     },
-    id ?? ""
+    id
   );
 
   if (createCustomer.isSuccess) {
