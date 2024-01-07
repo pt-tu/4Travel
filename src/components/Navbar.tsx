@@ -74,7 +74,7 @@ function Navbar() {
         <Link to="/danh-sach-nguon-luc">
           <Button className="navbutton">THIẾT BỊ</Button>
         </Link>
-        <Link to="">
+        <Link to="/booking-can-thanh-toan">
           <Button className="navbutton">HÓA ĐƠN</Button>
         </Link>
         <Link to="">
