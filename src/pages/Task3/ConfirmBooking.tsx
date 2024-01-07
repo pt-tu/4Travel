@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Button, FormInstance, message } from "antd";
+import { v4 as uuidv4 } from "uuid";
 import "./Form.css";
 import ContactInfo from "../../components/ContactInfo";
 import BookingInfo from "../../components/BookingInfo";
@@ -47,9 +48,9 @@ function ConfirmBooking({ cus_id = "", tour_id = "" }) {
   );
 
   const createBooking = useCreateBooking({
-    cus_id: cus_id,
-    tour_id: tour_id,
-    hanhkhach: hanhkhach,
+    cus_id: "1000e3bd-94f3-4db1-9fd4-cfca847c289c",
+    tour_id: "6e3398d5-2359-4e9d-9775-4487e0dc4efe",
+    hanhkhach: [{ a: "abc" }],
     status: "none",
   });
 
@@ -124,7 +125,13 @@ function ConfirmBooking({ cus_id = "", tour_id = "" }) {
       />
 
       <div className="submitButton">
-        <Button type="primary" htmlType="submit" onClick={onSubmit}>
+        <Button
+          type="primary"
+          htmlType="submit"
+          onClick={() => {
+            createBooking.mutate();
+          }}
+        >
           Xác nhận
         </Button>
       </div>
