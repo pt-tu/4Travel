@@ -11,6 +11,7 @@ interface Tour {
   start: string;
   end: string;
   chitiet: string;
+  price: number;
 }
 
 const createTour = async (tour: Tour, id: string) => {
@@ -27,6 +28,7 @@ const createTour = async (tour: Tour, id: string) => {
           start: tour.start,
           end: tour.end,
           chitiet: tour.chitiet,
+          price: tour.price,
         })
         .select();
       if (InsertError) {
@@ -34,31 +36,47 @@ const createTour = async (tour: Tour, id: string) => {
       }
       return data;
     } else {
-      const { data: img, error } = await supabase.storage
-        .from("anhbia")
-        .upload("public/" + id + ".jpg", tour.bia);
-
       const { data, error: InsertError } = await supabase
         .from("tour")
         .insert({
           name: tour.name,
           tourguide_id: tour.tourguide_id,
-          bia:
-            "https://iefaqndqhivmuelkgvvt.supabase.co/storage/v1/object/public/anhbia/public" +
-            id +
-            ".jpg",
           diemdi: tour.diemdi,
           diemden: tour.diemden,
           hotel: tour.hotel,
           start: tour.start,
           end: tour.end,
           chitiet: tour.chitiet,
+          price: tour.price,
         })
         .select();
+
+      id = data ? data[0].id : undefined;
+
+      const { data: img, error } = await supabase.storage
+        .from("anhbia")
+        .upload("public/" + id + ".jpg", tour.bia);
+
+      const { data: data2, error: UpdateError } = await supabase
+        .from("tour")
+        .update({
+          bia:
+            "https://iefaqndqhivmuelkgvvt.supabase.co/storage/v1/object/public/anhbia/public/" +
+            id +
+            ".jpg",
+        })
+        .eq("id", id)
+        .select();
+
       if (InsertError) {
         throw InsertError;
       }
-      return data;
+
+      if (UpdateError) {
+        throw UpdateError;
+      }
+
+      return data2;
     }
   } else {
     if (tour.bia == null) {
@@ -74,6 +92,7 @@ const createTour = async (tour: Tour, id: string) => {
           start: tour.start,
           end: tour.end,
           chitiet: tour.chitiet,
+          price: tour.price,
         })
         .select();
       if (InsertError) {
@@ -92,7 +111,7 @@ const createTour = async (tour: Tour, id: string) => {
           name: tour.name,
           tourguide_id: tour.tourguide_id,
           bia:
-            "https://iefaqndqhivmuelkgvvt.supabase.co/storage/v1/object/public/anhbia/public" +
+            "https://iefaqndqhivmuelkgvvt.supabase.co/storage/v1/object/public/anhbia/public/" +
             id +
             ".jpg",
           diemdi: tour.diemdi,
@@ -101,6 +120,7 @@ const createTour = async (tour: Tour, id: string) => {
           start: tour.start,
           end: tour.end,
           chitiet: tour.chitiet,
+          price: tour.price,
         })
         .select();
       if (InsertError) {
