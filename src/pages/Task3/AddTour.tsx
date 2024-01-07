@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Form.css";
 import useCreateTour from "../../hooks/TourManagement/useCreateTour";
 import {
@@ -21,6 +21,7 @@ const { TextArea } = Input;
 function AddTour({ id = "" }) {
   const navigate = useNavigate();
 
+  const [tourid, settourid] = useState("");
   const [name, setname] = useState("");
   const [tourguide_id, settourguide_id] = useState("");
   const [bia, setbia] = useState<Blob | null>(null);
@@ -31,6 +32,10 @@ function AddTour({ id = "" }) {
   const [end, setend] = useState("");
   const [chitiet, setchitiet] = useState("");
   const [price, setprice] = useState(0);
+
+  useEffect(() => {
+    settourid(id);
+  }, []);
 
   const createTour = useCreateTour(
     {
@@ -45,7 +50,7 @@ function AddTour({ id = "" }) {
       chitiet: chitiet,
       price: price,
     },
-    id
+    tourid
   );
 
   if (createTour.isSuccess) {

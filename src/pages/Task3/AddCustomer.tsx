@@ -1,11 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useCreateCustomer from "../../hooks/CustomerManagement/useCreateCustomer";
-import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
 import "./Form.css";
 import { Col, Row, Button, DatePicker, Form, Input, message } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
 
 const { TextArea } = Input;
 
@@ -13,6 +11,7 @@ function AddCustomer({ id = "" }) {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
+  const [customerid, setcustomerid] = useState("");
   const [hoten, sethoten] = useState("");
   const [cccd, setcccd] = useState("");
   const [sdt, setsdt] = useState("");
@@ -21,6 +20,10 @@ function AddCustomer({ id = "" }) {
   const [diachi, setdiachi] = useState("");
   const [ghichu, setghichu] = useState("");
   const [yeucau, setyeucau] = useState("");
+
+  useEffect(() => {
+    setcustomerid(id);
+  }, []);
 
   const createCustomer = useCreateCustomer(
     {
@@ -33,7 +36,7 @@ function AddCustomer({ id = "" }) {
       ghichu: ghichu,
       yeucau: yeucau,
     },
-    id
+    customerid
   );
 
   if (createCustomer.isSuccess) {
@@ -103,12 +106,7 @@ function AddCustomer({ id = "" }) {
           </Col>
 
           <Col span={11}>
-            <Form.Item
-              labelCol={{ span: 6 }}
-              name={"email"}
-              label="Email"
-              initialValue={email}
-            >
+            <Form.Item labelCol={{ span: 6 }} name={"email"} label="Email">
               <Input onChange={(e) => setemail(e.target.value)} />
             </Form.Item>
           </Col>
@@ -137,15 +135,11 @@ function AddCustomer({ id = "" }) {
           />
         </Form.Item>
 
-        <Form.Item name={"notes"} label="Ghi chú" >
+        <Form.Item name={"notes"} label="Ghi chú">
           <TextArea rows={5} onChange={(e) => setghichu(e.target.value)} />
         </Form.Item>
 
-        <Form.Item
-          name={"adhocreq"}
-          label="Yêu cầu đặc biệt"
-          initialValue={yeucau}
-        >
+        <Form.Item name={"adhocreq"} label="Yêu cầu đặc biệt">
           <TextArea rows={5} onChange={(e) => setyeucau(e.target.value)} />
         </Form.Item>
 

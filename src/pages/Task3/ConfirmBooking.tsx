@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Button, FormInstance, message } from "antd";
-import { v4 as uuidv4 } from "uuid";
 import "./Form.css";
 import ContactInfo from "../../components/ContactInfo";
 import BookingInfo from "../../components/BookingInfo";
@@ -14,24 +13,27 @@ function ConfirmBooking({ cus_id = "", tour_id = "" }) {
   const bookingInfo = useRef<FormInstance | undefined>();
   const navigate = useNavigate();
 
+  const [customerid, setcustomerid] = useState("");
+  const [tourid, settourid] = useState("");
   const [hoten, sethoten] = useState("");
   const [cccd, setcccd] = useState("");
   const [sdt, setsdt] = useState("");
   const [email, setemail] = useState("");
-
-  // Nếu không truyền tour_id thì back
-  useEffect(() => {
-    if (!tour_id) {
-      message.error("Không tìm thấy tour");
-      // navigate(-1);
-      tour_id = "35624166-97d0-4653-a5a5-95a2ef920e22";
-      // Cho tour id tạm 1 giá trị. Bao giờ gọi được trang này đúng cách thì nhớ bỏ cái này đi
-    }
-  }, [tour_id]);
-
   const [hanhkhach, sethanhkhach] = useState([
     { hoten: "", gioitinh: "", ngaysinh: "", ghichu: "" },
   ]);
+
+  // Nếu không truyền tour_id thì back
+  useEffect(() => {
+    setcustomerid(cus_id);
+    settourid(tour_id);
+    if (!tourid) {
+      message.error("Không tìm thấy tour");
+      // navigate(-1);
+      settourid("35624166-97d0-4653-a5a5-95a2ef920e22");
+      // Cho tour id tạm 1 giá trị. Bao giờ gọi được trang này đúng cách thì nhớ bỏ cái này đi
+    }
+  }, []);
 
   const createCustomer = useCreateCustomer(
     {
@@ -44,20 +46,21 @@ function ConfirmBooking({ cus_id = "", tour_id = "" }) {
       ghichu: "",
       yeucau: "",
     },
-    cus_id
+    customerid
   );
 
   const createBooking = useCreateBooking({
-    cus_id: "1000e3bd-94f3-4db1-9fd4-cfca847c289c",
-    tour_id: "6e3398d5-2359-4e9d-9775-4487e0dc4efe",
-    hanhkhach: [{ a: "abc" }],
+    cus_id: customerid,
+    tour_id: tourid,
+    hanhkhach: hanhkhach,
     status: "none",
   });
 
   if (createCustomer.isSuccess) {
-    if (!cus_id) {
-      cus_id = createCustomer.data[0].id;
+    if (!customerid) {
+      setcustomerid(createCustomer.data[0].id);
     }
+    createBooking.mutate();
   } else if (createCustomer.error instanceof Error) {
     message.error("Thêm thất bại. Lỗi: " + createCustomer.error.message);
   }
@@ -70,23 +73,20 @@ function ConfirmBooking({ cus_id = "", tour_id = "" }) {
     message.error("Thêm thất bại. Lỗi: " + createBooking.error.message);
   }
 
-  const onSubmit = useCallback(() => {
-    if (contactInfo.current) {
+  function onSubmit() {
+    if (contactInfo.current && bookingInfo.current) {
       contactInfo.current.submit();
     }
+  }
+
+  function onContactInfoFinish() {
     if (bookingInfo.current) {
       bookingInfo.current.submit();
     }
-  }, []);
-
-  function onContactInfoFinish() {
-    createCustomer.mutate();
   }
 
   function onBookingInfoFinish() {
-    if (cus_id) {
-      createBooking.mutate();
-    }
+    createCustomer.mutate();
   }
 
   return (
@@ -104,7 +104,6 @@ function ConfirmBooking({ cus_id = "", tour_id = "" }) {
       <h2>Thông tin khách hàng</h2>
 
       <ContactInfo
-        cus_id={cus_id}
         hoten={hoten}
         sethoten={sethoten}
         cccd={cccd}
@@ -125,13 +124,7 @@ function ConfirmBooking({ cus_id = "", tour_id = "" }) {
       />
 
       <div className="submitButton">
-        <Button
-          type="primary"
-          htmlType="submit"
-          onClick={() => {
-            createBooking.mutate();
-          }}
-        >
+        <Button type="primary" htmlType="submit" onClick={onSubmit}>
           Xác nhận
         </Button>
       </div>
