@@ -21,6 +21,7 @@ import Test from "./pages/Test";
 import Bill from "./pages/ThanhToan/Bill";
 import BookingCanThanhToan from "./pages/ThanhToan/BookingCanThanhToan";
 import BookingDaThanhToan from "./pages/ThanhToan/BookingDaThanhToan";
+import DoiMatKhau from "./pages/Task1/DoiMatKhau";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,6 +37,16 @@ function App() {
       <ConfigProvider
         theme={{
           token: {},
+          components: {
+            Button: {
+              primaryColor: "#4B268F ",
+            },
+            Input: {
+              activeBorderColor: "#4B268F ",
+              activeShadow: "#4B268F ",
+              hoverBorderColor: "#4B268F ",
+            },
+          },
         }}
       >
         <div className="App">
@@ -56,6 +67,7 @@ function App() {
               <Route path="/xac-nhan-dat-tour" element={<ConfirmBooking />} />
               <Route path="/test" element={<Test />} />
               <Route path="/hoa-don/:cid/:tid" element={<Bill />} />
+              <Route path="/reset-password" element={<DoiMatKhau />}></Route>
               <Route
                 path="/booking-can-thanh-toan"
                 element={<BookingCanThanhToan />}
