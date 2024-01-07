@@ -72,7 +72,6 @@ function AddCustomer({ id = "" }) {
               wrapperCol={{ span: 17 }}
               name={"name"}
               label="Họ và tên"
-              initialValue={CustomerData.data?.hoten}
               rules={[{ required: true, message: "Nhập họ tên" }]}
             >
               <Input onChange={(e) => sethoten(e.target.value)} />
@@ -84,7 +83,6 @@ function AddCustomer({ id = "" }) {
               labelCol={{ span: 6 }}
               name={"cic"}
               label="CMND/CCCD"
-              initialValue={cccd}
               rules={[{ required: true, message: "Nhập CCCD" }]}
             >
               <Input onChange={(e) => setcccd(e.target.value)} />
@@ -99,7 +97,6 @@ function AddCustomer({ id = "" }) {
               wrapperCol={{ span: 17 }}
               name={"phone"}
               label="Số điện thoại"
-              initialValue={sdt}
               rules={[{ required: true, message: "Nhập SĐT" }]}
             >
               <Input onChange={(e) => setsdt(e.target.value)} />
@@ -107,7 +104,7 @@ function AddCustomer({ id = "" }) {
           </Col>
 
           <Col span={11}>
-            <Form.Item labelCol={{ span: 6 }} name={"email"} label="Email" initialValue={email}>
+            <Form.Item labelCol={{ span: 6 }} name={"email"} label="Email">
               <Input onChange={(e) => setemail(e.target.value)} />
             </Form.Item>
           </Col>
@@ -122,14 +119,12 @@ function AddCustomer({ id = "" }) {
             placeholder="DD/MM/YY"
             format={"DD/MM/YY"}
             onChange={(e) => setngaysinh(e?.toISOString() ?? "")}
-            defaultValue={dayjs(ngaysinh)}
           />
         </Form.Item>
 
         <Form.Item
           name={"address"}
           label="Địa chỉ"
-          initialValue={diachi}
           rules={[{ required: true, message: "Nhập địa chỉ" }]}
         >
           <Input
@@ -138,11 +133,11 @@ function AddCustomer({ id = "" }) {
           />
         </Form.Item>
 
-        <Form.Item name={"notes"} label="Ghi chú" initialValue={ghichu}>
+        <Form.Item name={"notes"} label="Ghi chú" >
           <TextArea rows={5} onChange={(e) => setghichu(e.target.value)} />
         </Form.Item>
 
-        <Form.Item name={"adhocreq"} label="Yêu cầu đặc biệt" initialValue={yeucau}>
+        <Form.Item name={"adhocreq"} label="Yêu cầu đặc biệt" >
           <TextArea rows={5} onChange={(e) => setyeucau(e.target.value)} />
         </Form.Item>
 
