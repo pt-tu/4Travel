@@ -12,15 +12,15 @@ import {
   Select,
   Upload,
   message,
+  InputNumber,
 } from "antd";
 import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
-function AddTour() {
+function AddTour({ id = "" }) {
   const navigate = useNavigate();
 
-  const { id } = useParams();
   const [name, setname] = useState("");
   const [tourguide_id, settourguide_id] = useState("");
   const [bia, setbia] = useState<Blob | null>(null);
@@ -30,6 +30,7 @@ function AddTour() {
   const [start, setstart] = useState("");
   const [end, setend] = useState("");
   const [chitiet, setchitiet] = useState("");
+  const [price, setprice] = useState(0);
 
   const createTour = useCreateTour(
     {
@@ -42,9 +43,9 @@ function AddTour() {
       start: start,
       end: end,
       chitiet: chitiet,
-      price: 0,
+      price: price,
     },
-    id ?? ""
+    id
   );
 
   if (createTour.isSuccess) {
@@ -180,6 +181,10 @@ function AddTour() {
             </Form.Item>
           </Col>
         </Row>
+
+        <Form.Item name={"price"} label="Giá">
+          <InputNumber onChange={(e) => setprice(Number(e?.valueOf()) || 0)} />
+        </Form.Item>
 
         <Form.Item name={"note"} label="Ghi chú">
           <TextArea rows={5} onChange={(e) => setchitiet(e.target.value)} />
