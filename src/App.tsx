@@ -18,6 +18,9 @@ import ConfirmBooking from "./pages/Task3/ConfirmBooking";
 import { ConfigProvider } from "antd";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Test from "./pages/Test";
+import Bill from "./pages/ThanhToan/Bill";
+import BookingCanThanhToan from "./pages/ThanhToan/BookingCanThanhToan";
+import BookingDaThanhToan from "./pages/ThanhToan/BookingDaThanhToan";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -52,6 +55,15 @@ function App() {
               <Route path="/them-moi-tour" element={<AddTour />} />
               <Route path="/xac-nhan-dat-tour" element={<ConfirmBooking />} />
               <Route path="/test" element={<Test />} />
+              <Route path="/hoa-don" element={<Bill />} />
+              <Route
+                path="/booking-can-thanh-toan"
+                element={<BookingCanThanhToan />}
+              />
+              <Route
+                path="/booking-da-thanh-toan"
+                element={<BookingDaThanhToan />}
+              />
             </Routes>
             <Footer />
           </Router>
