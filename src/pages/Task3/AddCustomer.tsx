@@ -7,7 +7,7 @@ import { ArrowLeftOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
-function AddCustomer({ id }: any = "") {
+function AddCustomer({ id = "" }) {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 

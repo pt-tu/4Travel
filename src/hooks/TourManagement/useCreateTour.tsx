@@ -1,6 +1,5 @@
 import { useMutation } from "react-query";
 import supabase from "../../app/supabase";
-import { v4 as uuidv4 } from "uuid";
 
 interface Tour {
   name: string;

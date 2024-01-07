@@ -17,7 +17,7 @@ import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
-function AddTour({ id }: any = "") {
+function AddTour({ id = "" }) {
   const navigate = useNavigate();
 
   const [name, setname] = useState("");
