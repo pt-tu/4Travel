@@ -13,12 +13,17 @@ import {
 import { Input, Space, ConfigProvider, DatePicker, Select } from "antd";
 import { Link } from "react-router-dom";
 import useGetTourPage from "../../hooks/TourManagement/useGetTourPage";
+import { Console } from "console";
+
 function BookingTour() {
   const { Search } = Input;
   const [Page, setPage] = useState<number>(1);
-
-  const GetTourPage = useGetTourPage(Page);
-  
+  const [diemdi, setdiemdi] = useState("");
+  const [diemden, setdiemden] = useState("");
+  const [ngaydi, setngaydi] = useState("2000-01-01T00:00:00.001Z");
+  const [ngayve, setngayve] = useState("2099-01-01T00:00:00.001Z");
+  const [TourName, setTourName] = useState("");
+  const GetTourPage = useGetTourPage(Page, diemdi, diemden, ngaydi, ngayve, TourName);
   return (
     <div>
       <ConfigProvider
@@ -48,14 +53,17 @@ function BookingTour() {
                 <Select
                   size="large"
                   className="Selector"
-                  defaultValue="DaNang"
                   style={{ marginRight: 20 }}
                   bordered={false}
                   options={[
-                    { value: "DaNang", label: "Đà Nẵng" },
-                    { value: "HaNoi", label: "Hà Nội" },
-                    { value: "HCM", label: "Hồ Chí Minh" },
+                    { value: "Đà Nẵng", label: "Đà Nẵng" },
+                    { value: "Hà Nội", label: "Hà Nội" },
+                    { value: "Hồ Chí Minh", label: "Hồ Chí Minh" },
                   ]}
+                  placeholder="Điểm đi"
+                  onChange={(value: string) => {
+                    setdiemdi(value);
+                  }}
                 />
                 <ArrowRightOutlined></ArrowRightOutlined>
                 <img
@@ -66,18 +74,26 @@ function BookingTour() {
                 <Select
                   size="large"
                   className="Selector"
-                  defaultValue="HaNoi"
                   bordered={false}
                   options={[
-                    { value: "DaNang", label: "Đà Nẵng" },
-                    { value: "HaNoi", label: "Hà Nội" },
-                    { value: "HCM", label: "Hồ Chí Minh" },
+                    { value: "Đà Nẵng", label: "Đà Nẵng" },
+                    { value: "Hà Nội", label: "Hà Nội" },
+                    { value: "Hồ Chí Minh", label: "Hồ Chí Minh" },
                   ]}
+                  placeholder="Điểm đến"
+                  onChange={(value: string) => {
+                    setdiemden(value);
+                  }}
                 />
               </div>
             </div>
             <div className="fitterDiv">
-              <DatePicker.RangePicker className="fitter"></DatePicker.RangePicker>
+              <DatePicker.RangePicker className="fitter"
+                onChange={(date: any) => {
+                  setngaydi(date[0]?.toISOString() ?? "");
+                  setngayve(date[1]?.toISOString() ?? "");
+                }}
+              ></DatePicker.RangePicker>
             </div>
 
             <Button
@@ -89,18 +105,27 @@ function BookingTour() {
                 marginTop: "3px",
                 marginRight: "3px",
                 marginLeft: "3px",
-                color:"White"
+                color: "White"
+              }}
+              onClick={() => {
+                setPage(1);
+                GetTourPage.refetch();
               }}
             >
               <b>Tìm kiếm</b>
             </Button>
           </div>
           <Search
-            placeholder="Nhập tên hoặc mã tour bạn muốn"
+            placeholder="Nhập tên tour bạn muốn"
             className="SearchBar"
-            enterButton={<SearchOutlined style={{color:"White"}}/>}
+            enterButton={<SearchOutlined style={{ color: "White" }} />}
             size="large"
             allowClear
+            onChange={(e) => setTourName(e.target.value)}
+            onSearch={() => {
+              setPage(1);
+              GetTourPage.refetch();
+            }}
           />
           <div
             style={{
@@ -139,7 +164,7 @@ function BookingTour() {
               type="primary"
               icon={<ArrowLeftOutlined />}
               className="ButtonNext"
-              style={{ boxShadow: "none", color:"White" }}
+              style={{ boxShadow: "none", color: "White" }}
               onClick={() => {
                 Page > 1 && setPage(Page - 1)
               }}
@@ -151,8 +176,8 @@ function BookingTour() {
               type="primary"
               icon={<ArrowRightOutlined />}
               className="ButtonNext"
-              style={{ direction: "rtl", boxShadow: "none", color:"White"}}
-              onClick={() => {GetTourPage.data?.length!=0 && setPage(Page + 1) }}
+              style={{ direction: "rtl", boxShadow: "none", color: "White" }}
+              onClick={() => { GetTourPage.data?.length !== 0 && setPage(Page + 1) }}
             >
               Xem thêm
             </Button>
