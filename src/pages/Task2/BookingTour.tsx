@@ -13,8 +13,7 @@ import {
 import { Input, Space, ConfigProvider, DatePicker, Select } from "antd";
 import { Link } from "react-router-dom";
 import useGetTourPage from "../../hooks/TourManagement/useGetTourPage";
-import { Console } from "console";
-
+import useUser from "../../hooks/accountsystem/useUser";
 function BookingTour() {
   const { Search } = Input;
   const [Page, setPage] = useState<number>(1);
@@ -24,6 +23,12 @@ function BookingTour() {
   const [ngayve, setngayve] = useState("2099-01-01T00:00:00.001Z");
   const [TourName, setTourName] = useState("");
   const GetTourPage = useGetTourPage(Page, diemdi, diemden, ngaydi, ngayve, TourName);
+  const userAccount= useUser();
+  var isVis=false;
+
+  if(userAccount.data?.user_metadata.role=="user"){
+    isVis=true;
+  }
   return (
     <div>
       <ConfigProvider
@@ -131,15 +136,15 @@ function BookingTour() {
             style={{
               width: "80%",
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "flex-end",
             }}
           >
-            <Button icon={<FilterFilled />} className="ButtonUp">
-              {" "}
-              Lọc
-            </Button>
-            <Link to="/lich-su-dat">
-              <Button icon={<HistoryOutlined />} className="ButtonUp"></Button>
+            
+            <Link to="/lich-su-dat" style={{display: isVis ? 'block' : 'none'}}>
+              <Button icon={<HistoryOutlined />} style={{visibility: isVis ? 'visible' : 'hidden'  }} 
+              className="ButtonUp" disabled={!isVis}>
+
+              </Button>
             </Link>
           </div>
           {GetTourPage.data?.map((item) => (

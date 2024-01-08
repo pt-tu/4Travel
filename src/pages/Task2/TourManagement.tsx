@@ -39,10 +39,7 @@ function TourManagement() {
             GetTourPage.refetch();
           }}
         />
-        <div style={{ width: '80%', display: 'flex', justifyContent: "space-between" }}>
-          <Button icon={<FilterFilled />} className="ButtonUp"> Lọc</Button>
-
-        </div>
+        
         {GetTourPage.data?.map((item) => (
           <TourManagementCard
             name={item.name}
