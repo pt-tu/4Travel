@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import useCreateCustomer from "../../hooks/CustomerManagement/useCreateCustomer";
+import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
 import "./Form.css";
 import { Col, Row, Button, DatePicker, Form, Input, message } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
 
 const { TextArea } = Input;
 
-function AddCustomer({ id = "" }) {
+function AddCustomer() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [customerid, setcustomerid] = useState("");
+  const customerid = location.state ? location.state.id ?? "" : "";
   const [hoten, sethoten] = useState("");
   const [cccd, setcccd] = useState("");
   const [sdt, setsdt] = useState("");
@@ -20,10 +23,6 @@ function AddCustomer({ id = "" }) {
   const [diachi, setdiachi] = useState("");
   const [ghichu, setghichu] = useState("");
   const [yeucau, setyeucau] = useState("");
-
-  useEffect(() => {
-    setcustomerid(id);
-  }, []);
 
   const createCustomer = useCreateCustomer(
     {
@@ -40,12 +39,46 @@ function AddCustomer({ id = "" }) {
   );
 
   if (createCustomer.isSuccess) {
-    message.success("Thêm thành công");
+    message.success("Cập nhật thông tin thành công");
     navigate(-1);
     createCustomer.reset();
   } else if (createCustomer.error instanceof Error) {
     message.error("Thêm thất bại. Lỗi: " + createCustomer.error.message);
   }
+
+  const getcustomer = useGetCustomerByCID(customerid);
+
+  if (customerid && getcustomer.error instanceof Error) {
+    message.error(getcustomer.error.message);
+  }
+
+  useEffect(() => {
+    if (getcustomer.data) {
+      sethoten(getcustomer.data.hoten);
+      setcccd(getcustomer.data.cccd);
+      setsdt(getcustomer.data.sdt);
+      setemail(getcustomer.data.email);
+      setngaysinh(
+        getcustomer.data.ngaysinh
+          ? dayjs(getcustomer.data.ngaysinh).toISOString()
+          : ""
+      );
+      setdiachi(getcustomer.data.diachi);
+      setghichu(getcustomer.data.ghichu);
+      setyeucau(getcustomer.data.yeucau);
+
+      form.setFieldsValue({
+        name: getcustomer.data.hoten,
+        cic: getcustomer.data.cccd,
+        phone: getcustomer.data.sdt,
+        email: getcustomer.data.email,
+        bday: getcustomer.data.ngaysinh ? dayjs(getcustomer.data.ngaysinh) : "",
+        address: getcustomer.data.diachi,
+        notes: getcustomer.data.ghichu,
+        adhocreq: getcustomer.data.yeucau,
+      });
+    }
+  }, [getcustomer.data]);
 
   return (
     <div className="wrapper">
