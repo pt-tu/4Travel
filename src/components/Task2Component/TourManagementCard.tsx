@@ -3,7 +3,18 @@ import "./TourStyle.css";
 import Hanoi from "../../images/hanoi.jpg";
 import { Button, ConfigProvider } from "antd";
 import { Link } from "react-router-dom";
-export const TourManagementCard = () => {
+import location from "../../images/location.png"
+
+interface PropsType {
+  name: string,
+  id: string,
+  diemdi: string,
+  hotel: string,
+  bia: string,
+  price: string,
+}
+
+export const TourManagementCard = (props: PropsType) => {
   return (
     <div className="card GridContainer">
       <ConfigProvider
@@ -14,20 +25,19 @@ export const TourManagementCard = () => {
         }}
       >
         <div>
-          <img className="cardImg" src={Hanoi} alt="Hanoi" />
+          <img className="cardImg" src={props?.bia ?? location} alt={props?.name} />
         </div>
         <div style={{ textAlign: "left", paddingLeft: 10 }}>
           <h3 className="title">
-            Combo 3N3Đ Hà Nội & Khách sạn 5 Sao (Bao ăn sáng, dịch vụ đưa đón
-            tại sân bay)
+            {props?.name}
           </h3>
           <span className="normal">Mã tour: </span>
-          <span className="NameBold">NDDNG2640-011-161123VU</span> <br></br>
+          <span className="NameBold">{props?.id}</span> <br></br>
           <span className="normal">Nơi khởi hành: </span>
-          <span className="NameBold">Đà Nẵng</span> <br></br>
+          <span className="NameBold">{props?.diemdi}</span> <br></br>
           <span className="normal">Khách sạn: </span>
           <span className="NameBold">
-            Peridot Grand Luxury Boutique Hotel
+            {props?.hotel}
           </span>{" "}
           <br></br>
         </div>
