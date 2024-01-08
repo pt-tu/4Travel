@@ -12,7 +12,7 @@ const createBooking = async (booking: Booking) => {
   if (booking.cus_id && booking.tour_id) {
     const { data, error: InsertError } = await supabase
       .from("booking")
-      .insert({
+      .upsert({
         cus_id: booking.cus_id,
         tour_id: booking.tour_id,
         hanhkhach: booking.hanhkhach,
