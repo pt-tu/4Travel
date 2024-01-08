@@ -9,6 +9,7 @@ import useCreateCustomer from "../../hooks/CustomerManagement/useCreateCustomer"
 import useCreateBooking from "../../hooks/BookingManagement/useCreateBooking";
 import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
 import useGetCustomerByCCCD from "../../hooks/CustomerManagement/useGetCustomerByCCCD";
+import useUser from "../../hooks/accountsystem/useUser";
 import dayjs from "dayjs";
 
 function ConfirmBooking() {
@@ -17,6 +18,7 @@ function ConfirmBooking() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const user = useUser();
   const [customerid, setcustomerid] = useState(
     location.state ? location.state.cus_id ?? "" : ""
   );
@@ -70,12 +72,15 @@ function ConfirmBooking() {
     );
   }
 
-  const createBooking = useCreateBooking({
-    cus_id: customerid,
-    tour_id: tourid,
-    hanhkhach: hanhkhach,
-    status: "none",
-  });
+  const createBooking = useCreateBooking(
+    {
+      cus_id: customerid,
+      tour_id: tourid,
+      hanhkhach: hanhkhach,
+      status: "none",
+    },
+    user.data ? user.data.id : ""
+  );
   if (createBooking.isSuccess) {
     message.success("Cập nhật booking thành công");
     navigate(-1);

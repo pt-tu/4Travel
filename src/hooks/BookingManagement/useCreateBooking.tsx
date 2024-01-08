@@ -8,13 +8,14 @@ interface Booking {
   status: string;
 }
 
-const createBooking = async (booking: Booking) => {
+const createBooking = async (booking: Booking, user_id: string) => {
   if (booking.cus_id && booking.tour_id) {
     const { data, error: InsertError } = await supabase
       .from("booking")
       .upsert({
         cus_id: booking.cus_id,
         tour_id: booking.tour_id,
+        user_id: user_id,
         hanhkhach: booking.hanhkhach,
         status: booking.status,
       })
@@ -28,6 +29,6 @@ const createBooking = async (booking: Booking) => {
   }
 };
 
-export default function useCreateBooking(booking: Booking) {
-  return useMutation(() => createBooking(booking));
+export default function useCreateBooking(booking: Booking, user_id: string) {
+  return useMutation(() => createBooking(booking, user_id));
 }
