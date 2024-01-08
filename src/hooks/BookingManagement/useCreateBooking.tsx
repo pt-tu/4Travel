@@ -22,7 +22,7 @@ const createBooking = async (booking: Booking) => {
     if (InsertError) {
       throw InsertError;
     }
-    return data;
+    return data[0];
   } else {
     throw new Error("Missing customer id or tour id");
   }

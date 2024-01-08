@@ -34,7 +34,7 @@ const createTour = async (tour: Tour, id: string) => {
       if (InsertError) {
         throw InsertError;
       }
-      return data;
+      return data[0];
     } else {
       const { data, error: InsertError } = await supabase
         .from("tour")
@@ -76,7 +76,7 @@ const createTour = async (tour: Tour, id: string) => {
         throw UpdateError;
       }
 
-      return data2;
+      return data2[0];
     }
   } else {
     if (tour.bia == null) {
@@ -98,7 +98,7 @@ const createTour = async (tour: Tour, id: string) => {
       if (InsertError) {
         throw InsertError;
       }
-      return data;
+      return data[0];
     } else {
       const { data: img, error } = await supabase.storage
         .from("anhbia")
@@ -126,7 +126,7 @@ const createTour = async (tour: Tour, id: string) => {
       if (InsertError) {
         throw InsertError;
       }
-      return data;
+      return data[0];
     }
   }
 };

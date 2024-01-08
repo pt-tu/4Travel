@@ -30,7 +30,7 @@ const createCustomer = async (customer: Customer, id: string) => {
     if (InsertError) {
       throw InsertError;
     }
-    return data;
+    return data[0];
   } else {
     const { data, error: InsertError } = await supabase
       .from("customer")
@@ -49,7 +49,7 @@ const createCustomer = async (customer: Customer, id: string) => {
     if (InsertError) {
       throw InsertError;
     }
-    return data;
+    return data[0];
   }
 };
 
