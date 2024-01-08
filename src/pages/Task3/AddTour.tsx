@@ -61,7 +61,7 @@ function AddTour() {
     message.error("Thêm thất bại. Lỗi: " + createTour.error.message);
   }
 
-  const handleImageChange = (e: any) => {
+  const HandleImageChange = (e: any) => {
     const file = e.file;
     setbia(file.originFileObj);
   };
@@ -103,7 +103,7 @@ function AddTour() {
         price: gettour.data.price,
       });
     }
-  }, [gettour.data]);
+  }, [tourid]);
 
   return (
     <div className="wrapper">
@@ -237,7 +237,7 @@ function AddTour() {
             listType="picture-card"
             accept=".jpg"
             showUploadList={false}
-            onChange={handleImageChange}
+            onChange={HandleImageChange}
           >
             {bia != null ? (
               <img

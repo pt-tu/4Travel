@@ -13,7 +13,7 @@ function ContactInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
   const padRight = { paddingRight: 5 };
   const padLeft = { paddingLeft: 5 };
 
-  function handleFinish() {
+  function HandleFinish() {
     const validationerror = form
       .getFieldsError()
       .filter(({ errors }) => errors.length).length;
@@ -32,7 +32,7 @@ function ContactInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
         ref={contactInfo as React.Ref<FormInstance>}
         style={contactForm}
         layout="vertical"
-        onFinish={handleFinish}
+        onFinish={HandleFinish}
       >
         <Row>
           <Col span={12} style={padRight}>

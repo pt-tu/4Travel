@@ -32,7 +32,7 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
     props.sethanhkhach(hanhkhach);
   }, [hanhkhach]);
 
-  function handleSubmit() {
+  function HandleSubmit() {
     const validationerror = form
       .getFieldsError()
       .filter(({ errors }) => errors.length).length;
@@ -50,7 +50,7 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
         form={form}
         ref={bookingInfo as React.Ref<FormInstance>}
         style={listForm}
-        onFinish={handleSubmit}
+        onFinish={HandleSubmit}
         layout="vertical"
         initialValues={{ passengers: props.hanhkhach }}
       >
