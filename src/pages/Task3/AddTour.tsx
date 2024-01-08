@@ -1,7 +1,8 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./Form.css";
 import useCreateTour from "../../hooks/TourManagement/useCreateTour";
+import useGetTourByTID from "../../hooks/TourManagement/useGetTourByTID";
 import {
   Col,
   Row,
@@ -15,13 +16,16 @@ import {
   InputNumber,
 } from "antd";
 import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
 
 const { TextArea } = Input;
 
-function AddTour({ id = "" }) {
+function AddTour() {
+  const [form] = Form.useForm();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [tourid, settourid] = useState("");
+  const tourid = location.state ? location.state.id ?? "" : "";
   const [name, setname] = useState("");
   const [tourguide_id, settourguide_id] = useState("");
   const [bia, setbia] = useState<Blob | null>(null);
@@ -32,10 +36,6 @@ function AddTour({ id = "" }) {
   const [end, setend] = useState("");
   const [chitiet, setchitiet] = useState("");
   const [price, setprice] = useState(0);
-
-  useEffect(() => {
-    settourid(id);
-  }, []);
 
   const createTour = useCreateTour(
     {
@@ -54,7 +54,7 @@ function AddTour({ id = "" }) {
   );
 
   if (createTour.isSuccess) {
-    message.success("Thêm thành công");
+    message.success("Cập nhật thông tin thành công");
     navigate(-1);
     createTour.reset();
   } else if (createTour.error instanceof Error) {
@@ -69,6 +69,41 @@ function AddTour({ id = "" }) {
   // prettier-ignore
   const diaDiem = ["An Giang", "Bà Rịa – Vũng Tàu", "Bắc Giang", "Bắc Kạn", "Bạc Liêu", "Bắc Ninh", "Bến Tre", "Bình Định", "Bình Dương", "Bình Phước", "Bình Thuận", "Cà Mau", "Cần Thơ", "Cao Bằng", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Điện Biên", "Đồng Nai", "Đồng Tháp", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hậu Giang", "Hòa Bình", "Hưng Yên", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lâm Đồng", "Lạng Sơn", "Lào Cai", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thành phố Hồ Chí Minh", "Thừa Thiên Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"];
   const { Option } = Select;
+
+  const gettour = useGetTourByTID(tourid);
+
+  if (tourid && gettour.error instanceof Error) {
+    message.error(gettour.error.message);
+  }
+
+  useEffect(() => {
+    if (gettour.data) {
+      setname(gettour.data.name);
+      settourguide_id(gettour.data.tourguide_id);
+      setdiemdi(gettour.data.diemdi);
+      setdiemden(gettour.data.diemden);
+      sethotel(gettour.data.hotel);
+      setstart(
+        gettour.data.start ? dayjs(gettour.data.start).toISOString() : ""
+      );
+      setend(gettour.data.end ? dayjs(gettour.data.end).toISOString() : "");
+      setchitiet(gettour.data.chitiet);
+      setprice(gettour.data.price);
+
+      form.setFieldsValue({
+        name: gettour.data.name,
+        tgid: gettour.data.tourguide_id,
+        tgname: gettour.data.tourguide_name,
+        origin: gettour.data.diemdi,
+        destination: gettour.data.diemden,
+        hotel: gettour.data.hotel,
+        start: gettour.data.start ? dayjs(gettour.data.start) : "",
+        end: gettour.data.start ? dayjs(gettour.data.end) : "",
+        note: gettour.data.chitiet,
+        price: gettour.data.price,
+      });
+    }
+  }, [gettour.data]);
 
   return (
     <div className="wrapper">
@@ -85,6 +120,7 @@ function AddTour({ id = "" }) {
       <h1 className="pageTitle">Thông tin tour</h1>
 
       <Form
+        form={form}
         labelCol={{ span: 3 }}
         labelAlign="left"
         onFinish={() => createTour.mutate()}
