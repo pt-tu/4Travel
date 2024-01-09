@@ -14,6 +14,7 @@ import {
   DeleteOutlined,
   FormOutlined,
   PlusOutlined,
+  SearchOutlined
 } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import "../../components/Task2Component/TourStyle.css";
@@ -146,7 +147,8 @@ function CustomerList() {
             placeholder="Nhập tên, mã tour hoặc khách hàng bạn muốn"
             className="SearchBar"
             allowClear
-            enterButton
+            enterButton={<SearchOutlined style={{ color: "White" }} />}
+
             size="large"
             style={{ marginTop: "30px" }}
             onChange={(e) => setcccd(e.target.value)}

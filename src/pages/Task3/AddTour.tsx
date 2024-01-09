@@ -14,6 +14,7 @@ import {
   Upload,
   message,
   InputNumber,
+  ConfigProvider
 } from "antd";
 import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -108,6 +109,13 @@ function AddTour() {
 
   return (
     <div className="wrapper">
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#4B268F",
+          },
+        }}
+      >
       <Button
         type="text"
         icon={<ArrowLeftOutlined />}
@@ -256,11 +264,12 @@ function AddTour() {
         </Form.Item>
 
         <Form.Item className="submitButton">
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" style={{boxShadow: "none", color: "White" }}>
             Xác nhận
           </Button>
         </Form.Item>
       </Form>
+      </ConfigProvider>
     </div>
   );
 }

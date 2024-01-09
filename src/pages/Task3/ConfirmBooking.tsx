@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { Button, FormInstance, message } from "antd";
+import { Button, FormInstance, message,ConfigProvider } from "antd";
 import "./Form.css";
 import ContactInfo from "../../components/ContactInfo";
 import BookingInfo from "../../components/BookingInfo";
@@ -196,6 +196,13 @@ function ConfirmBooking() {
 
   return (
     <div className="wrapper">
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#4B268F",
+          },
+        }}
+      >
       <Button
         type="text"
         icon={<ArrowLeftOutlined />}
@@ -231,10 +238,11 @@ function ConfirmBooking() {
       />
 
       <div className="submitButton">
-        <Button type="primary" htmlType="submit" onClick={HandleSubmit}>
+        <Button type="primary" htmlType="submit" onClick={HandleSubmit} style={{boxShadow: "none", color: "White" }}>
           Xác nhận
         </Button>
       </div>
+      </ConfigProvider>
     </div>
   );
 }

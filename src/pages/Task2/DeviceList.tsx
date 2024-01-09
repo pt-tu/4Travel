@@ -6,6 +6,7 @@ import {
   DeleteOutlined,
   FormOutlined,
   PlusOutlined,
+  SearchOutlined
 } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import "../../components/Task2Component/TourStyle.css";
@@ -113,7 +114,8 @@ function DeviceList() {
             placeholder="Nhập tên, mã hàng bạn muốn tìm"
             className="SearchBar"
             allowClear
-            enterButton
+            enterButton={<SearchOutlined style={{ color: "White" }} />}
+
             size="large"
             style={{ marginTop: "30px" }}
           />
@@ -141,7 +143,7 @@ function DeviceList() {
             />
           </div>
           <div>
-            <h2>DANH SÁCH HÀNG TỒN KHO</h2>
+            <h2>DANH SÁCH HÀNG TRANG THIẾT BỊ</h2>
           </div>
           <Space></Space>
           <Table

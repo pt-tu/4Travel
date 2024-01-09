@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import useCreateDevice from "../../hooks/DeviceManagement/useCreateDevice";
 import "./Form.css";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message, ConfigProvider } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 function AddDevice() {
@@ -47,54 +47,62 @@ function AddDevice() {
 
   return (
     <div className="wrapper">
-      <Button
-        type="text"
-        icon={<ArrowLeftOutlined />}
-        className="ButtonUp"
-        onClick={() => navigate(-1)}
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#4B268F",
+          },
+        }}
       >
-        {" "}
-        <b>Quay lại</b>
-      </Button>
-
-      <h1 className="pageTitle">Thông tin thiết bị</h1>
-
-      <Form
-        form={form}
-        labelCol={{ span: 3 }}
-        labelAlign="left"
-        onFinish={() => createDevice.mutate()}
-      >
-        <Form.Item
-          name={"name"}
-          label="Tên thiết bị"
-          rules={[{ required: true, message: "Nhập Tên thiết bị" }]}
+        <Button
+          type="text"
+          icon={<ArrowLeftOutlined />}
+          className="ButtonUp"
+          onClick={() => navigate(-1)}
         >
-          <Input
-            className="longInput"
-            value={name}
-            onChange={(e) => setname(e.target.value)}
-          />
-        </Form.Item>
+          {" "}
+          <b>Quay lại</b>
+        </Button>
 
-        <Form.Item
-          name={"id_staff"}
-          label="Người quản lý"
-          rules={[{ required: true, message: "Nhập id người quản lý" }]}
+        <h1 className="pageTitle">Thông tin thiết bị</h1>
+
+        <Form
+          form={form}
+          labelCol={{ span: 3 }}
+          labelAlign="left"
+          onFinish={() => createDevice.mutate()}
         >
-          <Input
-            className="longInput"
-            value={id_staff}
-            onChange={(e) => setid_staff(e.target.value)}
-          />
-        </Form.Item>
+          <Form.Item
+            name={"name"}
+            label="Tên thiết bị"
+            rules={[{ required: true, message: "Nhập Tên thiết bị" }]}
+          >
+            <Input
+              className="longInput"
+              value={name}
+              onChange={(e) => setname(e.target.value)}
+            />
+          </Form.Item>
 
-        <Form.Item className="submitButton">
-          <Button type="primary" htmlType="submit">
-            Xác nhận
-          </Button>
-        </Form.Item>
-      </Form>
+          <Form.Item
+            name={"id_staff"}
+            label="Người quản lý"
+            rules={[{ required: true, message: "Nhập id người quản lý" }]}
+          >
+            <Input
+              className="longInput"
+              value={id_staff}
+              onChange={(e) => setid_staff(e.target.value)}
+            />
+          </Form.Item>
+
+          <Form.Item className="submitButton">
+            <Button type="primary" htmlType="submit" style={{boxShadow: "none", color: "White" }}>
+              Xác nhận
+            </Button>
+          </Form.Item>
+        </Form>
+      </ConfigProvider>
     </div>
   );
 }

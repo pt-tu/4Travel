@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Button, ConfigProvider, Input, Table, Space } from "antd";
-import { ArrowLeftOutlined, HistoryOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, HistoryOutlined,SearchOutlined } from "@ant-design/icons";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import type { ColumnsType } from "antd/es/table";
 import "../../components/Task2Component/TourStyle.css";
@@ -146,8 +146,10 @@ function BookingDaThanhToan() {
             placeholder="Nhập tên, mã tour hoặc khách hàng bạn muốn"
             className="SearchBar"
             allowClear
-            enterButton
+            enterButton={<SearchOutlined style={{ color: "White" }} />}
+
             size="large"
+            style={{paddingTop: "30px",paddingBottom: "30px"}}
           />
           <div
             style={{

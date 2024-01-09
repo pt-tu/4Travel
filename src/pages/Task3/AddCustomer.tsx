@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import useCreateCustomer from "../../hooks/CustomerManagement/useCreateCustomer";
 import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
 import "./Form.css";
-import { Col, Row, Button, DatePicker, Form, Input, message } from "antd";
+import { Col, Row, Button, DatePicker, Form, Input, message,ConfigProvider } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
@@ -83,7 +83,14 @@ function AddCustomer() {
 
   return (
     <div className="wrapper">
-      <Button
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: "#4B268F",
+          },
+        }}
+      >
+        <Button
         type="text"
         icon={<ArrowLeftOutlined />}
         className="ButtonUp"
@@ -178,11 +185,13 @@ function AddCustomer() {
         </Form.Item>
 
         <Form.Item className="submitButton">
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" style={{boxShadow: "none", color: "White" }}>
             Xác nhận
           </Button>
         </Form.Item>
       </Form>
+      </ConfigProvider>
+      
     </div>
   );
 }
