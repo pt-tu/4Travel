@@ -20,7 +20,7 @@ function BookingTourHistory() {
   const [Page, setPage] = useState(1);
   const [TourName, setTourName] = useState("")
   const BookingPageData = useGetBookingPage(Page, TourName)
-
+  
   return (
     <div>
       <ConfigProvider
@@ -45,7 +45,7 @@ function BookingTourHistory() {
             }}
           />
           {BookingPageData.data?.map((item) => {
-
+            if(item.tour == null ) return;
             const customer = Object.values(item.customer);
             const tour = Object.values(item.tour);
 

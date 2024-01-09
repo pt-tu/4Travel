@@ -17,9 +17,11 @@ const GetBookingPage = async (page: number, TourName: string) => {
       customer( id, hoten ),
       tour( id, name, diemdi, bia )
     `)
+    //.filter('tour.name', 'ilike', `%${TourName}%`)
+    .ilike('tour.name', `%${TourName}%`)
+    .not('tour( id, name, diemdi, bia )', 'is', null)
     .range((page - 1) * 5, page * 5 - 1)
     .order("created_at", { ascending: false });
-    //.filter('tour.name', 'ilike', `%${TourName}%`);
 
   if (error) {
     throw new Error(error.message);

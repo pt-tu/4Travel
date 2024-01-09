@@ -25,7 +25,8 @@ import useDeleteCustomer from "../../hooks/CustomerManagement/useDeleteCustomer"
 function CustomerList() {
   const { Search } = Input;
   const [DeleteID, setDeleteID] = useState("");
-  const CustomerList1 = useGetCustomerList();
+  const [cccd,setcccd]= useState("")
+  const CustomerList1 = useGetCustomerList(cccd);
   const DeleteMutate = useDeleteCustomer(DeleteID);
   if (DeleteMutate.isSuccess) {
     message.success("Xoá thành công");
@@ -147,6 +148,10 @@ function CustomerList() {
             enterButton
             size="large"
             style={{ marginTop: "30px" }}
+            onChange={(e) => setcccd(e.target.value)}
+            onSearch={() => {
+              CustomerList1.refetch();
+            }}
           />
           <div
             style={{
