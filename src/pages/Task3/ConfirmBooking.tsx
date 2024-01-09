@@ -42,9 +42,7 @@ function ConfirmBooking() {
   useEffect(() => {
     if (!tourid) {
       message.error("Không tìm thấy tour");
-      // navigate(-1);
-      settourid("35624166-97d0-4653-a5a5-95a2ef920e22");
-      // Cho tour id tạm 1 giá trị. Bao giờ gọi được trang này đúng cách thì nhớ bỏ cái này đi
+      navigate(-1);
     }
   }, []);
 
