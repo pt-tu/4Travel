@@ -36,7 +36,7 @@ function BookingTour() {
   const userAccount = useUser();
   var isVis = false;
 
-  if (userAccount.data?.user_metadata.role == "user") {
+  if (userAccount.data?.user_metadata.role == "admin" || userAccount.data?.user_metadata.role == "staff") {
     isVis = true;
   }
 

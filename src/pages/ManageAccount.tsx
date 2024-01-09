@@ -192,9 +192,7 @@ function CustomerList() {
                 <b>Quay lại</b>
               </Button>
             </Link>
-            <Link to="/them-moi-khach-hang">
-              <Button icon={<PlusOutlined />} className="ButtonUp"></Button>
-            </Link>
+            
           </div>
           <div>
             <h2>DANH SÁCH TÀI KHOẢN</h2>

@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { TourManagementCard } from "../../components/Task2Component/TourManagementCard"
 import "../../components/Task2Component/TourStyle.css"
 import { Button } from 'antd';
-import { ArrowRightOutlined, FilterFilled, SearchOutlined, ArrowLeftOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined, FilterFilled, SearchOutlined, ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
 import { Input, Space, ConfigProvider } from 'antd';
 import useGetTourPage from "../../hooks/TourManagement/useGetTourPage";
+import { Link } from "react-router-dom";
 
 function TourManagement() {
 
@@ -39,7 +40,29 @@ function TourManagement() {
             GetTourPage.refetch();
           }}
         />
-        
+        <div
+            style={{
+              width: "80%",
+              display: "flex",
+              justifyContent: "space-between",
+              paddingBottom: "30px"
+            }}
+          >
+            <Link to="/">
+              <Button
+                type="text"
+                icon={<ArrowLeftOutlined />}
+                className="ButtonUp"
+              >
+                {" "}
+                <b>Quay lại</b>
+              </Button>
+            </Link>
+            <Link to="/them-moi-tour">
+              <Button icon={<PlusOutlined />} className="ButtonUp"></Button>
+            </Link>
+          </div>
+
         {GetTourPage.data?.map((item) => (
           <TourManagementCard
             name={item.name}
