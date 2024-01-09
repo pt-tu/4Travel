@@ -25,6 +25,7 @@ import DoiMatKhau from "./pages/Task1/DoiMatKhau";
 import BaoCao from "./pages/BaoCao";
 import BillDaXuat from "./pages/ThanhToan/BillDaXuat";
 import ManageAccount from "./pages/ManageAccount";
+import TrangCaNhan from "./pages/Task1/TrangCaNhan";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -75,6 +76,7 @@ function App() {
                 element={<AddCustomer />}
               />
 
+              <Route path="/trang-ca-nhan" element={<TrangCaNhan />} />
               <Route path="/them-moi-tour" element={<AddTour />} />
               <Route path="/xac-nhan-dat-tour" element={<ConfirmBooking />} />
               <Route path="/test" element={<Test />} />
