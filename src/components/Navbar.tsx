@@ -29,7 +29,7 @@ function Navbar() {
     {
       key: "2",
       label: (
-        <Link style={style} to="/doi-mat-khau">
+        <Link style={style} to="/reset-password">
           <p>Đổi mật khẩu</p>
         </Link>
       ),
@@ -188,7 +188,7 @@ function Navbar() {
             ĐẶT TOUR
           </Button>
         </Link>
-        {user.data?.user_metadata.role == "user1" ? (
+        {user.data?.user_metadata.role == "staff" ? (
           <>
             {" "}
             <Link to="/danh-sach-khach-hang">
@@ -244,7 +244,7 @@ function Navbar() {
         ) : (
           <></>
         )}
-        {user.data?.user_metadata.role == "user" ? (
+        {user.data?.user_metadata.role == "admin" ? (
           <>
             {" "}
             <Link to="/danh-sach-khach-hang">
