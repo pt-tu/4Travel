@@ -44,6 +44,7 @@ function BookingTourHistory() {
             }}
           />
           {BookingPageData.data?.map((item) => {
+            if(item.tour == null ) return;
             const customer = Object.values(item.customer);
             const tour = Object.values(item.tour);
 

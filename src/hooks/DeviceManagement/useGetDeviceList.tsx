@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from "react-query";
 import supabase from "../../app/supabase";
 
-const GetCustomerList = async (Search: string) => {
+const GetDeviceList = async (Search: string) => {
     let { data: customer, error } = await supabase
-        .from('customer')
+        .from('device')
         .select('*')
         .ilike('cccd',`%${Search}%`)
         
@@ -11,11 +11,11 @@ const GetCustomerList = async (Search: string) => {
         throw new Error(error.message);
     }
     if(!customer){
-        throw new Error("Customer list not found")
+        throw new Error("Device list not found")
     }
     return customer;
 }
 
-export default function useGetCustomerList(Search: string) {
-    return useQuery("CustomerList",() => GetCustomerList(Search))
+export default function useGetDeviceList(Search: string) {
+    return useQuery("CustomerList",() => GetDeviceList(Search))
 }
