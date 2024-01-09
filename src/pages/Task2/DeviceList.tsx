@@ -10,10 +10,11 @@ import {
 import type { ColumnsType } from "antd/es/table";
 import "../../components/Task2Component/TourStyle.css";
 import "../../components/Task2Component/CustomerDevice.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useGetDeviceList from "../../hooks/DeviceManagement/useGetDeviceList";
 function DeviceList() {
   const { Search } = Input;
+  const navigate = useNavigate();
   const [SearchName, setSearchName] = useState("");
   const DeviceList = useGetDeviceList(SearchName);
   if (DeviceList.isSuccess) {
@@ -25,7 +26,7 @@ function DeviceList() {
   interface DeviceType {
     id: React.Key;
     name: string;
-    id_staff:string;
+    id_staff: string;
     status: string;
   }
   const columns: ColumnsType<DeviceType> = [
@@ -52,10 +53,17 @@ function DeviceList() {
       render: (text, record) => (
         <Button
           icon={<FormOutlined />}
-          onClick={() => {
-            alert(`Bạn đã chọn sửa ${record.name}`);
-          }}
-        ></Button>
+          onClick={() =>
+            navigate("/them-moi-nguon-luc", {
+              state: {
+                id: record.id,
+                name: record.name,
+                id_staff: record.id_staff,
+                status: record.status,
+              },
+            })
+          }
+        />
       ),
     },
     {
@@ -74,7 +82,6 @@ function DeviceList() {
       ),
     },
   ];
-
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: DeviceType[]) => {
@@ -127,7 +134,11 @@ function DeviceList() {
                 <b>Quay lại</b>
               </Button>{" "}
             </Link>
-            <Button icon={<PlusOutlined />} className="ButtonUp"></Button>
+            <Button
+              icon={<PlusOutlined />}
+              className="ButtonUp"
+              onClick={() => navigate("/them-moi-nguon-luc")}
+            />
           </div>
           <div>
             <h2>DANH SÁCH HÀNG TỒN KHO</h2>
