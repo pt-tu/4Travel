@@ -1,6 +1,14 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Button, ConfigProvider, Input, Table, Space, Popconfirm } from "antd";
+import {
+  Button,
+  ConfigProvider,
+  Input,
+  Table,
+  Space,
+  Popconfirm,
+  message,
+} from "antd";
 import {
   ArrowLeftOutlined,
   DeleteOutlined,
@@ -13,8 +21,6 @@ import "../../components/Task2Component/CustomerDevice.css";
 import { Link } from "react-router-dom";
 import useGetCustomerList from "../../hooks/CustomerManagement/useGetCustomerList";
 import useDeleteCustomer from "../../hooks/CustomerManagement/useDeleteCustomer";
-import { UseQueryResult } from "react-query";
-import supabase from "../../app/supabase";
 
 function CustomerList() {
   const { Search } = Input;
@@ -22,7 +28,10 @@ function CustomerList() {
   const CustomerList1 = useGetCustomerList();
   const DeleteMutate = useDeleteCustomer(DeleteID);
   if (DeleteMutate.isSuccess) {
+    message.success("Xoá thành công");
     window.location.reload();
+  } else if (DeleteMutate.error instanceof Error) {
+    message.error("Xoá thất bại. Lỗi: " + DeleteMutate.error.message);
   }
 
   /* //Test useState hook to re-render list after delete 
@@ -80,7 +89,7 @@ function CustomerList() {
       dataIndex: "id",
       width: 50,
       render: (text, record) => (
-        <Link to={"/them-moi-khach-hang/" + record.id}>
+        <Link to={"/them-moi-khach-hang"} state={{ id: record.id }}>
           <Button icon={<FormOutlined />}></Button>
         </Link>
         //khi chọn chỉnh sửa sẽ load trang chỉnh sửa, lúc này trang chỉnh sửa input sẽ là dữ liệu của khách hàng được chọn. tham khảo useParams để truyền id khách hàng vào trang chỉnh sửa để query: https://ui.dev/react-router-url-parameters?fbclid=IwAR3grGeq74ae9OoC9xyeMVStoe2agUV-hLT2MnipjCJnK5GyHRXoRvKZEvI, nếu khó quá có thể tách thêm mới khách và chỉnh sửa khách ra 2 page khác nhau
@@ -95,15 +104,9 @@ function CustomerList() {
         <Popconfirm
           title="Xác nhận?"
           description={"Xóa người dùng " + record.hoten}
-          onConfirm={DeleteUser}
+          onConfirm={() => setDeleteID(record.id)}
         >
-          <Button
-            icon={<DeleteOutlined />}
-            danger
-            onClick={() => {
-              setDeleteID(record.id);
-            }}
-          ></Button>
+          <Button icon={<DeleteOutlined />} danger />
         </Popconfirm>
       ),
     },
@@ -122,6 +125,10 @@ function CustomerList() {
       name: record.hoten,
     }),
   };
+
+  useEffect(() => {
+    if (DeleteID) DeleteMutate.mutate();
+  }, [DeleteID]);
 
   return (
     <div>
