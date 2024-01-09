@@ -253,7 +253,7 @@ function BaoCao() {
                             }}
                           >
                             <p style={{ margin: "0 auto", fontSize: 16 }}>
-                              ${item.diemden}
+                              ${item.total}
                             </p>
                           </div>
                         </>

@@ -10,37 +10,40 @@ import {
 import type { ColumnsType } from "antd/es/table";
 import "../../components/Task2Component/TourStyle.css";
 import "../../components/Task2Component/CustomerDevice.css";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import useGetDeviceList from "../../hooks/DeviceManagement/useGetDeviceList";
 function DeviceList() {
   const { Search } = Input;
-  interface CustomerType {
-    key: React.Key;
-    name: string;
-    cccd: string;
-    address: string;
-    phoneNumber: string;
+  const navigate = useNavigate();
+  const [SearchName, setSearchName] = useState("");
+  const DeviceList = useGetDeviceList(SearchName);
+  if (DeviceList.isSuccess) {
+    console.log(DeviceList.data);
   }
-  const columns: ColumnsType<CustomerType> = [
+  if (DeviceList.isError) {
+    console.log("That bai");
+  }
+  interface DeviceType {
+    id: React.Key;
+    name: string;
+    id_staff: string;
+    status: string;
+  }
+  const columns: ColumnsType<DeviceType> = [
     {
-      title: "Họ tên",
+      title: "Tên thiết bị",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "CMND/CCCD",
-      dataIndex: "cccd",
-      key: "cccd",
+      title: "Người quản lý",
+      dataIndex: "id_staff",
+      key: "id_staff",
     },
     {
-      title: "Địa chỉ",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Số điện thoại",
-      dataIndex: "phoneNumber",
-      key: "phoneNumber",
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
     },
     {
       title: "",
@@ -50,10 +53,17 @@ function DeviceList() {
       render: (text, record) => (
         <Button
           icon={<FormOutlined />}
-          onClick={() => {
-            alert(`Bạn đã chọn sửa ${record.name}`);
-          }}
-        ></Button>
+          onClick={() =>
+            navigate("/them-moi-nguon-luc", {
+              state: {
+                id: record.id,
+                name: record.name,
+                id_staff: record.id_staff,
+                status: record.status,
+              },
+            })
+          }
+        />
       ),
     },
     {
@@ -72,28 +82,17 @@ function DeviceList() {
       ),
     },
   ];
-  const Customer: CustomerType[] = [];
-
-  for (let i = 0; i < 46; i++) {
-    Customer.push({
-      key: i,
-      name: `Thái Dương ${i}`,
-      cccd: `1111111${i}`,
-      address: "TP HCM",
-      phoneNumber: "0999000999",
-    });
-  }
 
   const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: CustomerType[]) => {
+    onChange: (selectedRowKeys: React.Key[], selectedRows: DeviceType[]) => {
       console.log(
         `selectedRowKeys: ${selectedRowKeys}`,
         "selectedRows: ",
         selectedRows
       );
     },
-    getCheckboxProps: (record: CustomerType) => ({
-      disabled: record.name === "Disabled User", // Column configuration not to be checked
+    getCheckboxProps: (record: DeviceType) => ({
+      disabled: record.name === "Disabled Device", // Column configuration not to be checked
       name: record.name,
     }),
   };
@@ -116,7 +115,7 @@ function DeviceList() {
             allowClear
             enterButton
             size="large"
-            style={{marginTop: "30px"}}
+            style={{ marginTop: "30px" }}
           />
           <div
             style={{
@@ -135,19 +134,19 @@ function DeviceList() {
                 <b>Quay lại</b>
               </Button>{" "}
             </Link>
-            <Button icon={<PlusOutlined />} className="ButtonUp"></Button>
+            <Button
+              icon={<PlusOutlined />}
+              className="ButtonUp"
+              onClick={() => navigate("/them-moi-nguon-luc")}
+            />
           </div>
           <div>
             <h2>DANH SÁCH HÀNG TỒN KHO</h2>
           </div>
           <Space></Space>
           <Table
-            rowSelection={{
-              type: selectionType,
-              ...rowSelection,
-            }}
             columns={columns}
-            dataSource={Customer}
+            dataSource={DeviceList.data}
             className="tableFilter"
           />
         </div>

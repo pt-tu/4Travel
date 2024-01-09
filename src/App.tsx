@@ -25,6 +25,8 @@ import DoiMatKhau from "./pages/Task1/DoiMatKhau";
 import BaoCao from "./pages/BaoCao";
 import BillDaXuat from "./pages/ThanhToan/BillDaXuat";
 import ManageAccount from "./pages/ManageAccount";
+import AddDevice from "./pages/Task3/AddDevice";
+import TrangCaNhan from "./pages/Task1/TrangCaNhan";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -70,12 +72,11 @@ function App() {
               <Route path="/them-moi-khach-hang" element={<AddCustomer />} />
               <Route path="/quan-ly-tai-khoan" element={<ManageAccount />} />
 
-              <Route
-                path="/them-moi-khach-hang/:id"
-                element={<AddCustomer />}
-              />
+              <Route path="/them-moi-khach-hang" element={<AddCustomer />} />
 
+              <Route path="/trang-ca-nhan" element={<TrangCaNhan />} />
               <Route path="/them-moi-tour" element={<AddTour />} />
+              <Route path="/them-moi-nguon-luc" element={<AddDevice />} />
               <Route path="/xac-nhan-dat-tour" element={<ConfirmBooking />} />
               <Route path="/test" element={<Test />} />
               <Route path="/hoa-don/:cid/:tid" element={<Bill />} />

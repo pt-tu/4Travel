@@ -17,9 +17,9 @@ function BookingTourHistory() {
   const { Search } = Input;
   const User = useUser();
   const [Page, setPage] = useState(1);
-  const [TourName, setTourName] = useState("")
-  const BookingPageData = useGetBookingPage(Page, TourName)
-  
+  const [TourName, setTourName] = useState("");
+  const BookingPageData = useGetBookingPage(Page, TourName);
+
   return (
     <div>
       <ConfigProvider
