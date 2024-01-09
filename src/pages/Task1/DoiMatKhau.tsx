@@ -32,11 +32,27 @@ function DoiMatKhau() {
         }}
       >
         <Form layout="vertical">
-          <FormItem label="Nhập mật khẩu mới" style={{ fontSize: 20 }}>
+          <FormItem label="Nhập mật khẩu mới" 
+          style={{ fontSize: 20 }}
+          name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Bạn chưa nhập mật khẩu!",
+                },
+                {
+                  pattern: new RegExp(
+                    "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$"
+                  ),
+                  message: "Mật khẩu cần có hơn 6 kí tự và ít nhất 1 chữ, 1 số, một ký tự đặc biệt.",
+                },
+              ]}
+          >
             <Input
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
+              type="password"
             ></Input>
           </FormItem>
           {message1}

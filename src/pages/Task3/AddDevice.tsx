@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import useCreateDevice from "../../hooks/DeviceManagement/useCreateDevice";
 import "./Form.css";
-import { Button, Form, Input, message, ConfigProvider } from "antd";
+import { Button, Form, Input, message, ConfigProvider, Select } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 function AddDevice() {
@@ -18,7 +18,7 @@ function AddDevice() {
     location.state ? location.state.id_staff ?? "" : ""
   );
   const [status, setstatus] = useState(
-    location.state ? location.state.name ?? "unoccupied" : "unoccupied"
+    location.state ? location.state.status ?? "unoccupied" : "unoccupied"
   );
 
   const createDevice = useCreateDevice(
@@ -95,12 +95,29 @@ function AddDevice() {
               onChange={(e) => setid_staff(e.target.value)}
             />
           </Form.Item>
-
+          <Form.Item
+            name={"status"}
+            label="Trạng thái"
+          >
+            <Select
+              style={{width: "200px"}}
+              showSearch
+              onChange={(e) => setstatus(e)}
+              defaultValue={status}
+              options={[
+                {value: "unoccupied", label: "unoccupied"},
+                {value: "occupied", label: "occupied"}
+              ]}
+            >
+            </Select>
+          </Form.Item>
           <Form.Item className="submitButton">
-            <Button type="primary" htmlType="submit" style={{boxShadow: "none", color: "White" }}>
+            <Button type="primary" htmlType="submit" style={{ boxShadow: "none", color: "White" }}>
               Xác nhận
             </Button>
           </Form.Item>
+
+
         </Form>
       </ConfigProvider>
     </div>

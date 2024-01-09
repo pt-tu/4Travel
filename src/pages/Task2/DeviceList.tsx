@@ -1,6 +1,6 @@
 import React from "react";
-import { useState } from "react";
-import { Button, ConfigProvider, Input, Table, Space } from "antd";
+import { useState, useEffect } from "react";
+import { Button, ConfigProvider, Input, Table, Space, message, Popconfirm } from "antd";
 import {
   ArrowLeftOutlined,
   DeleteOutlined,
@@ -13,19 +13,27 @@ import "../../components/Task2Component/TourStyle.css";
 import "../../components/Task2Component/CustomerDevice.css";
 import { Link, useNavigate } from "react-router-dom";
 import useGetDeviceList from "../../hooks/DeviceManagement/useGetDeviceList";
+import useDeleteDevice from "../../hooks/DeviceManagement/useDeleteDevice";
+import { Console } from "console";
 function DeviceList() {
   const { Search } = Input;
   const navigate = useNavigate();
   const [SearchName, setSearchName] = useState("");
+  const [DeleteID, setDeleteID] = useState("");
   const DeviceList = useGetDeviceList(SearchName);
-  if (DeviceList.isSuccess) {
-    console.log(DeviceList.data);
+  const DeleteDevice = useDeleteDevice(DeleteID);
+  if (DeleteDevice.isSuccess) {
+    message.success("Xoá thành công");
+    window.location.reload();
   }
-  if (DeviceList.isError) {
-    console.log("That bai");
+  if (DeleteDevice.isError && DeleteDevice.error instanceof Error) {
+    message.error("Xoá thất bại. Lỗi: " + DeleteDevice.error.message);
   }
+  useEffect(() => {
+    if (DeleteID) DeleteDevice.mutate();
+  }, [DeleteID]);
   interface DeviceType {
-    id: React.Key;
+    id: string;
     name: string;
     id_staff: string;
     status: string;
@@ -48,8 +56,8 @@ function DeviceList() {
     },
     {
       title: "",
-      key: "key",
-      dataIndex: "key",
+      key: "id",
+      dataIndex: "id",
       width: 50,
       render: (text, record) => (
         <Button
@@ -69,17 +77,20 @@ function DeviceList() {
     },
     {
       title: "",
-      key: "key",
-      dataIndex: "key",
+      key: "id",
+      dataIndex: "id",
       width: 50,
       render: (text, record) => (
-        <Button
-          icon={<DeleteOutlined />}
-          danger
-          onClick={() => {
-            alert(`Bạn đã chọn xóa ${record.name}`);
+
+        <Popconfirm
+          title="Xác nhận?"
+          description={"Xóa thiết bị " + record.name}
+          onConfirm={() => {
+            setDeleteID(record.id);
           }}
-        ></Button>
+        >
+          <Button icon={<DeleteOutlined />} danger/>
+        </Popconfirm>
       ),
     },
   ];

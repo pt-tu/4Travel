@@ -43,6 +43,7 @@ export default function Login() {
               onChange={(e) => {
                 setepass(e.target.value);
               }}
+              type="password"
             ></Input>
           </FormItem>
           {message}

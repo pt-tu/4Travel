@@ -5,7 +5,7 @@ const GetDeviceList = async (Search: string) => {
     let { data: customer, error } = await supabase
         .from('device')
         .select(`
-           *
+            *
         `)
         .ilike('name',`%${Search}%`)
         
