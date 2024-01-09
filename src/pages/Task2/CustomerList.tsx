@@ -30,7 +30,8 @@ function CustomerList() {
   if (DeleteMutate.isSuccess) {
     message.success("Xoá thành công");
     window.location.reload();
-  } else if (DeleteMutate.error instanceof Error) {
+  }
+  if (DeleteMutate.isError && DeleteMutate.error instanceof Error) {
     message.error("Xoá thất bại. Lỗi: " + DeleteMutate.error.message);
   }
 

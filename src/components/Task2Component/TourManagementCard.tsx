@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./TourStyle.css";
 import Hanoi from "../../images/hanoi.jpg";
-import { Button, ConfigProvider } from "antd";
+import { Button, ConfigProvider, Popconfirm, message } from "antd";
 import { Link } from "react-router-dom";
 import location from "../../images/location.png";
+import { DeleteOutlined } from "@ant-design/icons";
+import useDeleteTour from "../../hooks/TourManagement/useDeleteTour";
 
 interface PropsType {
   name: string;
@@ -15,6 +17,18 @@ interface PropsType {
 }
 
 export const TourManagementCard = (props: PropsType) => {
+  const [DeleteID, setDeleteID] = useState("");
+  const deleteTour = useDeleteTour(DeleteID);
+  if (deleteTour.isSuccess) {
+    message.success("Xoá thành công");
+    window.location.reload();
+  }
+  if (deleteTour.isError && deleteTour.error instanceof Error) {
+    message.error("Xoá thất bại. Lỗi: " + deleteTour.error.message);
+  }
+  useEffect(() => {
+    if (DeleteID) deleteTour.mutate();
+  }, [DeleteID]);
   return (
     <div className="card GridContainer">
       <ConfigProvider
@@ -46,13 +60,19 @@ export const TourManagementCard = (props: PropsType) => {
               Sửa
             </Button>
           </Link>
-          <Button
-            type="primary"
-            style={{ boxShadow: "none", marginLeft: 10 }}
-            danger
+          <Popconfirm
+            title="Xác nhận?"
+            description={"Xóa tour " + props.name}
+            onConfirm={() => setDeleteID(props.id)}
           >
-            Xóa
-          </Button>
+            <Button
+              type="primary"
+              style={{ boxShadow: "none", marginLeft: 10 }}
+              danger
+            >
+              Xóa
+            </Button>
+          </Popconfirm>
         </div>
       </ConfigProvider>
     </div>
