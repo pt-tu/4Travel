@@ -1,6 +1,14 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Button, ConfigProvider, Input, Table, Space, Popconfirm } from "antd";
+import {
+  Button,
+  ConfigProvider,
+  Input,
+  Table,
+  Space,
+  Popconfirm,
+  Select,
+} from "antd";
 import {
   ArrowLeftOutlined,
   DeleteOutlined,
@@ -8,19 +16,33 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
-import "../../components/Task2Component/TourStyle.css";
-import "../../components/Task2Component/CustomerDevice.css";
+import "../components/Task2Component/TourStyle.css";
+import "../components/Task2Component/CustomerDevice.css";
 import { Link } from "react-router-dom";
-import useGetCustomerList from "../../hooks/CustomerManagement/useGetCustomerList";
-import useDeleteCustomer from "../../hooks/CustomerManagement/useDeleteCustomer";
-import { UseQueryResult } from "react-query";
-import supabase from "../../app/supabase";
+import useGetCustomerList from "../hooks/CustomerManagement/useGetCustomerList";
+import useDeleteCustomer from "../hooks/CustomerManagement/useDeleteCustomer";
+import useGetUserList from "../hooks/admin/useGetUserList";
 
 function CustomerList() {
   const { Search } = Input;
   const [DeleteID, setDeleteID] = useState("");
-  const CustomerList1 = useGetCustomerList();
   const DeleteMutate = useDeleteCustomer(DeleteID);
+  const getuserlist = useGetUserList();
+  const userlist: Customer[] = [];
+  if (getuserlist.isSuccess) {
+    getuserlist.data.map((item: any) =>
+      userlist.push({
+        id: item.id,
+        name: item.raw_user_meta_data.ten,
+        role: item.raw_user_meta_data.role,
+        email: item.email,
+      })
+    );
+    console.log(userlist);
+  }
+  if (getuserlist.error) {
+    return <></>;
+  }
   if (DeleteMutate.isSuccess) {
     window.location.reload();
   }
@@ -44,67 +66,32 @@ function CustomerList() {
   };
   interface Customer {
     id: string;
-    hoten: string;
-    cccd: string;
-    sdt: string;
+    name: string;
+    role: string;
     email: string;
-    ngaysinh: string;
-    diachi: string;
-    ghichu: string;
-    yeucau: string;
   }
   const columns: ColumnsType<Customer> = [
     {
       title: "Họ tên",
-      dataIndex: "hoten",
-      key: "hoten",
+      dataIndex: "name",
+      key: "name",
+      width: 150,
     },
     {
-      title: "CMND/CCCD",
-      dataIndex: "cccd",
-      key: "cccd",
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      width: 100,
     },
     {
-      title: "Địa chỉ",
-      dataIndex: "diachi",
-      key: "diachi",
-    },
-    {
-      title: "Số điện thoại",
-      dataIndex: "sdt",
-      key: "sdt",
-    },
-    {
-      title: "",
+      title: "Role",
       key: "id",
       dataIndex: "id",
-      width: 50,
+      width: 100,
+
       render: (text, record) => (
-        <Link to={"/them-moi-khach-hang/" + record.id}>
-          <Button icon={<FormOutlined />}></Button>
-        </Link>
+        <Select style={{ width: "100%" }} defaultValue={record.role} />
         //khi chọn chỉnh sửa sẽ load trang chỉnh sửa, lúc này trang chỉnh sửa input sẽ là dữ liệu của khách hàng được chọn. tham khảo useParams để truyền id khách hàng vào trang chỉnh sửa để query: https://ui.dev/react-router-url-parameters?fbclid=IwAR3grGeq74ae9OoC9xyeMVStoe2agUV-hLT2MnipjCJnK5GyHRXoRvKZEvI, nếu khó quá có thể tách thêm mới khách và chỉnh sửa khách ra 2 page khác nhau
-      ),
-    },
-    {
-      title: "",
-      key: "id",
-      dataIndex: "id",
-      width: 50,
-      render: (text, record) => (
-        <Popconfirm
-          title="Xác nhận?"
-          description={"Xóa người dùng " + record.hoten}
-          onConfirm={DeleteUser}
-        >
-          <Button
-            icon={<DeleteOutlined />}
-            danger
-            onClick={() => {
-              setDeleteID(record.id);
-            }}
-          ></Button>
-        </Popconfirm>
       ),
     },
   ];
@@ -118,8 +105,8 @@ function CustomerList() {
       );
     },
     getCheckboxProps: (record: Customer) => ({
-      disabled: record.hoten === "Disabled User", // Column configuration not to be checked
-      name: record.hoten,
+      disabled: record.name === "Disabled User", // Column configuration not to be checked
+      name: record.name,
     }),
   };
 
@@ -163,7 +150,7 @@ function CustomerList() {
             </Link>
           </div>
           <div>
-            <h2>DANH SÁCH KHÁCH HÀNG</h2>
+            <h2>DANH SÁCH TÀI KHOẢN</h2>
           </div>
           <Space></Space>
           <Table
@@ -171,7 +158,7 @@ function CustomerList() {
               ...rowSelection,
             }}
             columns={columns}
-            dataSource={CustomerList1.data}
+            dataSource={userlist}
             className="tableFilter"
             rowKey="id"
           />

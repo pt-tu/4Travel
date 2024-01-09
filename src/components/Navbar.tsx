@@ -188,6 +188,62 @@ function Navbar() {
             ĐẶT TOUR
           </Button>
         </Link>
+        {user.data?.user_metadata.role == "user1" ? (
+          <>
+            {" "}
+            <Link to="/danh-sach-khach-hang">
+              <Button
+                className={
+                  p === "/danh-sach-khach-hang"
+                    ? "navbutton active"
+                    : "navbutton"
+                }
+              >
+                KHÁCH HÀNG
+              </Button>
+            </Link>
+            <Link to="/quan-ly-tour">
+              <Button
+                className={
+                  p === "/quan-ly-tour" ? "navbutton active" : "navbutton"
+                }
+              >
+                QUẢN LÝ TOUR
+              </Button>
+            </Link>
+            <Link to="/danh-sach-nguon-luc">
+              <Button
+                className={
+                  p === "/danh-sach-nguon-luc"
+                    ? "navbutton active"
+                    : "navbutton"
+                }
+              >
+                THIẾT BỊ
+              </Button>
+            </Link>
+            <Link to="/booking-can-thanh-toan">
+              <Button
+                className={
+                  p === "/booking-can-thanh-toan"
+                    ? "navbutton active"
+                    : "navbutton"
+                }
+              >
+                HÓA ĐƠN
+              </Button>
+            </Link>
+            <Link to="/bao-cao">
+              <Button
+                className={p === "/bao-cao" ? "navbutton active" : "navbutton"}
+              >
+                BÁO CÁO
+              </Button>
+            </Link>
+          </>
+        ) : (
+          <></>
+        )}
         {user.data?.user_metadata.role == "user" ? (
           <>
             {" "}
@@ -238,6 +294,15 @@ function Navbar() {
                 className={p === "/bao-cao" ? "navbutton active" : "navbutton"}
               >
                 BÁO CÁO
+              </Button>
+            </Link>
+            <Link to="/quan-ly-tai-khoan">
+              <Button
+                className={
+                  p === "/quan-ly-tai-khoan" ? "navbutton active" : "navbutton"
+                }
+              >
+                QUẢN TRỊ
               </Button>
             </Link>
           </>

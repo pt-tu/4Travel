@@ -28,5 +28,5 @@ const GetCurrentUser = async () => {
   return userData;
 };
 export default function useUser() {
-  return useQuery("user", () => GetCurrentUser());
+  return useQuery("user11", () => GetCurrentUser());
 }
