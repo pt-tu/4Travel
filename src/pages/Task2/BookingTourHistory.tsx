@@ -7,12 +7,11 @@ import {
   FilterFilled,
   ReloadOutlined,
   ArrowLeftOutlined,
-  SearchOutlined
+  SearchOutlined,
 } from "@ant-design/icons";
 import { Input, Space, ConfigProvider, DatePicker, Select } from "antd";
 import useUser from "../../hooks/accountsystem/useUser";
-import useGetBookingPage from "../../hooks/BookingManagement/useGetBookingPage"
-
+import useGetBookingPage from "../../hooks/BookingManagement/useGetBookingPage";
 
 function BookingTourHistory() {
   const { Search } = Input;
@@ -37,7 +36,7 @@ function BookingTourHistory() {
             allowClear
             enterButton={<SearchOutlined style={{ color: "White" }} />}
             size="large"
-            style={{ marginTop: "30px"}}
+            style={{ marginTop: "30px" }}
             onChange={(e) => setTourName(e.target.value)}
             onSearch={() => {
               setPage(1);
@@ -49,15 +48,17 @@ function BookingTourHistory() {
             const customer = Object.values(item.customer);
             const tour = Object.values(item.tour);
 
-            return <TourHistory
-              name={tour[2]}
-              id={tour[0]}
-              diemdi={tour[3]}
-              hoten={customer[1]}
-              bia={tour[1]}
-            ></TourHistory>
-          }
-          )}
+            return (
+              <TourHistory
+                name={tour[2]}
+                tour_id={tour[0]}
+                diemdi={tour[3]}
+                hoten={customer[1]}
+                cus_id={customer[0]}
+                bia={tour[1]}
+              ></TourHistory>
+            );
+          })}
           <div
             style={{
               display: "flex",
@@ -72,7 +73,7 @@ function BookingTourHistory() {
               className="ButtonNext"
               style={{ boxShadow: "none", color: "White" }}
               onClick={() => {
-                Page > 1 && setPage(Page - 1)
+                Page > 1 && setPage(Page - 1);
               }}
             >
               Quay lại
@@ -83,15 +84,16 @@ function BookingTourHistory() {
               icon={<ArrowRightOutlined />}
               className="ButtonNext"
               style={{ direction: "rtl", boxShadow: "none", color: "White" }}
-              onClick={() => { BookingPageData.data?.length !== 0 && setPage(Page + 1) }}
+              onClick={() => {
+                BookingPageData.data?.length !== 0 && setPage(Page + 1);
+              }}
             >
               Xem thêm
             </Button>
           </div>
         </div>
-        
-      </ConfigProvider >
-    </div >
+      </ConfigProvider>
+    </div>
   );
 }
 

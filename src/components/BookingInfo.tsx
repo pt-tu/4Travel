@@ -28,10 +28,6 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
   const padRight = { paddingRight: 5 };
   const { Option } = Select;
 
-  useEffect(() => {
-    props.sethanhkhach(hanhkhach);
-  }, [hanhkhach]);
-
   function HandleSubmit() {
     const validationerror = form
       .getFieldsError()
@@ -44,8 +40,9 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
   }
 
   useEffect(() => {
-    if (props.hanhkhach) form.setFieldValue("passengers", props.hanhkhach);
-  }, [props.hanhkhach]);
+    if (props.gethanhkhach.data) {
+    }
+  }, [props.gethanhkhach.data]);
 
   return (
     <div className="list">

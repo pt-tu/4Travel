@@ -9,6 +9,7 @@ import useCreateCustomer from "../../hooks/CustomerManagement/useCreateCustomer"
 import useCreateBooking from "../../hooks/BookingManagement/useCreateBooking";
 import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
 import useGetCustomerByCCCD from "../../hooks/CustomerManagement/useGetCustomerByCCCD";
+import useGetHanhKhach from "../../hooks/TourManagement/useGetHanhKhach";
 import useUser from "../../hooks/accountsystem/useUser";
 import dayjs from "dayjs";
 
@@ -33,10 +34,10 @@ function ConfirmBooking() {
   const [diachi, setdiachi] = useState("");
   const [ghichu, setghichu] = useState("");
   const [yeucau, setyeucau] = useState("");
-
-  const [hanhkhach, sethanhkhach] = useState([
+  const defaulthanhkhach = [
     { hoten: "", gioitinh: "", ngaysinh: "", ghichu: "" },
-  ]);
+  ];
+  const [hanhkhach, sethanhkhach] = useState(defaulthanhkhach);
 
   // Nếu không truyền tour_id thì back
   useEffect(() => {
@@ -63,7 +64,8 @@ function ConfirmBooking() {
     if (!customerid) {
       setcustomerid(createCustomer.data.id);
     }
-  } else if (createCustomer.error instanceof Error) {
+  }
+  if (createCustomer.isError && createCustomer.error instanceof Error) {
     message.error(
       "Cập nhật thông tin khách hàng thất bại. Lỗi: " +
         createCustomer.error.message
@@ -84,14 +86,19 @@ function ConfirmBooking() {
     navigate(-1);
     createCustomer.reset();
     createBooking.reset();
-  } else if (createBooking.error instanceof Error) {
+  }
+  if (createBooking.isError && createBooking.error instanceof Error) {
     message.error(
       "Cập nhật booking thất bại. Lỗi: " + createBooking.error.message
     );
   }
 
   const getcustomerbycid = useGetCustomerByCID(customerid);
-  if (customerid && getcustomerbycid.error instanceof Error) {
+  if (
+    getcustomerbycid.isError &&
+    customerid &&
+    getcustomerbycid.error instanceof Error
+  ) {
     message.error(
       "Đồng bộ thông tin khách hàng thất bại. Lỗi: " +
         getcustomerbycid.error.message
@@ -99,9 +106,11 @@ function ConfirmBooking() {
   }
 
   const getcustomerbycccd = useGetCustomerByCCCD(cccd);
-  if (getcustomerbycccd.error instanceof Error) {
+  if (getcustomerbycccd.isError && getcustomerbycccd.error instanceof Error) {
     console.log(getcustomerbycccd.error.message);
   }
+
+  const gethanhkhach = useGetHanhKhach(customerid, tourid);
 
   function HandleSubmit() {
     if (contactInfo.current && bookingInfo.current) {
@@ -129,14 +138,15 @@ function ConfirmBooking() {
       } else return;
     } else if (getcustomerbycccd.data) {
       setcustomerid(getcustomerbycccd.data.id);
-      setngaysinh(
-        getcustomerbycccd.data.ngaysinh
-          ? dayjs(getcustomerbycccd.data.ngaysinh).toISOString()
-          : ""
-      );
-      setdiachi(getcustomerbycccd.data.diachi);
-      setghichu(getcustomerbycccd.data.ghichu);
-      setyeucau(getcustomerbycccd.data.yeucau);
+      if (!ngaysinh)
+        setngaysinh(
+          getcustomerbycccd.data.ngaysinh
+            ? dayjs(getcustomerbycccd.data.ngaysinh).toISOString()
+            : ""
+        );
+      if (!diachi) setdiachi(getcustomerbycccd.data.diachi);
+      if (!ghichu) setghichu(getcustomerbycccd.data.ghichu);
+      if (!yeucau) setyeucau(getcustomerbycccd.data.yeucau);
     } else if (hanhkhach.length > 0) {
       for (const hk of hanhkhach) {
         if (hk.hoten == hoten) {
@@ -149,6 +159,35 @@ function ConfirmBooking() {
 
     createCustomer.mutate();
   }
+
+  useEffect(() => {
+    if (getcustomerbycid.data) {
+      if (!hoten) sethoten(getcustomerbycid.data.hoten);
+      if (!cccd) setcccd(getcustomerbycid.data.cccd);
+      if (!sdt) setsdt(getcustomerbycid.data.sdt);
+      if (!email) setemail(getcustomerbycid.data.email);
+      setngaysinh(
+        getcustomerbycid.data.ngaysinh
+          ? dayjs(getcustomerbycid.data.ngaysinh).toISOString()
+          : ""
+      );
+      setdiachi(getcustomerbycid.data.diachi);
+      setghichu(getcustomerbycid.data.ghichu);
+      setyeucau(getcustomerbycid.data.yeucau);
+    }
+    if (gethanhkhach.data && (!hanhkhach || hanhkhach == defaulthanhkhach)) {
+      sethanhkhach([
+        {
+          hoten: gethanhkhach.data.hoten,
+          gioitinh: gethanhkhach.data.gioitinh,
+          ngaysinh: gethanhkhach.data.ngaysinh
+            ? dayjs(gethanhkhach.data.ngaysinh).toISOString()
+            : "",
+          ghichu: gethanhkhach.data.ghichu,
+        },
+      ]);
+    }
+  }, [tourid, gethanhkhach.data]);
 
   // WARNING: Trick lỏ, xử lý bất đồng bộ sau
   useEffect(() => {
@@ -183,8 +222,10 @@ function ConfirmBooking() {
       />
 
       <BookingInfo
+        defaulthanhkhach={defaulthanhkhach}
         hanhkhach={hanhkhach}
         sethanhkhach={sethanhkhach}
+        gethanhkhach={gethanhkhach}
         onBookingInfoFinish={HandleBookingInfoFinish}
         ref={bookingInfo}
       />

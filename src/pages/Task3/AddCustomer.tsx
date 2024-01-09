@@ -42,13 +42,14 @@ function AddCustomer() {
     message.success("Cập nhật thông tin thành công");
     navigate(-1);
     createCustomer.reset();
-  } else if (createCustomer.error instanceof Error) {
+  }
+  if (createCustomer.isError && createCustomer.error instanceof Error) {
     message.error("Thêm thất bại. Lỗi: " + createCustomer.error.message);
   }
 
   const getcustomer = useGetCustomerByCID(customerid);
 
-  if (customerid && getcustomer.error instanceof Error) {
+  if (getcustomer.isError && customerid && getcustomer.error instanceof Error) {
     message.error(getcustomer.error.message);
   }
 
