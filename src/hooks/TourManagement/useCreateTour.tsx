@@ -55,7 +55,10 @@ const createTour = async (tour: Tour, id: string) => {
 
       const { data: img, error } = await supabase.storage
         .from("anhbia")
-        .upload("public/" + id + ".jpg", tour.bia);
+        .upload("public/" + id + ".jpg", tour.bia, {
+          upsert: true,
+          contentType: "image/jpeg",
+        });
 
       const { data: data2, error: UpdateError } = await supabase
         .from("tour")
@@ -102,7 +105,10 @@ const createTour = async (tour: Tour, id: string) => {
     } else {
       const { data: img, error } = await supabase.storage
         .from("anhbia")
-        .upload("public/" + id + ".jpg", tour.bia);
+        .upload("public/" + id + ".jpg", tour.bia, {
+          upsert: true,
+          contentType: "image/jpeg",
+        });
 
       const { data, error: InsertError } = await supabase
         .from("tour")
