@@ -43,6 +43,10 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
     }
   }
 
+  useEffect(() => {
+    if (props.hanhkhach) form.setFieldValue("passengers", props.hanhkhach);
+  }, [props.hanhkhach]);
+
   return (
     <div className="list">
       <h3>Thông tin hành khách</h3>

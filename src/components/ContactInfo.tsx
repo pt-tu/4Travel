@@ -1,5 +1,5 @@
 import { Col, Row, Form, Input, FormInstance } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { useImperativeHandle, useRef } from "react";
 
 function ContactInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
@@ -23,6 +23,16 @@ function ContactInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
       props.onContactInfoFinish();
     }
   }
+
+  useEffect(() => {
+    if (props.cccd)
+      form.setFieldsValue({
+        name: props.hoten,
+        cic: props.cccd,
+        phone: props.sdt,
+        email: props.email,
+      });
+  }, [props.cccd]);
 
   return (
     <div className="contact">

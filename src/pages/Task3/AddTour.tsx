@@ -103,7 +103,7 @@ function AddTour() {
         price: gettour.data.price,
       });
     }
-  }, [tourid]);
+  }, [tourid, gettour.data]);
 
   return (
     <div className="wrapper">

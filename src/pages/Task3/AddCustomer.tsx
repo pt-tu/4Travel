@@ -78,7 +78,7 @@ function AddCustomer() {
         adhocreq: getcustomer.data.yeucau,
       });
     }
-  }, [customerid]);
+  }, [customerid, getcustomer.data]);
 
   return (
     <div className="wrapper">

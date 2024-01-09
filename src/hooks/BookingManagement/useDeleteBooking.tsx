@@ -13,6 +13,6 @@ const deleteBooking = async (cus_id: string, tour_id: string) => {
   }
 };
 
-export default function useDeleteBooking(cus_id: any, tour_id: any) {
+export default function useDeleteBooking(cus_id: string, tour_id: string) {
   return useMutation(() => deleteBooking(cus_id, tour_id));
 }

@@ -9,6 +9,6 @@ const deleteCustomer = async (id: string) => {
   }
 };
 
-export default function useDeleteCustomer(id: any) {
+export default function useDeleteCustomer(id: string) {
   return useMutation(() => deleteCustomer(id));
 }
