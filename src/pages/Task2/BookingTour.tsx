@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TourBooking } from "../../components/Task2Component/TourBooking";
 import "../../components/Task2Component/TourStyle.css";
 import location from "../../images/location.png";
@@ -16,19 +16,34 @@ import useGetTourPage from "../../hooks/TourManagement/useGetTourPage";
 import useUser from "../../hooks/accountsystem/useUser";
 function BookingTour() {
   const { Search } = Input;
+  const { Option } = Select;
   const [Page, setPage] = useState<number>(1);
   const [diemdi, setdiemdi] = useState("");
   const [diemden, setdiemden] = useState("");
   const [ngaydi, setngaydi] = useState("2000-01-01T00:00:00.001Z");
   const [ngayve, setngayve] = useState("2099-01-01T00:00:00.001Z");
   const [TourName, setTourName] = useState("");
-  const GetTourPage = useGetTourPage(Page, diemdi, diemden, ngaydi, ngayve, TourName);
-  const userAccount= useUser();
-  var isVis=false;
+  // prettier-ignore
+  const diaDiem = ["An Giang", "Bà Rịa – Vũng Tàu", "Bắc Giang", "Bắc Kạn", "Bạc Liêu", "Bắc Ninh", "Bến Tre", "Bình Định", "Bình Dương", "Bình Phước", "Bình Thuận", "Cà Mau", "Cần Thơ", "Cao Bằng", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Điện Biên", "Đồng Nai", "Đồng Tháp", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hậu Giang", "Hòa Bình", "Hưng Yên", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lâm Đồng", "Lạng Sơn", "Lào Cai", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thành phố Hồ Chí Minh", "Thừa Thiên Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"];
+  const GetTourPage = useGetTourPage(
+    Page,
+    diemdi,
+    diemden,
+    ngaydi,
+    ngayve,
+    TourName
+  );
+  const userAccount = useUser();
+  var isVis = false;
 
-  if(userAccount.data?.user_metadata.role=="user"){
-    isVis=true;
+  if (userAccount.data?.user_metadata.role == "user") {
+    isVis = true;
   }
+
+  useEffect(() => {
+    setPage(1);
+    GetTourPage.refetch();
+  }, [diemdi, diemden, ngaydi, ngayve]);
   return (
     <div>
       <ConfigProvider
@@ -59,17 +74,18 @@ function BookingTour() {
                   size="large"
                   className="Selector"
                   style={{ marginRight: 20 }}
+                  showSearch
+                  allowClear
                   bordered={false}
-                  options={[
-                    { value: "Đà Nẵng", label: "Đà Nẵng" },
-                    { value: "Hà Nội", label: "Hà Nội" },
-                    { value: "Hồ Chí Minh", label: "Hồ Chí Minh" },
-                  ]}
                   placeholder="Điểm đi"
-                  onChange={(value: string) => {
-                    setdiemdi(value);
+                  onChange={(value) => {
+                    setdiemdi(value ?? "");
                   }}
-                />
+                >
+                  {diaDiem.map((e) => (
+                    <Option key={e}>{e}</Option>
+                  ))}
+                </Select>
                 <ArrowRightOutlined></ArrowRightOutlined>
                 <img
                   src={location}
@@ -79,46 +95,43 @@ function BookingTour() {
                 <Select
                   size="large"
                   className="Selector"
+                  showSearch
+                  allowClear
                   bordered={false}
-                  options={[
-                    { value: "Đà Nẵng", label: "Đà Nẵng" },
-                    { value: "Hà Nội", label: "Hà Nội" },
-                    { value: "Hồ Chí Minh", label: "Hồ Chí Minh" },
-                  ]}
                   placeholder="Điểm đến"
-                  onChange={(value: string) => {
-                    setdiemden(value);
+                  onChange={(value) => {
+                    setdiemden(value ?? "");
                   }}
-                />
+                >
+                  {diaDiem.map((e) => (
+                    <Option key={e}>{e}</Option>
+                  ))}
+                </Select>
               </div>
             </div>
             <div className="fitterDiv">
-              <DatePicker.RangePicker className="fitter"
-                onChange={(date: any) => {
-                  setngaydi(date[0]?.toISOString() ?? "");
-                  setngayve(date[1]?.toISOString() ?? "");
+              <DatePicker.RangePicker
+                className="fitter"
+                placeholder={["Từ ngày", "Đến ngày"]}
+                onChange={(date) => {
+                  setngaydi(
+                    date
+                      ? date[0]
+                        ? date[0].toISOString() ?? new Date().toISOString()
+                        : new Date().toISOString()
+                      : new Date().toISOString()
+                  );
+                  setngayve(
+                    date
+                      ? date[1]
+                        ? date[1].toISOString() ??
+                          new Date(8640000000000000).toISOString()
+                        : new Date(8640000000000000).toISOString()
+                      : new Date(8640000000000000).toISOString()
+                  ); // If date is null, set to max date possible
                 }}
               ></DatePicker.RangePicker>
             </div>
-
-            <Button
-              type="primary"
-              style={{
-                boxShadow: "none",
-                height: "50px",
-                borderRadius: "4px",
-                marginTop: "3px",
-                marginRight: "3px",
-                marginLeft: "3px",
-                color: "White"
-              }}
-              onClick={() => {
-                setPage(1);
-                GetTourPage.refetch();
-              }}
-            >
-              <b>Tìm kiếm</b>
-            </Button>
           </div>
           <Search
             placeholder="Nhập tên tour bạn muốn"
@@ -139,12 +152,16 @@ function BookingTour() {
               justifyContent: "flex-end",
             }}
           >
-            
-            <Link to="/lich-su-dat" style={{display: isVis ? 'block' : 'none'}}>
-              <Button icon={<HistoryOutlined />} style={{visibility: isVis ? 'visible' : 'hidden'  }} 
-              className="ButtonUp" disabled={!isVis}>
-
-              </Button>
+            <Link
+              to="/lich-su-dat"
+              style={{ display: isVis ? "block" : "none" }}
+            >
+              <Button
+                icon={<HistoryOutlined />}
+                style={{ visibility: isVis ? "visible" : "hidden" }}
+                className="ButtonUp"
+                disabled={!isVis}
+              ></Button>
             </Link>
           </div>
           {GetTourPage.data?.map((item) => (
@@ -171,7 +188,7 @@ function BookingTour() {
               className="ButtonNext"
               style={{ boxShadow: "none", color: "White" }}
               onClick={() => {
-                Page > 1 && setPage(Page - 1)
+                Page > 1 && setPage(Page - 1);
               }}
             >
               Quay lại
@@ -182,13 +199,14 @@ function BookingTour() {
               icon={<ArrowRightOutlined />}
               className="ButtonNext"
               style={{ direction: "rtl", boxShadow: "none", color: "White" }}
-              onClick={() => { GetTourPage.data?.length !== 0 && setPage(Page + 1) }}
+              onClick={() => {
+                GetTourPage.data?.length !== 0 && setPage(Page + 1);
+              }}
             >
               Xem thêm
             </Button>
           </div>
         </div>
-
       </ConfigProvider>
     </div>
   );

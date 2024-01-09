@@ -1,7 +1,14 @@
 import { useQuery } from "react-query";
 import supabase from "../../app/supabase";
 
-const GetTourPage = async (page: number, diemdi: string, diemden: string, ngaydi: string, ngayve: string, TourName: string) => {
+const GetTourPage = async (
+  page: number,
+  diemdi: string,
+  diemden: string,
+  ngaydi: string,
+  ngayve: string,
+  TourName: string
+) => {
   const { data, error } = await supabase
     .from("tour")
     .select("*")
@@ -10,7 +17,7 @@ const GetTourPage = async (page: number, diemdi: string, diemden: string, ngaydi
     .ilike("diemdi", `%${diemdi}%`)
     .ilike("diemden", `%${diemden}%`)
     .gte("start", `%${ngaydi}%`)
-    .lte("end", `%${ngayve}%`)
+    .lte("start", `%${ngayve}%`)
     .ilike("name", `%${TourName}%`);
 
   if (error) {
@@ -24,6 +31,15 @@ const GetTourPage = async (page: number, diemdi: string, diemden: string, ngaydi
 
   return data;
 };
-export default function useGetTourPage(page: number, diemdi: string, diemden: string, ngaydi: string, ngayve: string, TourName: string) {
-  return useQuery("TourPage" + page, () => GetTourPage(page, diemdi, diemden, ngaydi, ngayve, TourName));
+export default function useGetTourPage(
+  page: number,
+  diemdi: string,
+  diemden: string,
+  ngaydi: string,
+  ngayve: string,
+  TourName: string
+) {
+  return useQuery("TourPage" + page, () =>
+    GetTourPage(page, diemdi, diemden, ngaydi, ngayve, TourName)
+  );
 }
