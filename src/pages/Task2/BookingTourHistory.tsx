@@ -51,9 +51,10 @@ function BookingTourHistory() {
             return (
               <TourHistory
                 name={tour[2]}
-                id={tour[0]}
+                tour_id={tour[0]}
                 diemdi={tour[3]}
                 hoten={customer[1]}
+                cus_id={customer[0]}
                 bia={tour[1]}
               ></TourHistory>
             );

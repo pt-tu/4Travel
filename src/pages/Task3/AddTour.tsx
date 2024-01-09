@@ -57,7 +57,8 @@ function AddTour() {
     message.success("Cập nhật thông tin thành công");
     navigate(-1);
     createTour.reset();
-  } else if (createTour.error instanceof Error) {
+  }
+  if (createTour.isError && createTour.error instanceof Error) {
     message.error("Thêm thất bại. Lỗi: " + createTour.error.message);
   }
 
@@ -72,7 +73,7 @@ function AddTour() {
 
   const gettour = useGetTourByTID(tourid);
 
-  if (tourid && gettour.error instanceof Error) {
+  if (gettour.isError && tourid && gettour.error instanceof Error) {
     message.error(gettour.error.message);
   }
 

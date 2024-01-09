@@ -7,9 +7,10 @@ import location from "../../images/location.png";
 
 interface PropsType {
   name: any;
-  id: any;
+  tour_id: any;
   diemdi: any;
   hoten: any;
+  cus_id: any;
   bia: any;
 }
 
@@ -33,14 +34,17 @@ export const TourHistory = (props: PropsType) => {
         <div style={{ textAlign: "left", paddingLeft: 10 }}>
           <h3 className="title">{props?.name}</h3>
           <span className="normal">Mã tour: </span>
-          <span className="NameBold">{props?.id}</span> <br></br>
+          <span className="NameBold">{props?.tour_id}</span> <br></br>
           <span className="normal">Nơi khởi hành: </span>
           <span className="NameBold">{props?.diemdi}</span> <br></br>
           <span className="normal">Người đặt: </span>
           <span className="NameBold">{props?.hoten}</span> <br></br>
         </div>
         <div style={{ paddingRight: 10, paddingTop: 110 }}>
-          <Link to="/xac-nhan-dat-tour" state={{ tour_id: props.id }}>
+          <Link
+            to="/xac-nhan-dat-tour"
+            state={{ cus_id: props.cus_id, tour_id: props.tour_id }}
+          >
             {/*comment như customerlist dòng 54*/}
             <Button type="primary" style={{ boxShadow: "none" }}>
               Sửa
