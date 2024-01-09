@@ -8,10 +8,14 @@ import {
   Space,
   Popconfirm,
   Select,
+  message,
+  Modal,
 } from "antd";
+
 import {
   ArrowLeftOutlined,
   DeleteOutlined,
+  ExclamationCircleFilled,
   FormOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
@@ -22,23 +26,29 @@ import { Link } from "react-router-dom";
 import useGetCustomerList from "../hooks/CustomerManagement/useGetCustomerList";
 import useDeleteCustomer from "../hooks/CustomerManagement/useDeleteCustomer";
 import useGetUserList from "../hooks/admin/useGetUserList";
+import useUpdateRoleByUID from "../hooks/admin/useUpdateRoleByUID";
 
 function CustomerList() {
+  const { confirm } = Modal;
   const { Search } = Input;
-  const [DeleteID, setDeleteID] = useState("");
+  const [DeleteID, setDeleteID] = useState(
+    "9318b50c-e847-4d14-ae4e-4cf717ab7402"
+  );
   const DeleteMutate = useDeleteCustomer(DeleteID);
   const getuserlist = useGetUserList();
+  const [role, setrole] = useState<any>();
+  const [uid, setuid] = useState();
+  const updaterole = useUpdateRoleByUID(uid, role);
   const userlist: Customer[] = [];
   if (getuserlist.isSuccess) {
-    getuserlist.data.map((item: any) =>
+    getuserlist.data.map((item: any) => {
       userlist.push({
         id: item.id,
         name: item.raw_user_meta_data.ten,
         role: item.raw_user_meta_data.role,
         email: item.email,
-      })
-    );
-    console.log(userlist);
+      });
+    });
   }
   if (getuserlist.error) {
     return <></>;
@@ -46,6 +56,18 @@ function CustomerList() {
   if (DeleteMutate.isSuccess) {
     window.location.reload();
   }
+  if (updaterole.isLoading) {
+    console.log("load");
+  }
+  if (updaterole.isSuccess) {
+    console.log("done");
+  }
+
+  const handleSelectChange = (selectedValues: any, uid: any) => {
+    setrole(selectedValues); // Cập nhật state genre khi có giá trị được chọn
+    setuid(uid);
+    console.log(uid);
+  };
 
   /* //Test useState hook to re-render list after delete 
   const [CustomerListData, setCustomerListData] = useState<Customer[] | null>(null);
@@ -67,7 +89,7 @@ function CustomerList() {
   interface Customer {
     id: string;
     name: string;
-    role: string;
+    role: any;
     email: string;
   }
   const columns: ColumnsType<Customer> = [
@@ -90,7 +112,32 @@ function CustomerList() {
       width: 100,
 
       render: (text, record) => (
-        <Select style={{ width: "100%" }} defaultValue={record.role} />
+        <Select
+          style={{ width: "100%" }}
+          defaultValue={record.role}
+          onChange={(e) => {
+            handleSelectChange(e, record.id);
+            confirm({
+              title: "Bạn muốn xóa chương?",
+              icon: <ExclamationCircleFilled />,
+              content: "Các chương được chọn sẽ bị xóa sau khi xác nhận",
+              okText: "Xác nhận",
+              okType: "danger",
+              cancelText: "Hủy bỏ",
+              onOk() {
+                updaterole.mutate();
+              },
+              onCancel() {
+                console.log("Cancel");
+              },
+            });
+          }}
+          options={[
+            { value: "staff", label: "staff" },
+            { value: "user", label: "user" },
+            { value: "admin", label: "admin" },
+          ]}
+        />
         //khi chọn chỉnh sửa sẽ load trang chỉnh sửa, lúc này trang chỉnh sửa input sẽ là dữ liệu của khách hàng được chọn. tham khảo useParams để truyền id khách hàng vào trang chỉnh sửa để query: https://ui.dev/react-router-url-parameters?fbclid=IwAR3grGeq74ae9OoC9xyeMVStoe2agUV-hLT2MnipjCJnK5GyHRXoRvKZEvI, nếu khó quá có thể tách thêm mới khách và chỉnh sửa khách ra 2 page khác nhau
       ),
     },
