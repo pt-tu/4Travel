@@ -4,8 +4,10 @@ import supabase from "../../app/supabase";
 const GetDeviceList = async (Search: string) => {
     let { data: customer, error } = await supabase
         .from('device')
-        .select('*')
-        .ilike('cccd',`%${Search}%`)
+        .select(`
+           *
+        `)
+        .ilike('name',`%${Search}%`)
         
     if (error) {
         throw new Error(error.message);

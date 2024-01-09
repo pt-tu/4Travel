@@ -180,9 +180,6 @@ function CustomerList() {
           </div>
           <Space></Space>
           <Table
-            rowSelection={{
-              ...rowSelection,
-            }}
             columns={columns}
             dataSource={CustomerList1.data}
             className="tableFilter"
