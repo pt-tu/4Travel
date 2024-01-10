@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { TourHistory } from "../../components/Task2Component/TourHistory";
 import "../../components/Task2Component/TourStyle.css";
 import { Button } from "antd";
 import {
   ArrowRightOutlined,
-  FilterFilled,
-  ReloadOutlined,
   ArrowLeftOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Input, Space, ConfigProvider, DatePicker, Select } from "antd";
+import { Input, ConfigProvider } from "antd";
 import useUser from "../../hooks/accountsystem/useUser";
 import useGetBookingPage from "../../hooks/BookingManagement/useGetBookingPage";
 
@@ -22,13 +20,7 @@ function BookingTourHistory() {
 
   return (
     <div>
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: "#4B268F",
-          },
-        }}
-      >
+      <ConfigProvider theme={{ token: { colorPrimary: "#4B268F" } }}>
         <div className="CenterContainer">
           <Search
             placeholder="Nhập tên, mã tour hoặc khách hàng bạn muốn"
@@ -43,6 +35,7 @@ function BookingTourHistory() {
               BookingPageData.refetch();
             }}
           />
+
           {BookingPageData.data?.map((item) => {
             if (item.tour == null) return;
             const customer = Object.values(item.customer);
@@ -53,13 +46,14 @@ function BookingTourHistory() {
                 name={tour[2]}
                 tour_id={tour[0]}
                 diemdi={tour[3]}
-                hoten={customer[1]}
+                hoten={customer[4]}
                 bia={tour[1]}
                 hanhkhach={item.hanhkhach}
                 customer={customer}
-              ></TourHistory>
+              />
             );
           })}
+
           <div
             style={{
               display: "flex",
@@ -76,6 +70,7 @@ function BookingTourHistory() {
               onClick={() => {
                 Page > 1 && setPage(Page - 1);
               }}
+              disabled={Page == 1}
             >
               Quay lại
             </Button>
@@ -88,6 +83,7 @@ function BookingTourHistory() {
               onClick={() => {
                 BookingPageData.data?.length !== 0 && setPage(Page + 1);
               }}
+              disabled={(BookingPageData.data?.length ?? 0) < 5}
             >
               Xem thêm
             </Button>

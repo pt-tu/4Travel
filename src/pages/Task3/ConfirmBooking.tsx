@@ -27,7 +27,7 @@ function ConfirmBooking() {
   const [hoten, sethoten] = useState(
     location.state
       ? location.state.customer
-        ? location.state.customer[1] ?? ""
+        ? location.state.customer[4] ?? ""
         : ""
       : ""
   );
@@ -41,50 +41,53 @@ function ConfirmBooking() {
   const [sdt, setsdt] = useState(
     location.state
       ? location.state.customer
-        ? location.state.customer[3] ?? ""
+        ? location.state.customer[1] ?? ""
         : ""
       : ""
   );
   const [email, setemail] = useState(
     location.state
       ? location.state.customer
-        ? location.state.customer[4] ?? ""
+        ? location.state.customer[3] ?? ""
         : ""
       : ""
   );
   const [ngaysinh, setngaysinh] = useState(
     location.state
       ? location.state.customer
-        ? location.state.customer[5]
-          ? new Date().toISOString() // Lấy ngày sinh từ database
-          : new Date().toISOString()
+        ? dayjs(location.state.customer[8]).toISOString()
         : new Date().toISOString()
       : new Date().toISOString()
   );
   const [diachi, setdiachi] = useState(
     location.state
       ? location.state.customer
-        ? location.state.customer[6] ?? ""
+        ? location.state.customer[5] ?? ""
         : ""
       : ""
   );
   const [ghichu, setghichu] = useState(
     location.state
       ? location.state.customer
-        ? location.state.customer[7] ?? ""
+        ? location.state.customer[6] ?? ""
         : ""
       : ""
   );
   const [yeucau, setyeucau] = useState(
     location.state
       ? location.state.customer
-        ? location.state.customer[8] ?? ""
+        ? location.state.customer[7] ?? ""
         : ""
       : ""
   );
-  const [hanhkhach, sethanhkhach] = useState([
-    { hoten: hoten, gioitinh: "", ngaysinh: ngaysinh, ghichu: ghichu },
-  ]);
+  const [hanhkhach, sethanhkhach] = useState(
+    location.state
+      ? location.state.hanhkhach ?? [
+          { hoten: hoten, gioitinh: "", ngaysinh: ngaysinh, ghichu: ghichu },
+        ]
+      : [{ hoten: hoten, gioitinh: "", ngaysinh: ngaysinh, ghichu: ghichu }]
+  );
+  const [retrymutate, setretrymutate] = useState(true);
 
   // Nếu không truyền tour_id thì back
   useEffect(() => {
@@ -107,17 +110,8 @@ function ConfirmBooking() {
     },
     customerid
   );
-  if (createCustomer.isSuccess) {
-    if (!customerid) {
-      setcustomerid(createCustomer.data.id);
-    }
-  }
-  if (createCustomer.isError && createCustomer.error instanceof Error) {
-    message.error(
-      "Cập nhật thông tin khách hàng thất bại. Lỗi: " +
-        createCustomer.error.message
-    );
-  }
+  if (createCustomer.isSuccess)
+    if (!customerid) setcustomerid(createCustomer.data.id);
 
   const createBooking = useCreateBooking(
     {
@@ -128,34 +122,24 @@ function ConfirmBooking() {
     },
     user.data ? user.data.id : ""
   );
+
   if (createBooking.isSuccess) {
     message.success("Cập nhật booking thành công");
     navigate(-1);
     createCustomer.reset();
     createBooking.reset();
   }
-  if (createBooking.isError && createBooking.error instanceof Error) {
-    message.error(
-      "Cập nhật booking thất bại. Lỗi: " + createBooking.error.message
-    );
-    createCustomer.reset();
-  }
 
   const getcustomerbycccd = useGetCustomerByCCCD(cccd);
-  if (getcustomerbycccd.isError && getcustomerbycccd.error instanceof Error) {
-    console.log(getcustomerbycccd.error.message);
-  }
+  if (getcustomerbycccd.isError)
+    console.log((getcustomerbycccd.error as any).message);
 
   function HandleSubmit() {
-    if (contactInfo.current && bookingInfo.current) {
-      contactInfo.current.submit();
-    }
+    if (contactInfo.current) contactInfo.current.submit();
   }
 
   function HandleContactInfoFinish() {
-    if (bookingInfo.current) {
-      bookingInfo.current.submit();
-    }
+    if (bookingInfo.current) bookingInfo.current.submit();
   }
 
   function HandleBookingInfoFinish() {
@@ -171,6 +155,7 @@ function ConfirmBooking() {
       setghichu(getcustomerbycccd.data.ghichu);
       setyeucau(getcustomerbycccd.data.yeucau);
     }
+
     if (hanhkhach.length > 0) {
       for (const hk of hanhkhach) {
         if (hk.hoten == hoten) {
@@ -184,20 +169,38 @@ function ConfirmBooking() {
     createCustomer.mutate();
   }
 
-  // WARNING: Trick lỏ, xử lý bất đồng bộ sau
   useEffect(() => {
     if (createCustomer.isSuccess) createBooking.mutate();
   }, [createCustomer.isSuccess]);
 
+  // Lỗi 23505: duplicate key value violates unique constraint "customer_cccd_key"
+  // Lỗi này xảy ra khi ta update customer mà vẫn giữ nguyên cccd
+  // Do đó có thể xem đây là lỗi giả, cho phép chạy lại mutate 1 lần nữa
+  useEffect(() => {
+    if (createCustomer.isError && retrymutate) {
+      if ((createCustomer.error as any).code == "23505") {
+        createCustomer.mutate();
+        setretrymutate(false);
+      } else
+        message.error(
+          "Cập nhật thông tin liên lạc thất bại. Lỗi: " +
+            (createCustomer.error as any).message
+        );
+    }
+  }, [createCustomer.isError]);
+
+  useEffect(() => {
+    if (createBooking.isError) {
+      message.error(
+        "Cập nhật booking thất bại. Lỗi: " +
+          (createBooking.error as any).message
+      );
+    }
+  }, [createBooking.isError]);
+
   return (
     <div className="wrapper">
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: "#4B268F",
-          },
-        }}
-      >
+      <ConfigProvider theme={{ token: { colorPrimary: "#4B268F" } }}>
         <Button
           type="text"
           icon={<ArrowLeftOutlined />}
@@ -219,6 +222,7 @@ function ConfirmBooking() {
           setsdt={setsdt}
           email={email}
           setemail={setemail}
+          setretrymutate={setretrymutate}
           onContactInfoFinish={HandleContactInfoFinish}
           ref={contactInfo}
         />

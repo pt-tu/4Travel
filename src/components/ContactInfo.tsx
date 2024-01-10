@@ -7,7 +7,6 @@ function ContactInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
   // This is confusing, but for now it's the only way to get the form instance
   const [form] = Form.useForm(); // Form instance used inside this component to get validation status
   const contactInfo = useRef<FormInstance>(); // Form instance referenced by parent component to trigger form validation
-
   const location = useLocation();
 
   useImperativeHandle(ref, () => contactInfo.current);
@@ -20,32 +19,16 @@ function ContactInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
     const validationerror = form
       .getFieldsError()
       .filter(({ errors }) => errors.length).length;
-    if (!!validationerror) {
-      return;
-    } else {
-      props.onContactInfoFinish();
-    }
+    if (!!validationerror) return;
+    props.onContactInfoFinish();
   }
 
-  useEffect(
-    () => form.setFieldValue("name", props.hoten),
-    [location.state.customer]
-  );
-
-  useEffect(
-    () => form.setFieldValue("cic", props.cccd),
-    [location.state.customer]
-  );
-
-  useEffect(
-    () => form.setFieldValue("phone", props.sdt),
-    [location.state.customer]
-  );
-
-  useEffect(
-    () => form.setFieldValue("email", props.email),
-    [location.state.customer]
-  );
+  useEffect(() => {
+    form.setFieldValue("name", props.hoten);
+    form.setFieldValue("cic", props.cccd);
+    form.setFieldValue("phone", props.sdt);
+    form.setFieldValue("email", props.email);
+  }, [location.state.customer]);
 
   return (
     <div className="contact">
@@ -70,6 +53,7 @@ function ContactInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
               />
             </Form.Item>
           </Col>
+
           <Col span={12} style={padLeft}>
             <Form.Item
               name={"cic"}
@@ -78,11 +62,15 @@ function ContactInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
             >
               <Input
                 value={props.cccd}
-                onChange={(e) => props.setcccd(e.target.value)}
+                onChange={(e) => {
+                  props.setcccd(e.target.value);
+                  props.setretrymutate(false);
+                }}
               />
             </Form.Item>
           </Col>
         </Row>
+
         <Row>
           <Col span={12} style={padRight}>
             <Form.Item
@@ -96,6 +84,7 @@ function ContactInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
               />
             </Form.Item>
           </Col>
+
           <Col span={12} style={padLeft}>
             <Form.Item name={"email"} label="Email">
               <Input

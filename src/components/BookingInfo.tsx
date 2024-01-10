@@ -33,19 +33,14 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
     const validationerror = form
       .getFieldsError()
       .filter(({ errors }) => errors.length).length;
-    if (!!validationerror) {
-      return;
-    } else {
-      props.onBookingInfoFinish();
-    }
+    if (!!validationerror) return;
+    props.sethanhkhach(form.getFieldsValue().passengers);
+    props.onBookingInfoFinish();
   }
 
   useEffect(() => {
     const updatedHanhkhach = props.hanhkhach.map((hk: any) => {
-      return {
-        ...hk,
-        ngaysinh: dayjs(new Date(hk.ngaysinh)),
-      };
+      return { ...hk, ngaysinh: dayjs(hk.ngaysinh) };
     });
     form.setFieldValue("passengers", updatedHanhkhach);
   }, [location.state.hanhkhach]);
@@ -76,6 +71,7 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
                         <Input />
                       </Form.Item>
                     </Col>
+
                     <Col style={padLeftRight}>
                       <Form.Item
                         {...restField}
@@ -89,6 +85,7 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
                         </Select>
                       </Form.Item>
                     </Col>
+
                     <Col style={padLeftRight}>
                       <Form.Item
                         {...restField}
@@ -102,6 +99,7 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
                         />
                       </Form.Item>
                     </Col>
+
                     <Col flex={"auto"} style={padLeftRight}>
                       <Form.Item
                         {...restField}
@@ -111,6 +109,7 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
                         <Input />
                       </Form.Item>
                     </Col>
+
                     <MinusCircleOutlined
                       style={padLeft}
                       onClick={() => remove(name)}
@@ -118,6 +117,7 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
                   </Row>
                 </Space>
               ))}
+
               <Form.Item>
                 <Button
                   type="dashed"
