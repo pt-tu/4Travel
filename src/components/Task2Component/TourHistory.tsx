@@ -10,8 +10,9 @@ interface PropsType {
   tour_id: any;
   diemdi: any;
   hoten: any;
-  cus_id: any;
   bia: any;
+  customer: any;
+  hanhkhach: any;
 }
 
 export const TourHistory = (props: PropsType) => {
@@ -43,7 +44,11 @@ export const TourHistory = (props: PropsType) => {
         <div style={{ paddingRight: 10, paddingTop: 110 }}>
           <Link
             to="/xac-nhan-dat-tour"
-            state={{ cus_id: props.cus_id, tour_id: props.tour_id }}
+            state={{
+              tour_id: props.tour_id,
+              customer: props.customer,
+              hanhkhach: props.hanhkhach,
+            }}
           >
             {/*comment như customerlist dòng 54*/}
             <Button type="primary" style={{ boxShadow: "none" }}>

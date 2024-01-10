@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { Button, FormInstance, message,ConfigProvider } from "antd";
+import { Button, FormInstance, message, ConfigProvider } from "antd";
 import "./Form.css";
 import ContactInfo from "../../components/ContactInfo";
 import BookingInfo from "../../components/BookingInfo";
 import useCreateCustomer from "../../hooks/CustomerManagement/useCreateCustomer";
 import useCreateBooking from "../../hooks/BookingManagement/useCreateBooking";
-import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
 import useGetCustomerByCCCD from "../../hooks/CustomerManagement/useGetCustomerByCCCD";
-import useGetHanhKhach from "../../hooks/TourManagement/useGetHanhKhach";
 import useUser from "../../hooks/accountsystem/useUser";
 import dayjs from "dayjs";
 
@@ -26,18 +24,67 @@ function ConfirmBooking() {
   const [tourid, settourid] = useState(
     location.state ? location.state.tour_id ?? "" : ""
   );
-  const [hoten, sethoten] = useState("");
-  const [cccd, setcccd] = useState("");
-  const [sdt, setsdt] = useState("");
-  const [email, setemail] = useState("");
-  const [ngaysinh, setngaysinh] = useState(new Date().toISOString());
-  const [diachi, setdiachi] = useState("");
-  const [ghichu, setghichu] = useState("");
-  const [yeucau, setyeucau] = useState("");
-  const defaulthanhkhach = [
-    { hoten: "", gioitinh: "", ngaysinh: "", ghichu: "" },
-  ];
-  const [hanhkhach, sethanhkhach] = useState(defaulthanhkhach);
+  const [hoten, sethoten] = useState(
+    location.state
+      ? location.state.customer
+        ? location.state.customer[1] ?? ""
+        : ""
+      : ""
+  );
+  const [cccd, setcccd] = useState(
+    location.state
+      ? location.state.customer
+        ? location.state.customer[2] ?? ""
+        : ""
+      : ""
+  );
+  const [sdt, setsdt] = useState(
+    location.state
+      ? location.state.customer
+        ? location.state.customer[3] ?? ""
+        : ""
+      : ""
+  );
+  const [email, setemail] = useState(
+    location.state
+      ? location.state.customer
+        ? location.state.customer[4] ?? ""
+        : ""
+      : ""
+  );
+  const [ngaysinh, setngaysinh] = useState(
+    location.state
+      ? location.state.customer
+        ? location.state.customer[5]
+          ? new Date().toISOString() // Lấy ngày sinh từ database
+          : new Date().toISOString()
+        : new Date().toISOString()
+      : new Date().toISOString()
+  );
+  const [diachi, setdiachi] = useState(
+    location.state
+      ? location.state.customer
+        ? location.state.customer[6] ?? ""
+        : ""
+      : ""
+  );
+  const [ghichu, setghichu] = useState(
+    location.state
+      ? location.state.customer
+        ? location.state.customer[7] ?? ""
+        : ""
+      : ""
+  );
+  const [yeucau, setyeucau] = useState(
+    location.state
+      ? location.state.customer
+        ? location.state.customer[8] ?? ""
+        : ""
+      : ""
+  );
+  const [hanhkhach, sethanhkhach] = useState([
+    { hoten: hoten, gioitinh: "", ngaysinh: ngaysinh, ghichu: ghichu },
+  ]);
 
   // Nếu không truyền tour_id thì back
   useEffect(() => {
@@ -91,26 +138,13 @@ function ConfirmBooking() {
     message.error(
       "Cập nhật booking thất bại. Lỗi: " + createBooking.error.message
     );
-  }
-
-  const getcustomerbycid = useGetCustomerByCID(customerid);
-  if (
-    getcustomerbycid.isError &&
-    customerid &&
-    getcustomerbycid.error instanceof Error
-  ) {
-    message.error(
-      "Đồng bộ thông tin khách hàng thất bại. Lỗi: " +
-        getcustomerbycid.error.message
-    );
+    createCustomer.reset();
   }
 
   const getcustomerbycccd = useGetCustomerByCCCD(cccd);
   if (getcustomerbycccd.isError && getcustomerbycccd.error instanceof Error) {
     console.log(getcustomerbycccd.error.message);
   }
-
-  const gethanhkhach = useGetHanhKhach(customerid, tourid);
 
   function HandleSubmit() {
     if (contactInfo.current && bookingInfo.current) {
@@ -125,18 +159,7 @@ function ConfirmBooking() {
   }
 
   function HandleBookingInfoFinish() {
-    if (customerid) {
-      if (getcustomerbycid.data) {
-        setngaysinh(
-          getcustomerbycid.data.ngaysinh
-            ? dayjs(getcustomerbycid.data.ngaysinh).toISOString()
-            : ""
-        );
-        setdiachi(getcustomerbycid.data.diachi);
-        setghichu(getcustomerbycid.data.ghichu);
-        setyeucau(getcustomerbycid.data.yeucau);
-      } else return;
-    } else if (getcustomerbycccd.data) {
+    if (!customerid && getcustomerbycccd.data) {
       setcustomerid(getcustomerbycccd.data.id);
       if (!ngaysinh)
         setngaysinh(
@@ -144,14 +167,15 @@ function ConfirmBooking() {
             ? dayjs(getcustomerbycccd.data.ngaysinh).toISOString()
             : ""
         );
-      if (!diachi) setdiachi(getcustomerbycccd.data.diachi);
-      if (!ghichu) setghichu(getcustomerbycccd.data.ghichu);
-      if (!yeucau) setyeucau(getcustomerbycccd.data.yeucau);
-    } else if (hanhkhach.length > 0) {
+      setdiachi(getcustomerbycccd.data.diachi);
+      setghichu(getcustomerbycccd.data.ghichu);
+      setyeucau(getcustomerbycccd.data.yeucau);
+    }
+    if (hanhkhach.length > 0) {
       for (const hk of hanhkhach) {
         if (hk.hoten == hoten) {
-          setngaysinh(hk.ngaysinh);
-          setghichu(hk.ghichu);
+          if (!ngaysinh) setngaysinh(hk.ngaysinh);
+          if (!ghichu) setghichu(hk.ghichu);
           break;
         }
       }
@@ -159,35 +183,6 @@ function ConfirmBooking() {
 
     createCustomer.mutate();
   }
-
-  useEffect(() => {
-    if (getcustomerbycid.data) {
-      if (!hoten) sethoten(getcustomerbycid.data.hoten);
-      if (!cccd) setcccd(getcustomerbycid.data.cccd);
-      if (!sdt) setsdt(getcustomerbycid.data.sdt);
-      if (!email) setemail(getcustomerbycid.data.email);
-      setngaysinh(
-        getcustomerbycid.data.ngaysinh
-          ? dayjs(getcustomerbycid.data.ngaysinh).toISOString()
-          : ""
-      );
-      setdiachi(getcustomerbycid.data.diachi);
-      setghichu(getcustomerbycid.data.ghichu);
-      setyeucau(getcustomerbycid.data.yeucau);
-    }
-    if (gethanhkhach.data && (!hanhkhach || hanhkhach == defaulthanhkhach)) {
-      sethanhkhach([
-        {
-          hoten: gethanhkhach.data.hoten,
-          gioitinh: gethanhkhach.data.gioitinh,
-          ngaysinh: gethanhkhach.data.ngaysinh
-            ? dayjs(gethanhkhach.data.ngaysinh).toISOString()
-            : "",
-          ghichu: gethanhkhach.data.ghichu,
-        },
-      ]);
-    }
-  }, [tourid, gethanhkhach.data]);
 
   // WARNING: Trick lỏ, xử lý bất đồng bộ sau
   useEffect(() => {
@@ -203,45 +198,48 @@ function ConfirmBooking() {
           },
         }}
       >
-      <Button
-        type="text"
-        icon={<ArrowLeftOutlined />}
-        className="ButtonUp"
-        onClick={() => navigate(-1)}
-      >
-        {" "}
-        <b>Quay lại</b>
-      </Button>
-
-      <h2>Thông tin khách hàng</h2>
-
-      <ContactInfo
-        hoten={hoten}
-        sethoten={sethoten}
-        cccd={cccd}
-        setcccd={setcccd}
-        sdt={sdt}
-        setsdt={setsdt}
-        email={email}
-        setemail={setemail}
-        onContactInfoFinish={HandleContactInfoFinish}
-        ref={contactInfo}
-      />
-
-      <BookingInfo
-        defaulthanhkhach={defaulthanhkhach}
-        hanhkhach={hanhkhach}
-        sethanhkhach={sethanhkhach}
-        gethanhkhach={gethanhkhach}
-        onBookingInfoFinish={HandleBookingInfoFinish}
-        ref={bookingInfo}
-      />
-
-      <div className="submitButton">
-        <Button type="primary" htmlType="submit" onClick={HandleSubmit} style={{boxShadow: "none", color: "White" }}>
-          Xác nhận
+        <Button
+          type="text"
+          icon={<ArrowLeftOutlined />}
+          className="ButtonUp"
+          onClick={() => navigate(-1)}
+        >
+          {" "}
+          <b>Quay lại</b>
         </Button>
-      </div>
+
+        <h2>Thông tin khách hàng</h2>
+
+        <ContactInfo
+          hoten={hoten}
+          sethoten={sethoten}
+          cccd={cccd}
+          setcccd={setcccd}
+          sdt={sdt}
+          setsdt={setsdt}
+          email={email}
+          setemail={setemail}
+          onContactInfoFinish={HandleContactInfoFinish}
+          ref={contactInfo}
+        />
+
+        <BookingInfo
+          hanhkhach={hanhkhach}
+          sethanhkhach={sethanhkhach}
+          onBookingInfoFinish={HandleBookingInfoFinish}
+          ref={bookingInfo}
+        />
+
+        <div className="submitButton">
+          <Button
+            type="primary"
+            htmlType="submit"
+            onClick={HandleSubmit}
+            style={{ boxShadow: "none", color: "White" }}
+          >
+            Xác nhận
+          </Button>
+        </div>
       </ConfigProvider>
     </div>
   );

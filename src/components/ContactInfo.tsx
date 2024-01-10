@@ -1,11 +1,14 @@
 import { Col, Row, Form, Input, FormInstance } from "antd";
 import React, { useEffect } from "react";
 import { useImperativeHandle, useRef } from "react";
+import { useLocation } from "react-router-dom";
 
 function ContactInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
   // This is confusing, but for now it's the only way to get the form instance
   const [form] = Form.useForm(); // Form instance used inside this component to get validation status
   const contactInfo = useRef<FormInstance>(); // Form instance referenced by parent component to trigger form validation
+
+  const location = useLocation();
 
   useImperativeHandle(ref, () => contactInfo.current);
   // use global color variables
@@ -24,15 +27,25 @@ function ContactInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
     }
   }
 
-  useEffect(() => {
-    if (props.cccd)
-      form.setFieldsValue({
-        name: props.hoten,
-        cic: props.cccd,
-        phone: props.sdt,
-        email: props.email,
-      });
-  }, [props.cccd]);
+  useEffect(
+    () => form.setFieldValue("name", props.hoten),
+    [location.state.customer]
+  );
+
+  useEffect(
+    () => form.setFieldValue("cic", props.cccd),
+    [location.state.customer]
+  );
+
+  useEffect(
+    () => form.setFieldValue("phone", props.sdt),
+    [location.state.customer]
+  );
+
+  useEffect(
+    () => form.setFieldValue("email", props.email),
+    [location.state.customer]
+  );
 
   return (
     <div className="contact">

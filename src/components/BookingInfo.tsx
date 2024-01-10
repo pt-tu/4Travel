@@ -10,15 +10,16 @@ import {
   DatePicker,
   FormInstance,
 } from "antd";
-import { useWatch } from "antd/es/form/Form";
 import React, { useEffect } from "react";
 import { useImperativeHandle, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import dayjs from "dayjs";
 
 function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
   // This is confusing, but for now it's the only way to get the form instance
   const [form] = Form.useForm(); // Form instance used inside this component to get validation status
   const bookingInfo = useRef<FormInstance>(); // Form instance referenced by parent component to trigger form validation
-  const hanhkhach = useWatch("passengers", form);
+  const location = useLocation();
 
   useImperativeHandle(ref, () => bookingInfo.current);
   // use global color variables
@@ -40,9 +41,14 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
   }
 
   useEffect(() => {
-    if (props.gethanhkhach.data) {
-    }
-  }, [props.gethanhkhach.data]);
+    const updatedHanhkhach = props.hanhkhach.map((hk: any) => {
+      return {
+        ...hk,
+        ngaysinh: dayjs(new Date(hk.ngaysinh)),
+      };
+    });
+    form.setFieldValue("passengers", updatedHanhkhach);
+  }, [location.state.hanhkhach]);
 
   return (
     <div className="list">
@@ -53,7 +59,6 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
         style={listForm}
         onFinish={HandleSubmit}
         layout="vertical"
-        initialValues={{ passengers: props.hanhkhach }}
       >
         <Form.List name="passengers">
           {(fields, { add, remove }) => (

@@ -14,13 +14,14 @@ const GetBookingPage = async (page: number, TourName: string) => {
     .from("booking")
     .select(
       `
-      status,
-      customer( id, hoten ),
+      status, hanhkhach,
+      customer( id, hoten, cccd, sdt, email, ngaysinh, diachi, ghichu, yeucau ),
       tour( id, name, diemdi, bia )
-    `)
+    `
+    )
     //.filter('tour.name', 'ilike', `%${TourName}%`)
-    .ilike('tour.name', `%${TourName}%`)
-    .not('tour( id, name, diemdi, bia )', 'is', null)
+    .ilike("tour.name", `%${TourName}%`)
+    .not("tour( id, name, diemdi, bia )", "is", null)
     .range((page - 1) * 5, page * 5 - 1)
     .order("created_at", { ascending: false });
 

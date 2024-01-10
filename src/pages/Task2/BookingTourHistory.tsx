@@ -44,7 +44,7 @@ function BookingTourHistory() {
             }}
           />
           {BookingPageData.data?.map((item) => {
-            if(item.tour == null ) return;
+            if (item.tour == null) return;
             const customer = Object.values(item.customer);
             const tour = Object.values(item.tour);
 
@@ -54,8 +54,9 @@ function BookingTourHistory() {
                 tour_id={tour[0]}
                 diemdi={tour[3]}
                 hoten={customer[1]}
-                cus_id={customer[0]}
                 bia={tour[1]}
+                hanhkhach={item.hanhkhach}
+                customer={customer}
               ></TourHistory>
             );
           })}
