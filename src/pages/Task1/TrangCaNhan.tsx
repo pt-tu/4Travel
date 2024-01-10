@@ -1,22 +1,32 @@
 import React, { useState } from "react";
 import Logo4T from "../../images/logo4T.png";
 import FormItem from "antd/es/form/FormItem";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import useLogin from "../../hooks/accountsystem/useLogin";
+import useUser from "../../hooks/accountsystem/useUser";
+import useUpdateMetadata from "../../hooks/useUpdateMetadata";
 
 export default function TrangCaNhan() {
-  const [email, setemail] = useState("");
-  const [password, setepass] = useState("");
+  const getu = useUser();
+  const [email, setemail] = useState(getu.data?.email);
+  const [ten, seteten] = useState(getu.data?.user_metadata.ten);
+  const [cccd, setcccd] = useState(getu.data?.user_metadata.cccd);
+  const [diachi, setdiachi] = useState(getu.data?.user_metadata.diachi);
+  const [sdt, setstd] = useState(getu.data?.user_metadata.sdt);
   const nav = useNavigate();
-  let message = "";
-  const login = useLogin({ email, password });
-  if (login.isSuccess) {
-    nav("/");
-    window.location.reload();
-  }
-  if (login.isError) {
-    message = (login.error as any).message;
+  const user = {
+    ten: ten,
+    cccd: cccd,
+    sdt: sdt,
+    diachi: diachi,
+  };
+  const updatemetadata = useUpdateMetadata(user);
+  if (updatemetadata.isSuccess) {
+    message.success("Cập nhật thông tin thành công, bạn sẽ quay lại trang chủ");
+    setTimeout(() => {
+      nav("/");
+    }, 1000);
   }
 
   return (
@@ -36,16 +46,43 @@ export default function TrangCaNhan() {
               onChange={(e) => {
                 setemail(e.target.value);
               }}
+              disabled
+              value={getu.data?.email}
             ></Input>
           </FormItem>
-          <FormItem label="Mật khẩu" style={{ fontSize: 20 }}>
+          <FormItem label="Họ tên" style={{ fontSize: 20 }}>
             <Input
+              defaultValue={getu.data?.user_metadata.ten}
               onChange={(e) => {
-                setepass(e.target.value);
+                seteten(e.target.value);
+              }}
+            ></Input>{" "}
+          </FormItem>
+          <FormItem label="CCCD" style={{ fontSize: 20 }}>
+            <Input
+              defaultValue={getu.data?.user_metadata.cccd}
+              onChange={(e) => {
+                setcccd(e.target.value);
               }}
             ></Input>
           </FormItem>
-          {message}
+          <FormItem label="Địa chỉ" style={{ fontSize: 20 }}>
+            <Input
+              defaultValue={getu.data?.user_metadata.diachi}
+              onChange={(e) => {
+                setdiachi(e.target.value);
+              }}
+            ></Input>
+          </FormItem>
+          <FormItem label="Số điện thoại" style={{ fontSize: 20 }}>
+            <Input
+              defaultValue={getu.data?.user_metadata.sdt}
+              onChange={(e) => {
+                setstd(e.target.value);
+              }}
+            ></Input>
+          </FormItem>
+
           <div
             style={{
               display: "flex",
@@ -63,20 +100,11 @@ export default function TrangCaNhan() {
                 fontWeight: "bold",
               }}
               onClick={() => {
-                login.mutate();
+                updatemetadata.mutate();
               }}
             >
-              Đăng nhập
+              Cập nhật
             </Button>
-            <Link
-              to="/quen-mat-khau"
-              style={{ color: "#4B268F", marginTop: 30 }}
-            >
-              Quên mật khẩu?
-            </Link>
-            <Link to="/dang-ky" style={{ color: "#4B268F", marginTop: 30 }}>
-              Chưa có tài khoản?
-            </Link>
           </div>
         </Form>
       </div>
