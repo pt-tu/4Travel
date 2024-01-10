@@ -14,15 +14,14 @@ import {
   Upload,
   message,
   InputNumber,
-  ConfigProvider
+  ConfigProvider,
 } from "antd";
 import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
-const { TextArea } = Input;
-
 function AddTour() {
   const [form] = Form.useForm();
+  const { TextArea } = Input;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -59,9 +58,6 @@ function AddTour() {
     navigate(-1);
     createTour.reset();
   }
-  if (createTour.isError && createTour.error instanceof Error) {
-    message.error("Thêm thất bại. Lỗi: " + createTour.error.message);
-  }
 
   const HandleImageChange = (e: any) => {
     const file = e.file;
@@ -73,10 +69,6 @@ function AddTour() {
   const { Option } = Select;
 
   const gettour = useGetTourByTID(tourid);
-
-  if (gettour.isError && tourid && gettour.error instanceof Error) {
-    message.error(gettour.error.message);
-  }
 
   useEffect(() => {
     if (gettour.data) {
@@ -107,168 +99,178 @@ function AddTour() {
     }
   }, [tourid, gettour.data]);
 
+  useEffect(() => {
+    if (createTour.isError)
+      message.error("Thêm thất bại. Lỗi: " + (createTour.error as any).message);
+  }, [createTour.isError]);
+
+  useEffect(() => {
+    if (gettour.isError && tourid)
+      message.error((gettour.error as any).message);
+  }, [gettour.isError]);
+
   return (
     <div className="wrapper">
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: "#4B268F",
-          },
-        }}
-      >
-      <Button
-        type="text"
-        icon={<ArrowLeftOutlined />}
-        className="ButtonUp"
-        onClick={() => navigate(-1)}
-      >
-        {" "}
-        <b>Quay lại</b>
-      </Button>
-
-      <h1 className="pageTitle">Thông tin tour</h1>
-
-      <Form
-        form={form}
-        labelCol={{ span: 3 }}
-        labelAlign="left"
-        onFinish={() => createTour.mutate()}
-      >
-        <Form.Item
-          name={"name"}
-          label="Tên tour"
-          rules={[{ required: true, message: "Nhập tên tour" }]}
+      <ConfigProvider theme={{ token: { colorPrimary: "#4B268F" } }}>
+        <Button
+          type="text"
+          icon={<ArrowLeftOutlined />}
+          className="ButtonUp"
+          onClick={() => navigate(-1)}
         >
-          <Input onChange={(e) => setname(e.target.value)} />
-        </Form.Item>
+          {" "}
+          <b>Quay lại</b>
+        </Button>
 
-        <Form.Item
-          name={"tgid"}
-          label="Mã hướng dẫn viên"
-          rules={[{ required: true, message: "Nhập mã HDV" }]}
+        <h1 className="pageTitle">Thông tin tour</h1>
+
+        <Form
+          form={form}
+          labelCol={{ span: 3 }}
+          labelAlign="left"
+          onFinish={() => createTour.mutate()}
         >
-          <Input
-            className="shortInput"
-            onChange={(e) => settourguide_id(e.target.value)}
-          />
-        </Form.Item>
-
-        <Form.Item name={"tgname"} label="Tên hướng dẫn viên">
-          <Input disabled className="shortInput" />
-        </Form.Item>
-
-        <Form.Item
-          name={"origin"}
-          label="Điểm đi"
-          rules={[{ required: true, message: "Nhập điểm đi" }]}
-        >
-          <Select
-            showSearch
-            placeholder="Địa điểm"
-            onChange={(e) => setdiemdi(e)}
+          <Form.Item
+            name={"name"}
+            label="Tên tour"
+            rules={[{ required: true, message: "Nhập tên tour" }]}
           >
-            {diaDiem.map((e) => (
-              <Option key={e}>{e}</Option>
-            ))}
-          </Select>
-        </Form.Item>
+            <Input onChange={(e) => setname(e.target.value)} />
+          </Form.Item>
 
-        <Form.Item
-          name={"destination"}
-          label="Điểm đến"
-          rules={[{ required: true, message: "Nhập điểm đến" }]}
-        >
-          <Select
-            showSearch
-            placeholder="Địa điểm"
-            onChange={(e) => setdiemden(e)}
+          <Form.Item
+            name={"tgid"}
+            label="Mã hướng dẫn viên"
+            rules={[{ required: true, message: "Nhập mã HDV" }]}
           >
-            {diaDiem.map((e) => (
-              <Option key={e}>{e}</Option>
-            ))}
-          </Select>
-        </Form.Item>
+            <Input
+              className="shortInput"
+              onChange={(e) => settourguide_id(e.target.value)}
+            />
+          </Form.Item>
 
-        <Form.Item
-          name={"hotel"}
-          label="Khách sạn"
-          rules={[{ required: true, message: "Nhập khách sạn" }]}
-        >
-          <Input
-            className="shortInput"
-            onChange={(e) => sethotel(e.target.value)}
-          />
-        </Form.Item>
+          <Form.Item name={"tgname"} label="Tên hướng dẫn viên">
+            <Input disabled className="shortInput" />
+          </Form.Item>
 
-        <Row>
-          <Col span={12}>
-            <Form.Item
-              labelCol={{ span: 6 }}
-              name={"start"}
-              label="Thời gian bắt đầu"
-              rules={[{ required: true, message: "Nhập thời gian bắt đầu" }]}
+          <Form.Item
+            name={"origin"}
+            label="Điểm đi"
+            rules={[{ required: true, message: "Nhập điểm đi" }]}
+          >
+            <Select
+              showSearch
+              placeholder="Địa điểm"
+              onChange={(e) => setdiemdi(e)}
             >
-              <DatePicker
-                placeholder="DD/MM/YY"
-                format={"DD/MM/YY"}
-                onChange={(e) => setstart(e?.toISOString() ?? "")}
-              />
-            </Form.Item>
-          </Col>
+              {diaDiem.map((e) => (
+                <Option key={e}>{e}</Option>
+              ))}
+            </Select>
+          </Form.Item>
 
-          <Col span={12}>
-            <Form.Item
-              labelCol={{ span: 6 }}
-              name={"end"}
-              label="Thời gian kết thúc"
-              rules={[{ required: true, message: "Nhập thời gian kết thúc" }]}
-            >
-              <DatePicker
-                placeholder="DD/MM/YY"
-                format={"DD/MM/YY"}
-                onChange={(e) => setend(e?.toISOString() ?? "")}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Form.Item name={"price"} label="Giá">
-          <InputNumber onChange={(e) => setprice(Number(e?.valueOf()) || 0)} />
-        </Form.Item>
-
-        <Form.Item name={"note"} label="Ghi chú">
-          <TextArea rows={5} onChange={(e) => setchitiet(e.target.value)} />
-        </Form.Item>
-
-        <Form.Item name={"bia"} label="Ảnh bìa">
-          <Upload
-            name="bia"
-            listType="picture-card"
-            accept=".jpg"
-            showUploadList={false}
-            onChange={HandleImageChange}
+          <Form.Item
+            name={"destination"}
+            label="Điểm đến"
+            rules={[{ required: true, message: "Nhập điểm đến" }]}
           >
-            {bia != null ? (
-              <img
-                src={URL.createObjectURL(bia)}
-                alt="Ảnh bìa tour"
-                style={{ width: "100%", height: "100%" }}
-              />
-            ) : (
-              <div>
-                <PlusOutlined />
-                <div>Upload</div>
-              </div>
-            )}
-          </Upload>
-        </Form.Item>
+            <Select
+              showSearch
+              placeholder="Địa điểm"
+              onChange={(e) => setdiemden(e)}
+            >
+              {diaDiem.map((e) => (
+                <Option key={e}>{e}</Option>
+              ))}
+            </Select>
+          </Form.Item>
 
-        <Form.Item className="submitButton">
-          <Button type="primary" htmlType="submit" style={{boxShadow: "none", color: "White" }}>
-            Xác nhận
-          </Button>
-        </Form.Item>
-      </Form>
+          <Form.Item
+            name={"hotel"}
+            label="Khách sạn"
+            rules={[{ required: true, message: "Nhập khách sạn" }]}
+          >
+            <Input
+              className="shortInput"
+              onChange={(e) => sethotel(e.target.value)}
+            />
+          </Form.Item>
+
+          <Row>
+            <Col span={12}>
+              <Form.Item
+                labelCol={{ span: 6 }}
+                name={"start"}
+                label="Thời gian bắt đầu"
+                rules={[{ required: true, message: "Nhập thời gian bắt đầu" }]}
+              >
+                <DatePicker
+                  placeholder="DD/MM/YY"
+                  format={"DD/MM/YY"}
+                  onChange={(e) => setstart(e?.toISOString() ?? "")}
+                />
+              </Form.Item>
+            </Col>
+
+            <Col span={12}>
+              <Form.Item
+                labelCol={{ span: 6 }}
+                name={"end"}
+                label="Thời gian kết thúc"
+                rules={[{ required: true, message: "Nhập thời gian kết thúc" }]}
+              >
+                <DatePicker
+                  placeholder="DD/MM/YY"
+                  format={"DD/MM/YY"}
+                  onChange={(e) => setend(e?.toISOString() ?? "")}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Form.Item name={"price"} label="Giá">
+            <InputNumber
+              onChange={(e) => setprice(Number(e?.valueOf()) || 0)}
+            />
+          </Form.Item>
+
+          <Form.Item name={"note"} label="Ghi chú">
+            <TextArea rows={5} onChange={(e) => setchitiet(e.target.value)} />
+          </Form.Item>
+
+          <Form.Item name={"bia"} label="Ảnh bìa">
+            <Upload
+              name="bia"
+              listType="picture-card"
+              accept=".jpg"
+              showUploadList={false}
+              onChange={HandleImageChange}
+            >
+              {bia != null ? (
+                <img
+                  src={URL.createObjectURL(bia)}
+                  alt="Ảnh bìa tour"
+                  style={{ width: "100%", height: "100%" }}
+                />
+              ) : (
+                <div>
+                  <PlusOutlined />
+                  <div>Upload</div>
+                </div>
+              )}
+            </Upload>
+          </Form.Item>
+
+          <Form.Item className="submitButton">
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ boxShadow: "none", color: "White" }}
+            >
+              Xác nhận
+            </Button>
+          </Form.Item>
+        </Form>
       </ConfigProvider>
     </div>
   );

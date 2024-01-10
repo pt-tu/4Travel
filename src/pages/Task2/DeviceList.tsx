@@ -1,12 +1,20 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Button, ConfigProvider, Input, Table, Space, message, Popconfirm } from "antd";
+import {
+  Button,
+  ConfigProvider,
+  Input,
+  Table,
+  Space,
+  message,
+  Popconfirm,
+} from "antd";
 import {
   ArrowLeftOutlined,
   DeleteOutlined,
   FormOutlined,
   PlusOutlined,
-  SearchOutlined
+  SearchOutlined,
 } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import "../../components/Task2Component/TourStyle.css";
@@ -14,24 +22,32 @@ import "../../components/Task2Component/CustomerDevice.css";
 import { Link, useNavigate } from "react-router-dom";
 import useGetDeviceList from "../../hooks/DeviceManagement/useGetDeviceList";
 import useDeleteDevice from "../../hooks/DeviceManagement/useDeleteDevice";
-import { Console } from "console";
+
 function DeviceList() {
   const { Search } = Input;
   const navigate = useNavigate();
   const [SearchName, setSearchName] = useState("");
   const [DeleteID, setDeleteID] = useState("");
+
   const DeviceList = useGetDeviceList(SearchName);
+
   const DeleteDevice = useDeleteDevice(DeleteID);
   if (DeleteDevice.isSuccess) {
     message.success("Xoá thành công");
     window.location.reload();
   }
-  if (DeleteDevice.isError && DeleteDevice.error instanceof Error) {
-    message.error("Xoá thất bại. Lỗi: " + DeleteDevice.error.message);
-  }
+
   useEffect(() => {
     if (DeleteID) DeleteDevice.mutate();
   }, [DeleteID]);
+
+  useEffect(() => {
+    if (DeleteDevice.isError)
+      message.error(
+        "Xoá thất bại. Lỗi: " + (DeleteDevice.error as any).message
+      );
+  }, [DeleteDevice.isError]);
+
   interface DeviceType {
     id: string;
     name: string;
@@ -39,27 +55,15 @@ function DeviceList() {
     status: string;
   }
   const columns: ColumnsType<DeviceType> = [
-    {
-      title: "Tên thiết bị",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Người quản lý",
-      dataIndex: "id_staff",
-      key: "id_staff",
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-    },
+    { title: "Tên thiết bị", dataIndex: "name", key: "name" },
+    { title: "Người quản lý", dataIndex: "id_staff", key: "id_staff" },
+    { title: "Trạng thái", dataIndex: "status", key: "status" },
     {
       title: "",
       key: "id",
       dataIndex: "id",
       width: 50,
-      render: (text, record) => (
+      render: (record) => (
         <Button
           icon={<FormOutlined />}
           onClick={() =>
@@ -80,8 +84,7 @@ function DeviceList() {
       key: "id",
       dataIndex: "id",
       width: 50,
-      render: (text, record) => (
-
+      render: (record) => (
         <Popconfirm
           title="Xác nhận?"
           description={"Xóa thiết bị " + record.name}
@@ -89,7 +92,7 @@ function DeviceList() {
             setDeleteID(record.id);
           }}
         >
-          <Button icon={<DeleteOutlined />} danger/>
+          <Button icon={<DeleteOutlined />} danger />
         </Popconfirm>
       ),
     },
@@ -108,28 +111,24 @@ function DeviceList() {
       name: record.name,
     }),
   };
+
   const [selectionType, setSelectionType] = useState<"checkbox" | "radio">(
     "checkbox"
   );
+
   return (
     <div>
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: "#4B268F",
-          },
-        }}
-      >
+      <ConfigProvider theme={{ token: { colorPrimary: "#4B268F" } }}>
         <div className="CenterContainer">
           <Search
             placeholder="Nhập tên, mã hàng bạn muốn tìm"
             className="SearchBar"
             allowClear
             enterButton={<SearchOutlined style={{ color: "White" }} />}
-
             size="large"
             style={{ marginTop: "30px" }}
           />
+
           <div
             style={{
               width: "80%",
@@ -145,18 +144,22 @@ function DeviceList() {
               >
                 {" "}
                 <b>Quay lại</b>
-              </Button>{" "}
+              </Button>
             </Link>
+
             <Button
               icon={<PlusOutlined />}
               className="ButtonUp"
               onClick={() => navigate("/them-moi-nguon-luc")}
             />
           </div>
+
           <div>
             <h2>DANH SÁCH HÀNG TRANG THIẾT BỊ</h2>
           </div>
+
           <Space></Space>
+
           <Table
             columns={columns}
             dataSource={DeviceList.data}

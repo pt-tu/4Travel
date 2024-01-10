@@ -3,14 +3,22 @@ import { useNavigate, useLocation } from "react-router-dom";
 import useCreateCustomer from "../../hooks/CustomerManagement/useCreateCustomer";
 import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
 import "./Form.css";
-import { Col, Row, Button, DatePicker, Form, Input, message,ConfigProvider } from "antd";
+import {
+  Col,
+  Row,
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  message,
+  ConfigProvider,
+} from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 
-const { TextArea } = Input;
-
 function AddCustomer() {
   const [form] = Form.useForm();
+  const { TextArea } = Input;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -43,15 +51,8 @@ function AddCustomer() {
     navigate(-1);
     createCustomer.reset();
   }
-  if (createCustomer.isError && createCustomer.error instanceof Error) {
-    message.error("Thêm thất bại. Lỗi: " + createCustomer.error.message);
-  }
 
   const getcustomer = useGetCustomerByCID(customerid);
-
-  if (getcustomer.isError && customerid && getcustomer.error instanceof Error) {
-    message.error(getcustomer.error.message);
-  }
 
   useEffect(() => {
     if (getcustomer.data) {
@@ -81,117 +82,126 @@ function AddCustomer() {
     }
   }, [customerid, getcustomer.data]);
 
+  useEffect(() => {
+    if (createCustomer.isError)
+      message.error(
+        "Thêm thất bại. Lỗi: " + (createCustomer.error as any).message
+      );
+  }, [createCustomer.isError]);
+
+  useEffect(() => {
+    if (getcustomer.isError && customerid)
+      message.error(+(getcustomer.error as any).message);
+  }, [getcustomer.isError]);
+
   return (
     <div className="wrapper">
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: "#4B268F",
-          },
-        }}
-      >
+      <ConfigProvider theme={{ token: { colorPrimary: "#4B268F" } }}>
         <Button
-        type="text"
-        icon={<ArrowLeftOutlined />}
-        className="ButtonUp"
-        onClick={() => navigate(-1)}
-      >
-        {" "}
-        <b>Quay lại</b>
-      </Button>
-
-      <h1 className="pageTitle">Thông tin khách hàng</h1>
-
-      <Form
-        form={form}
-        labelCol={{ span: 3 }}
-        labelAlign="left"
-        onFinish={() => createCustomer.mutate()}
-      >
-        <Row justify={"space-between"}>
-          <Col span={12}>
-            <Form.Item
-              labelCol={{ span: 6 }}
-              wrapperCol={{ span: 17 }}
-              name={"name"}
-              label="Họ và tên"
-              rules={[{ required: true, message: "Nhập họ tên" }]}
-            >
-              <Input onChange={(e) => sethoten(e.target.value)} />
-            </Form.Item>
-          </Col>
-
-          <Col span={11}>
-            <Form.Item
-              labelCol={{ span: 6 }}
-              name={"cic"}
-              label="CMND/CCCD"
-              rules={[{ required: true, message: "Nhập CCCD" }]}
-            >
-              <Input onChange={(e) => setcccd(e.target.value)} />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row justify={"space-between"}>
-          <Col span={12}>
-            <Form.Item
-              labelCol={{ span: 6 }}
-              wrapperCol={{ span: 17 }}
-              name={"phone"}
-              label="Số điện thoại"
-              rules={[{ required: true, message: "Nhập SĐT" }]}
-            >
-              <Input onChange={(e) => setsdt(e.target.value)} />
-            </Form.Item>
-          </Col>
-
-          <Col span={11}>
-            <Form.Item labelCol={{ span: 6 }} name={"email"} label="Email">
-              <Input onChange={(e) => setemail(e.target.value)} />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Form.Item
-          name={"bday"}
-          label="Ngày sinh"
-          rules={[{ required: true, message: "Nhập ngày sinh" }]}
+          type="text"
+          icon={<ArrowLeftOutlined />}
+          className="ButtonUp"
+          onClick={() => navigate(-1)}
         >
-          <DatePicker
-            placeholder="DD/MM/YY"
-            format={"DD/MM/YY"}
-            onChange={(e) => setngaysinh(e?.toISOString() ?? "")}
-          />
-        </Form.Item>
+          {" "}
+          <b>Quay lại</b>
+        </Button>
 
-        <Form.Item
-          name={"address"}
-          label="Địa chỉ"
-          rules={[{ required: true, message: "Nhập địa chỉ" }]}
+        <h1 className="pageTitle">Thông tin khách hàng</h1>
+
+        <Form
+          form={form}
+          labelCol={{ span: 3 }}
+          labelAlign="left"
+          onFinish={() => createCustomer.mutate()}
         >
-          <Input
-            className="longInput"
-            onChange={(e) => setdiachi(e.target.value)}
-          />
-        </Form.Item>
+          <Row justify={"space-between"}>
+            <Col span={12}>
+              <Form.Item
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 17 }}
+                name={"name"}
+                label="Họ và tên"
+                rules={[{ required: true, message: "Nhập họ tên" }]}
+              >
+                <Input onChange={(e) => sethoten(e.target.value)} />
+              </Form.Item>
+            </Col>
 
-        <Form.Item name={"notes"} label="Ghi chú">
-          <TextArea rows={5} onChange={(e) => setghichu(e.target.value)} />
-        </Form.Item>
+            <Col span={11}>
+              <Form.Item
+                labelCol={{ span: 6 }}
+                name={"cic"}
+                label="CMND/CCCD"
+                rules={[{ required: true, message: "Nhập CCCD" }]}
+              >
+                <Input onChange={(e) => setcccd(e.target.value)} />
+              </Form.Item>
+            </Col>
+          </Row>
 
-        <Form.Item name={"adhocreq"} label="Yêu cầu đặc biệt">
-          <TextArea rows={5} onChange={(e) => setyeucau(e.target.value)} />
-        </Form.Item>
+          <Row justify={"space-between"}>
+            <Col span={12}>
+              <Form.Item
+                labelCol={{ span: 6 }}
+                wrapperCol={{ span: 17 }}
+                name={"phone"}
+                label="Số điện thoại"
+                rules={[{ required: true, message: "Nhập SĐT" }]}
+              >
+                <Input onChange={(e) => setsdt(e.target.value)} />
+              </Form.Item>
+            </Col>
 
-        <Form.Item className="submitButton">
-          <Button type="primary" htmlType="submit" style={{boxShadow: "none", color: "White" }}>
-            Xác nhận
-          </Button>
-        </Form.Item>
-      </Form>
+            <Col span={11}>
+              <Form.Item labelCol={{ span: 6 }} name={"email"} label="Email">
+                <Input onChange={(e) => setemail(e.target.value)} />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Form.Item
+            name={"bday"}
+            label="Ngày sinh"
+            rules={[{ required: true, message: "Nhập ngày sinh" }]}
+          >
+            <DatePicker
+              placeholder="DD/MM/YY"
+              format={"DD/MM/YY"}
+              onChange={(e) => setngaysinh(e?.toISOString() ?? "")}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name={"address"}
+            label="Địa chỉ"
+            rules={[{ required: true, message: "Nhập địa chỉ" }]}
+          >
+            <Input
+              className="longInput"
+              onChange={(e) => setdiachi(e.target.value)}
+            />
+          </Form.Item>
+
+          <Form.Item name={"notes"} label="Ghi chú">
+            <TextArea rows={5} onChange={(e) => setghichu(e.target.value)} />
+          </Form.Item>
+
+          <Form.Item name={"adhocreq"} label="Yêu cầu đặc biệt">
+            <TextArea rows={5} onChange={(e) => setyeucau(e.target.value)} />
+          </Form.Item>
+
+          <Form.Item className="submitButton">
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ boxShadow: "none", color: "White" }}
+            >
+              Xác nhận
+            </Button>
+          </Form.Item>
+        </Form>
       </ConfigProvider>
-      
     </div>
   );
 }

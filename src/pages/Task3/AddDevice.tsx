@@ -34,8 +34,6 @@ function AddDevice() {
     message.success("Cập nhật thông tin thành công");
     navigate(-1);
     createDevice.reset();
-  } else if (createDevice.isError && createDevice.error instanceof Error) {
-    message.error("Thêm thất bại. Lỗi: " + createDevice.error.message);
   }
 
   useEffect(() => {
@@ -45,15 +43,16 @@ function AddDevice() {
     });
   }, [location.state]);
 
+  useEffect(() => {
+    if (createDevice.isError)
+      message.error(
+        "Thêm thất bại. Lỗi: " + (createDevice.error as any).message
+      );
+  }, [createDevice.isError]);
+
   return (
     <div className="wrapper">
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: "#4B268F",
-          },
-        }}
-      >
+      <ConfigProvider theme={{ token: { colorPrimary: "#4B268F" } }}>
         <Button
           type="text"
           icon={<ArrowLeftOutlined />}
@@ -95,29 +94,33 @@ function AddDevice() {
               onChange={(e) => setid_staff(e.target.value)}
             />
           </Form.Item>
+
           <Form.Item
             name={"status"}
             label="Trạng thái"
+            rules={[{ required: true, message: "Nhập trạng thái" }]}
           >
             <Select
-              style={{width: "200px"}}
+              style={{ width: "200px" }}
               showSearch
               onChange={(e) => setstatus(e)}
               defaultValue={status}
               options={[
-                {value: "unoccupied", label: "unoccupied"},
-                {value: "occupied", label: "occupied"}
+                { value: "unoccupied", label: "unoccupied" },
+                { value: "occupied", label: "occupied" },
               ]}
-            >
-            </Select>
+            />
           </Form.Item>
+
           <Form.Item className="submitButton">
-            <Button type="primary" htmlType="submit" style={{ boxShadow: "none", color: "White" }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ boxShadow: "none", color: "White" }}
+            >
               Xác nhận
             </Button>
           </Form.Item>
-
-
         </Form>
       </ConfigProvider>
     </div>
