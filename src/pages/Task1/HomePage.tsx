@@ -11,9 +11,10 @@ import DaLat from "../../images/Da-Lat-City.jpg";
 import HoiAn from "../../images/hoian.jpg";
 import SixIcons from "../../images/6Icons.png";
 import { Button, Col, Input, Row } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function HomePage() {
+  const navigate = useNavigate();
   const bgitem: React.CSSProperties = {
     width: "100%",
     height: 250,
@@ -100,28 +101,61 @@ export default function HomePage() {
 
           <Row gutter={12}>
             <Col span={12}>
-              <div>
+              <div
+                className="clickable"
+                onClick={() =>
+                  navigate("/dat-tour", { state: { diemden: "Hồ Chí Minh" } })
+                }
+              >
                 <p style={textitem}>Thành phố Hồ Chí Minh</p>
                 <img src={TPHCM} style={bgitem} />
               </div>
             </Col>
             <Col span={12}>
-              <p style={textitem}>Vũng Tàu</p>
-              <img src={VungTau} style={bgitem} />
+              <div
+                className="clickable"
+                onClick={() =>
+                  navigate("/dat-tour", { state: { diemden: "Vũng Tàu" } })
+                }
+              >
+                <p style={textitem}>Vũng Tàu</p>
+                <img src={VungTau} style={bgitem} />
+              </div>
             </Col>
           </Row>
           <Row gutter={12} style={{ marginTop: 15 }}>
             <Col span={8}>
-              <p style={textitem}>Hà Nội</p>
-              <img src={HaNoi} style={bgitem} />
+              <div
+                className="clickable"
+                onClick={() =>
+                  navigate("/dat-tour", { state: { diemden: "Hà Nội" } })
+                }
+              >
+                <p style={textitem}>Hà Nội</p>
+                <img src={HaNoi} style={bgitem} />
+              </div>
             </Col>
             <Col span={8}>
-              <p style={textitem}>Đà Lạt</p>
-              <img src={DaLat} style={bgitem} />
+              <div
+                className="clickable"
+                onClick={() =>
+                  navigate("/dat-tour", { state: { diemden: "Đà Lạt" } })
+                }
+              >
+                <p style={textitem}>Đà Lạt</p>
+                <img src={DaLat} style={bgitem} />
+              </div>
             </Col>
             <Col span={8}>
-              <p style={textitem}>Hội An</p>
-              <img src={HoiAn} style={bgitem} />
+              <div
+                className="clickable"
+                onClick={() =>
+                  navigate("/dat-tour", { state: { diemden: "Hội An" } })
+                }
+              >
+                <p style={textitem}>Hội An</p>
+                <img src={HoiAn} style={bgitem} />
+              </div>
             </Col>
           </Row>
 

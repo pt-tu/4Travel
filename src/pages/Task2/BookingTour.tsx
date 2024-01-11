@@ -1,30 +1,34 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { TourBooking } from "../../components/Task2Component/TourBooking";
 import "../../components/Task2Component/TourStyle.css";
 import location from "../../images/location.png";
 import { Button } from "antd";
 import {
   ArrowRightOutlined,
-  FilterFilled,
   HistoryOutlined,
   ArrowLeftOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Input, Space, ConfigProvider, DatePicker, Select } from "antd";
-import { Link } from "react-router-dom";
+import { Input, ConfigProvider, DatePicker, Select } from "antd";
+import { Link, useLocation } from "react-router-dom";
 import useGetTourPage from "../../hooks/TourManagement/useGetTourPage";
 import useUser from "../../hooks/accountsystem/useUser";
 function BookingTour() {
+  const data = useLocation(); // usually I call this location but it's already used in this module
   const { Search } = Input;
   const { Option } = Select;
   const [Page, setPage] = useState<number>(1);
   const [diemdi, setdiemdi] = useState("");
-  const [diemden, setdiemden] = useState("");
+  const [diemden, setdiemden] = useState(
+    data.state ? data.state.diemden ?? "" : ""
+  );
   const [ngaydi, setngaydi] = useState("2000-01-01T00:00:00.001Z");
   const [ngayve, setngayve] = useState("2099-01-01T00:00:00.001Z");
-  const [TourName, setTourName] = useState("");
+  const [TourName, setTourName] = useState(
+    data.state ? data.state.name ?? "" : ""
+  );
   // prettier-ignore
-  const diaDiem = ["An Giang", "Bà Rịa – Vũng Tàu", "Bắc Giang", "Bắc Kạn", "Bạc Liêu", "Bắc Ninh", "Bến Tre", "Bình Định", "Bình Dương", "Bình Phước", "Bình Thuận", "Cà Mau", "Cần Thơ", "Cao Bằng", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Điện Biên", "Đồng Nai", "Đồng Tháp", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hậu Giang", "Hòa Bình", "Hưng Yên", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lâm Đồng", "Lạng Sơn", "Lào Cai", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thành phố Hồ Chí Minh", "Thừa Thiên Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"];
+  const diaDiem = ["An Giang", "Bà Rịa – Vũng Tàu", "Bắc Giang", "Bắc Kạn", "Bạc Liêu", "Bắc Ninh", "Bến Tre", "Bình Định", "Bình Dương", "Bình Phước", "Bình Thuận", "Cà Mau", "Cần Thơ", "Cao Bằng", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Điện Biên", "Đồng Nai", "Đồng Tháp", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hậu Giang", "Hòa Bình", "Hồ Chí Minh", "Hưng Yên", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lâm Đồng", "Lạng Sơn", "Lào Cai", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"];
   const GetTourPage = useGetTourPage(
     Page,
     diemdi,
@@ -36,14 +40,18 @@ function BookingTour() {
   const userAccount = useUser();
   var isVis = false;
 
-  if (userAccount.data?.user_metadata.role == "admin" || userAccount.data?.user_metadata.role == "staff") {
+  if (
+    userAccount.data?.user_metadata.role == "admin" ||
+    userAccount.data?.user_metadata.role == "staff"
+  ) {
     isVis = true;
   }
 
   useEffect(() => {
     setPage(1);
     GetTourPage.refetch();
-  }, [diemdi, diemden, ngaydi, ngayve]);
+  }, [diemdi, diemden, ngaydi, ngayve, data.state]);
+
   return (
     <div>
       <ConfigProvider
@@ -99,6 +107,7 @@ function BookingTour() {
                   allowClear
                   bordered={false}
                   placeholder="Điểm đến"
+                  value={diemden}
                   onChange={(value) => {
                     setdiemden(value ?? "");
                   }}
@@ -139,6 +148,7 @@ function BookingTour() {
             enterButton={<SearchOutlined style={{ color: "White" }} />}
             size="large"
             allowClear
+            value={TourName}
             onChange={(e) => setTourName(e.target.value)}
             onSearch={() => {
               setPage(1);

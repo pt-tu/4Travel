@@ -1,13 +1,13 @@
 import { Button, Col, Dropdown, MenuProps, Row } from "antd";
 import Search from "antd/es/input/Search";
-import path from "path";
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useUser from "../hooks/accountsystem/useUser";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 import useLogOut from "../hooks/accountsystem/useLogout";
 
 function Navbar() {
+  const navigate = useNavigate();
   const logout = useLogOut();
 
   const style: React.CSSProperties = {
@@ -108,7 +108,15 @@ function Navbar() {
           </Link>
         </Col>
         <Col offset={6} span={8}>
-          <Search style={{ width: "100%", color: "white", marginTop: 15 }} />
+          <Search
+            style={{ width: "100%", color: "white", marginTop: 15 }}
+            onSearch={(e) => {
+              if (p == "/dat-tour") {
+                navigate("/dat-tour", { state: { name: e } });
+                window.location.reload();
+              } else navigate("/dat-tour", { state: { name: e } });
+            }}
+          />
         </Col>
         <Col
           span={8}
