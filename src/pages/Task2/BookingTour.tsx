@@ -20,7 +20,7 @@ function BookingTour() {
   const [Page, setPage] = useState<number>(1);
   const [diemdi, setdiemdi] = useState("");
   const [diemden, setdiemden] = useState(
-    data.state ? data.state.diemden ?? "" : ""
+    data.state ? data.state.diemden : undefined
   );
   const [ngaydi, setngaydi] = useState("2000-01-01T00:00:00.001Z");
   const [ngayve, setngayve] = useState("2099-01-01T00:00:00.001Z");
@@ -32,7 +32,7 @@ function BookingTour() {
   const GetTourPage = useGetTourPage(
     Page,
     diemdi,
-    diemden,
+    diemden ?? "",
     ngaydi,
     ngayve,
     TourName
