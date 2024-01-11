@@ -64,7 +64,7 @@ function ContactInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
                 value={props.cccd}
                 onChange={(e) => {
                   props.setcccd(e.target.value);
-                  props.setretrymutate(false);
+                  props.setretrymutate(true);
                 }}
               />
             </Form.Item>

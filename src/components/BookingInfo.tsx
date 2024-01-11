@@ -34,13 +34,18 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
       .getFieldsError()
       .filter(({ errors }) => errors.length).length;
     if (!!validationerror) return;
-    props.sethanhkhach(form.getFieldsValue().passengers);
+    props.sethanhkhach(
+      form.getFieldsValue().passengers.map((passenger: any) => ({
+        ...passenger,
+        ngaysinh: passenger.ngaysinh ? passenger.ngaysinh.toISOString() : "",
+      }))
+    );
     props.onBookingInfoFinish();
   }
 
   useEffect(() => {
     const updatedHanhkhach = props.hanhkhach.map((hk: any) => {
-      return { ...hk, ngaysinh: dayjs(hk.ngaysinh) };
+      return { ...hk, ngaysinh: hk.ngaysinh ? dayjs(hk.ngaysinh) : "" };
     });
     form.setFieldValue("passengers", updatedHanhkhach);
   }, [location.state.hanhkhach]);

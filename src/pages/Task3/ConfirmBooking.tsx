@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { Button, FormInstance, message, ConfigProvider } from "antd";
+import { Button, FormInstance, message, Modal, ConfigProvider } from "antd";
 import "./Form.css";
 import ContactInfo from "../../components/ContactInfo";
 import BookingInfo from "../../components/BookingInfo";
@@ -18,11 +18,9 @@ function ConfirmBooking() {
   const location = useLocation();
 
   const user = useUser();
+  const tourid = location.state ? location.state.tour_id ?? "" : "";
   const [customerid, setcustomerid] = useState(
     location.state ? location.state.cus_id ?? "" : ""
-  );
-  const [tourid, settourid] = useState(
-    location.state ? location.state.tour_id ?? "" : ""
   );
   const [hoten, sethoten] = useState(
     location.state
@@ -56,8 +54,8 @@ function ConfirmBooking() {
     location.state
       ? location.state.customer
         ? dayjs(location.state.customer[8]).toISOString()
-        : new Date().toISOString()
-      : new Date().toISOString()
+        : ""
+      : ""
   );
   const [diachi, setdiachi] = useState(
     location.state
@@ -135,6 +133,7 @@ function ConfirmBooking() {
     console.log((getcustomerbycccd.error as any).message);
 
   function HandleSubmit() {
+    getcustomerbycccd.refetch();
     if (contactInfo.current) contactInfo.current.submit();
   }
 
@@ -145,26 +144,28 @@ function ConfirmBooking() {
   function HandleBookingInfoFinish() {
     if (!customerid && getcustomerbycccd.data) {
       setcustomerid(getcustomerbycccd.data.id);
-      if (!ngaysinh)
-        setngaysinh(
-          getcustomerbycccd.data.ngaysinh
-            ? dayjs(getcustomerbycccd.data.ngaysinh).toISOString()
-            : ""
-        );
-      setdiachi(getcustomerbycccd.data.diachi);
-      setghichu(getcustomerbycccd.data.ghichu);
-      setyeucau(getcustomerbycccd.data.yeucau);
-    }
-
-    if (hanhkhach.length > 0) {
-      for (const hk of hanhkhach) {
-        if (hk.hoten == hoten) {
-          if (!ngaysinh) setngaysinh(hk.ngaysinh);
-          if (!ghichu) setghichu(hk.ghichu);
-          break;
-        }
+      if (customerid) {
+        if (!ngaysinh)
+          setngaysinh(
+            getcustomerbycccd.data.ngaysinh
+              ? dayjs(getcustomerbycccd.data.ngaysinh).toISOString()
+              : ""
+          );
+        setdiachi(getcustomerbycccd.data.diachi);
+        setghichu(getcustomerbycccd.data.ghichu);
+        setyeucau(getcustomerbycccd.data.yeucau);
       }
     }
+
+    for (const hk of hanhkhach) {
+      if (hk.hoten == hoten) {
+        if (!ngaysinh) setngaysinh(hk.ngaysinh);
+        if (!ghichu) setghichu(hk.ghichu);
+        break;
+      }
+    }
+
+    if (!ngaysinh) setngaysinh(new Date().toISOString());
 
     createCustomer.mutate();
   }
@@ -177,8 +178,20 @@ function ConfirmBooking() {
   // Lỗi này xảy ra khi ta update customer mà vẫn giữ nguyên cccd
   // Do đó có thể xem đây là lỗi giả, cho phép chạy lại mutate 1 lần nữa
   useEffect(() => {
-    if (createCustomer.isError && retrymutate) {
-      if ((createCustomer.error as any).code == "23505") {
+    if (createCustomer.isError) {
+      if (retrymutate && (createCustomer.error as any).code == "23505") {
+        Modal.confirm({
+          title: "Thông tin CCCD",
+          content:
+            "Tìm thấy số CCCD " +
+            cccd +
+            " trong hệ thống. Đây có đúng là số CCCD của bạn?",
+          onOk: () => {
+            createCustomer.mutate();
+            setretrymutate(false);
+          },
+        });
+      } else if (retrymutate) {
         createCustomer.mutate();
         setretrymutate(false);
       } else
