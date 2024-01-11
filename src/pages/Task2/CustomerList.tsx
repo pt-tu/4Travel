@@ -110,7 +110,7 @@ function CustomerList() {
       <ConfigProvider theme={{ token: { colorPrimary: "#4B268F" } }}>
         <div className="CenterContainer">
           <Search
-            placeholder="Nhập tên, mã tour hoặc khách hàng bạn muốn"
+            placeholder="Nhập CCCD hoặc tên của khách hàng bạn muốn tìm"
             className="SearchBar"
             allowClear
             enterButton={<SearchOutlined style={{ color: "White" }} />}

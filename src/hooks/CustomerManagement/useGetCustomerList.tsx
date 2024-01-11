@@ -5,8 +5,8 @@ const GetCustomerList = async (Search: string) => {
     let { data: customer, error } = await supabase
         .from('customer')
         .select('*')
-        .ilike('cccd',`%${Search}%`)
-        
+        //.ilike('cccd',`%${Search}%`)
+        .or(`cccd.ilike.%${Search}%,hoten.ilike.%${Search}%`)
     if (error) {
         throw new Error(error.message);
     }

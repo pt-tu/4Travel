@@ -35,13 +35,15 @@ function CustomerList() {
   const [DeleteID, setDeleteID] = useState(
     "9318b50c-e847-4d14-ae4e-4cf717ab7402"
   );
+  const [name, setName] = useState("");
   const DeleteMutate = useDeleteCustomer(DeleteID);
-  const getuserlist = useGetUserList();
+  const getuserlist = useGetUserList(name);
   const [role, setrole] = useState<any>();
   const [uid, setuid] = useState();
   const updaterole = useUpdateRoleByUID(uid, role);
   const userlist: Customer[] = [];
   if (getuserlist.isSuccess) {
+    console.log(getuserlist.data);
     getuserlist.data.map((item: any) => {
       userlist.push({
         id: item.id,
@@ -51,6 +53,10 @@ function CustomerList() {
       });
     });
   }
+
+
+
+
   if (getuserlist.error) {
     return <></>;
   }
@@ -173,9 +179,12 @@ function CustomerList() {
             className="SearchBar"
             allowClear
             enterButton={<SearchOutlined style={{ color: "White" }} />}
-
             size="large"
             style={{ marginTop: "30px" }}
+            onChange={(e) => setName(e.target.value)}
+            onSearch={() => {
+              getuserlist.refetch();
+            }}
           />
           <div
             style={{

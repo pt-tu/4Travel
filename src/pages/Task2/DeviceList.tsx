@@ -127,6 +127,8 @@ function DeviceList() {
             enterButton={<SearchOutlined style={{ color: "White" }} />}
             size="large"
             style={{ marginTop: "30px" }}
+            onChange={(e)=>setSearchName(e.target.value)}
+            onSearch={()=>DeviceList.refetch()}
           />
 
           <div
