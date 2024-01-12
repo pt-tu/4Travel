@@ -109,7 +109,7 @@ function BookingTour() {
                   placeholder="Điểm đến"
                   value={diemden}
                   onChange={(value) => {
-                    setdiemden(value ?? "");
+                    setdiemden(value ?? undefined);
                   }}
                 >
                   {diaDiem.map((e) => (
@@ -126,17 +126,16 @@ function BookingTour() {
                   setngaydi(
                     date
                       ? date[0]
-                        ? date[0].toISOString() ?? new Date().toISOString()
-                        : new Date().toISOString()
-                      : new Date().toISOString()
+                        ? date[0].toISOString() ?? "2000-01-01T00:00:00.001Z"
+                        : "2000-01-01T00:00:00.001Z"
+                      : "2000-01-01T00:00:00.001Z"
                   );
                   setngayve(
                     date
                       ? date[1]
-                        ? date[1].toISOString() ??
-                          new Date(8640000000000000).toISOString()
-                        : new Date(8640000000000000).toISOString()
-                      : new Date(8640000000000000).toISOString()
+                        ? date[1].toISOString() ?? "2099-01-01T00:00:00.001Z"
+                        : "2099-01-01T00:00:00.001Z"
+                      : "2099-01-01T00:00:00.001Z"
                   ); // If date is null, set to max date possible
                 }}
               ></DatePicker.RangePicker>
