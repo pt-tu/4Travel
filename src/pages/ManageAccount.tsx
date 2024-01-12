@@ -43,8 +43,8 @@ function CustomerList() {
   const updaterole = useUpdateRoleByUID(uid, role);
   const userlist: Customer[] = [];
   if (getuserlist.isSuccess) {
-    console.log(getuserlist.data);
     getuserlist.data.map((item: any) => {
+      if(item.raw_user_meta_data.ten.includes(name))
       userlist.push({
         id: item.id,
         name: item.raw_user_meta_data.ten,
@@ -54,10 +54,10 @@ function CustomerList() {
     });
   }
 
-
-
+  
 
   if (getuserlist.error) {
+    console.log(getuserlist.error);
     return <></>;
   }
   if (DeleteMutate.isSuccess) {

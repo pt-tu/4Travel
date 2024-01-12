@@ -51,6 +51,8 @@ function convertToVietnameseDateFormat(dateTimeString: any) {
 function BookingDaThanhToan() {
   const { Search } = Input;
   const getbookinglist = useGetBookingForBill();
+  const[CusName,setCusName]=useState("");
+
   if (getbookinglist.isSuccess) {
     console.log(getbookinglist.data.datadone);
   }
@@ -106,6 +108,7 @@ function BookingDaThanhToan() {
   const Customer: CustomerType[] = [];
 
   bill.data?.map((item, i) => {
+    if(item.cusname.includes(CusName))
     Customer.push({
       key: i,
       bid: item.id,
@@ -143,13 +146,15 @@ function BookingDaThanhToan() {
       >
         <div className="CenterContainer">
           <Search
-            placeholder="Nhập tên, mã tour hoặc khách hàng bạn muốn"
+            placeholder="Nhập tên khách hàng cần tìm hóa đơn"
             className="SearchBar"
             allowClear
             enterButton={<SearchOutlined style={{ color: "White" }} />}
 
             size="large"
             style={{paddingTop: "30px",paddingBottom: "30px"}}
+            onChange={(e)=>setCusName(e.target.value)}
+            onSearch={()=>getbookinglist.refetch()}
           />
           <div
             style={{
