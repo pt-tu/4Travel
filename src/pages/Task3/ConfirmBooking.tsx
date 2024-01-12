@@ -179,19 +179,7 @@ function ConfirmBooking() {
   // Do đó có thể xem đây là lỗi giả, cho phép chạy lại mutate 1 lần nữa
   useEffect(() => {
     if (createCustomer.isError) {
-      if (retrymutate && (createCustomer.error as any).code == "23505") {
-        Modal.confirm({
-          title: "Thông tin CCCD",
-          content:
-            "Tìm thấy số CCCD " +
-            cccd +
-            " trong hệ thống. Đây có đúng là số CCCD của bạn?",
-          onOk: () => {
-            createCustomer.mutate();
-            setretrymutate(false);
-          },
-        });
-      } else if (retrymutate) {
+      if (retrymutate) {
         createCustomer.mutate();
         setretrymutate(false);
       } else
