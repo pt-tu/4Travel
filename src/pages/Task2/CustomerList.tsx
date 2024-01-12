@@ -64,7 +64,7 @@ function CustomerList() {
       key: "id",
       dataIndex: "id",
       width: 50,
-      render: (record) => (
+      render: (text, record) => (
         <Link to={"/them-moi-khach-hang"} state={{ id: record.id }}>
           <Button icon={<FormOutlined />} />
         </Link>
@@ -75,7 +75,7 @@ function CustomerList() {
       key: "id",
       dataIndex: "id",
       width: 50,
-      render: (record) => (
+      render: (text, record) => (
         <Popconfirm
           title="Xác nhận?"
           description={"Xóa người dùng " + record.hoten}
@@ -102,7 +102,10 @@ function CustomerList() {
   };
 
   useEffect(() => {
-    if (DeleteID) DeleteMutate.mutate();
+    if (DeleteID) {
+      DeleteMutate.mutate();
+      CustomerList1.refetch();
+    }
   }, [DeleteID]);
 
   return (

@@ -18,7 +18,7 @@ import {
   ExclamationCircleFilled,
   FormOutlined,
   PlusOutlined,
-  SearchOutlined
+  SearchOutlined,
 } from "@ant-design/icons";
 import type { ColumnsType } from "antd/es/table";
 import "../components/Task2Component/TourStyle.css";
@@ -44,17 +44,15 @@ function CustomerList() {
   const userlist: Customer[] = [];
   if (getuserlist.isSuccess) {
     getuserlist.data.map((item: any) => {
-      if(item.raw_user_meta_data.ten.includes(name))
-      userlist.push({
-        id: item.id,
-        name: item.raw_user_meta_data.ten,
-        role: item.raw_user_meta_data.role,
-        email: item.email,
-      });
+      if (item.raw_user_meta_data.ten.includes(name))
+        userlist.push({
+          id: item.id,
+          name: item.raw_user_meta_data.ten,
+          role: item.raw_user_meta_data.role,
+          email: item.email,
+        });
     });
   }
-
-  
 
   if (getuserlist.error) {
     console.log(getuserlist.error);
@@ -125,9 +123,10 @@ function CustomerList() {
           onChange={(e) => {
             handleSelectChange(e, record.id);
             confirm({
-              title: "Bạn muốn xóa chương?",
+              title: "Bạn muốn cập nhật role?",
               icon: <ExclamationCircleFilled />,
-              content: "Các chương được chọn sẽ bị xóa sau khi xác nhận",
+              content:
+                "Bạn có chắc mình muốn thay đổi role của " + record.name + "?",
               okText: "Xác nhận",
               okType: "danger",
               cancelText: "Hủy bỏ",
@@ -203,7 +202,6 @@ function CustomerList() {
                 <b>Quay lại</b>
               </Button>
             </Link>
-            
           </div>
           <div>
             <h2>DANH SÁCH TÀI KHOẢN</h2>

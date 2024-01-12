@@ -63,7 +63,7 @@ function DeviceList() {
       key: "id",
       dataIndex: "id",
       width: 50,
-      render: (record) => (
+      render: (text, record) => (
         <Button
           icon={<FormOutlined />}
           onClick={() =>
@@ -84,7 +84,7 @@ function DeviceList() {
       key: "id",
       dataIndex: "id",
       width: 50,
-      render: (record) => (
+      render: (text, record) => (
         <Popconfirm
           title="Xác nhận?"
           description={"Xóa thiết bị " + record.name}
@@ -127,8 +127,8 @@ function DeviceList() {
             enterButton={<SearchOutlined style={{ color: "White" }} />}
             size="large"
             style={{ marginTop: "30px" }}
-            onChange={(e)=>setSearchName(e.target.value)}
-            onSearch={()=>DeviceList.refetch()}
+            onChange={(e) => setSearchName(e.target.value)}
+            onSearch={() => DeviceList.refetch()}
           />
 
           <div

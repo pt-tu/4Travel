@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./TourStyle.css";
 import Hanoi from "../../images/hanoi.jpg";
-import { Button, ConfigProvider } from "antd";
+import { Button, ConfigProvider, Popconfirm, message } from "antd";
 import { Link } from "react-router-dom";
 import location from "../../images/location.png";
+import useDeleteBooking from "../../hooks/BookingManagement/useDeleteBooking";
 
 interface PropsType {
   name: any;
@@ -16,6 +17,18 @@ interface PropsType {
 }
 
 export const TourHistory = (props: PropsType) => {
+  const [cusid, setcusid] = useState("");
+  const [tourid, settourid] = useState("");
+  const deleteBooking = useDeleteBooking(cusid, tourid);
+  if (deleteBooking.isSuccess) {
+    message.success("Xoá thành công");
+    window.location.reload();
+  }
+
+  useEffect(() => {
+    if (cusid && tourid) deleteBooking.mutate();
+  }, [cusid, tourid]);
+
   return (
     <div className="card GridContainer">
       <ConfigProvider
@@ -55,13 +68,22 @@ export const TourHistory = (props: PropsType) => {
               Sửa
             </Button>
           </Link>
-          <Button
-            type="primary"
-            style={{ boxShadow: "none", marginLeft: 10 }}
-            danger
+          <Popconfirm
+            title="Xác nhận?"
+            description={"Xóa booking " + props.name}
+            onConfirm={() => {
+              setcusid(props.customer[0]);
+              settourid(props.tour_id);
+            }}
           >
-            Xóa
-          </Button>
+            <Button
+              type="primary"
+              style={{ boxShadow: "none", marginLeft: 10 }}
+              danger
+            >
+              Xóa
+            </Button>
+          </Popconfirm>
         </div>
       </ConfigProvider>
     </div>
