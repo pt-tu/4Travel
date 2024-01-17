@@ -19,6 +19,7 @@ interface Bill {
   total: number;
   diemden: string;
   price: number;
+  ngay: any;
 }
 
 const Checkout = async (booking: Booking, bill: Bill) => {
@@ -40,6 +41,7 @@ const Checkout = async (booking: Booking, bill: Bill) => {
     total: bill.total,
     diemden: bill.diemden,
     price: bill.price,
+    ngay: bill.ngay,
   });
   if (InsertbillError) {
     throw InsertbillError;

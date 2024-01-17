@@ -77,10 +77,12 @@ const BillDaXuat: React.FC = () => {
   let hanhkhach = [""];
   let total = "";
   let diemden = "";
+  let ngay = "";
   let price = "";
   if (bill.isSuccess) {
     cusname = bill.data.cusname;
     tourname = bill.data.tourname;
+    ngay = bill.data.ngay;
     sdt = bill.data.sdt;
     email = bill.data.email;
     time = bill.data.time;
@@ -151,6 +153,7 @@ const BillDaXuat: React.FC = () => {
           <h2 style={{ marginBottom: 0, color: "#4B268F" }}> HÓA ĐƠN</h2>
         </div>
         <p style={text2}>Tên tour: {tourname} </p>
+        <p style={text2}>Ngày bắt đầu: {ngay} </p>{" "}
         <Flex>
           <div style={{ width: "50%" }}>
             {/* Red section content */}
@@ -194,7 +197,6 @@ const BillDaXuat: React.FC = () => {
             </div>
           </div>
         </Flex>
-
         <table style={tableStyles}>
           <thead>
             <tr style={rowStyles1}>

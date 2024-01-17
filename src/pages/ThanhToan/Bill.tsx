@@ -10,6 +10,27 @@ import useCheckOut from "../../hooks/Bill/useCheckOut";
 import { v4 as uuidv4 } from "uuid";
 import generatePDF, { Margin, Resolution } from "react-to-pdf";
 
+function convertToVietnameseDateFormat(dateTimeString: any) {
+  // Chuyển đổi thành đối tượng Date
+  const originalDate = new Date(dateTimeString);
+
+  // Đặt múi giờ Việt Nam (UTC+7)
+  const options: Intl.DateTimeFormatOptions = {
+    timeZone: "Asia/Ho_Chi_Minh",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  };
+
+  // Format the date using the Vietnamese locale and the specified options
+  const vietnameseDateFormat = originalDate.toLocaleDateString(
+    "vi-VN",
+    options
+  );
+
+  return vietnameseDateFormat;
+}
+
 const invoiceStyles: React.CSSProperties = {
   width: "500px",
   margin: "20px auto",
@@ -85,6 +106,7 @@ const Bill: React.FC = () => {
   let hoten = "";
   let sdt = "";
   let email = "";
+  let ngay;
   let name = "";
   let hanhkhach = [""];
   let diemden = "";
@@ -98,6 +120,7 @@ const Bill: React.FC = () => {
   }
   if (tour.isSuccess) {
     name = tour.data.name;
+    ngay = convertToVietnameseDateFormat(tour.data.start);
     diemden = tour.data.diemden;
     price = tour.data.price;
   }
@@ -124,6 +147,7 @@ const Bill: React.FC = () => {
       total: hanhkhach.length * price,
       price: price,
       diemden: diemden,
+      ngay: ngay,
     }
   );
   useEffect(() => {
@@ -193,7 +217,8 @@ const Bill: React.FC = () => {
         <div style={headerStyles}>
           <h2 style={{ marginBottom: 0, color: "#4B268F" }}> HÓA ĐƠN</h2>
         </div>
-        <p style={text2}>Tên tour: {name} </p>
+        <p style={text2}>Tên tour: {name} </p>{" "}
+        <p style={text2}>Ngày bắt đầu: {ngay} </p>{" "}
         <Flex>
           <div style={{ width: "50%" }}>
             {/* Red section content */}
@@ -237,7 +262,6 @@ const Bill: React.FC = () => {
             </div>
           </div>
         </Flex>
-
         <table style={tableStyles}>
           <thead>
             <tr style={rowStyles1}>
@@ -280,3 +304,6 @@ const Bill: React.FC = () => {
 };
 
 export default Bill;
+function convertToVietnamTime(start: any): any {
+  throw new Error("Function not implemented.");
+}
