@@ -1,10 +1,7 @@
 import React, { useState } from "react";
-import Logo4T from "../../images/logo4T.png";
 import FormItem from "antd/es/form/FormItem";
 import { Button, ConfigProvider, Form, Input } from "antd";
 import { Link } from "react-router-dom";
-import useCreateUser from "../../hooks/accountsystem/useCreateUser";
-import { number } from "yargs";
 // customer sau khi đăng ký
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -12,13 +9,6 @@ export default function SignUp() {
   const [hoten, setName] = useState("");
   const [sdt, setsdt] = useState("");
   let message = "";
-  const dangky = useCreateUser({ sdt, hoten, email, password });
-  if (dangky.isSuccess) {
-    message = "Hãy kiểm tra email của bạn";
-  }
-  if (dangky.isError) {
-    message = (dangky.error as any).message;
-  }
   return (
     <ConfigProvider
       theme={{
@@ -100,18 +90,6 @@ export default function SignUp() {
             <FormItem label="Mật khẩu"
               style={{ fontSize: 20 }}
               name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Bạn chưa nhập mật khẩu!",
-                },
-                {
-                  pattern: new RegExp(
-                    "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$"
-                  ),
-                  message: "Mật khẩu cần có hơn 6 kí tự và ít nhất 1 chữ, 1 số, một ký tự đặc biệt.",
-                },
-              ]}
             >
               <Input
                 type="password"
@@ -123,22 +101,6 @@ export default function SignUp() {
             <FormItem label="Xác nhận mật khẩu"
               style={{ fontSize: 20 }}
               name="confirm"
-              rules={[
-                {
-                  required: true,
-                  message: "Bạn chưa xác nhận mật khẩu!",
-                },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue("password") === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(
-                      new Error("Mật khẩu xác nhận phải khớp với mật khẩu!")
-                    );
-                  },
-                }),
-              ]}
             >
               <Input type="password"></Input>
             </FormItem>
@@ -152,9 +114,6 @@ export default function SignUp() {
                   backgroundColor: "#7200E4",
                   color: "white",
                   fontWeight: "bold",
-                }}
-                onClick={() => {
-                  dangky.mutate();
                 }}
               >
                 Đăng ký

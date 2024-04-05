@@ -20,28 +20,11 @@ import type { ColumnsType } from "antd/es/table";
 import "../../components/Task2Component/TourStyle.css";
 import "../../components/Task2Component/CustomerDevice.css";
 import { Link } from "react-router-dom";
-import useGetCustomerList from "../../hooks/CustomerManagement/useGetCustomerList";
-import useDeleteCustomer from "../../hooks/CustomerManagement/useDeleteCustomer";
 
 function CustomerList() {
   const { Search } = Input;
   const [DeleteID, setDeleteID] = useState("");
   const [cccd, setcccd] = useState("");
-
-  const CustomerList1 = useGetCustomerList(cccd);
-
-  const DeleteMutate = useDeleteCustomer(DeleteID);
-  if (DeleteMutate.isSuccess) {
-    message.success("Xoá thành công");
-    window.location.reload();
-  }
-
-  useEffect(() => {
-    if (DeleteMutate.isError)
-      message.error(
-        "Xoá thất bại. Lỗi: " + (DeleteMutate.error as any).message
-      );
-  }, [DeleteMutate.isError]);
 
   interface Customer {
     id: string;
@@ -101,13 +84,6 @@ function CustomerList() {
     }),
   };
 
-  useEffect(() => {
-    if (DeleteID) {
-      DeleteMutate.mutate();
-      CustomerList1.refetch();
-    }
-  }, [DeleteID]);
-
   return (
     <div>
       <ConfigProvider theme={{ token: { colorPrimary: "#4B268F" } }}>
@@ -120,9 +96,6 @@ function CustomerList() {
             size="large"
             style={{ marginTop: "30px" }}
             onChange={(e) => setcccd(e.target.value)}
-            onSearch={() => {
-              CustomerList1.refetch();
-            }}
           />
 
           <div
@@ -156,7 +129,6 @@ function CustomerList() {
 
           <Table
             columns={columns}
-            dataSource={CustomerList1.data}
             className="tableFilter"
             rowKey="id"
           />

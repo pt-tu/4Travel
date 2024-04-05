@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import useCreateDevice from "../../hooks/DeviceManagement/useCreateDevice";
 import "./Form.css";
-import { Button, Form, Input, message, ConfigProvider, Select } from "antd";
+import { Button, Form, Input, ConfigProvider, Select } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 
 function AddDevice() {
@@ -20,35 +19,6 @@ function AddDevice() {
   const [status, setstatus] = useState(
     location.state ? location.state.status ?? "unoccupied" : "unoccupied"
   );
-
-  const createDevice = useCreateDevice(
-    {
-      name: name,
-      id_staff: id_staff,
-      status: status,
-    },
-    deviceid
-  );
-
-  if (createDevice.isSuccess) {
-    message.success("Cập nhật thông tin thành công");
-    navigate(-1);
-    createDevice.reset();
-  }
-
-  useEffect(() => {
-    form.setFieldsValue({
-      name: location.state ? location.state.name ?? "" : "",
-      id_staff: location.state ? location.state.id_staff ?? "" : "",
-    });
-  }, [location.state]);
-
-  useEffect(() => {
-    if (createDevice.isError)
-      message.error(
-        "Thêm thất bại. Lỗi: " + (createDevice.error as any).message
-      );
-  }, [createDevice.isError]);
 
   return (
     <div className="wrapper">
@@ -69,12 +39,10 @@ function AddDevice() {
           form={form}
           labelCol={{ span: 3 }}
           labelAlign="left"
-          onFinish={() => createDevice.mutate()}
         >
           <Form.Item
             name={"name"}
             label="Tên thiết bị"
-            rules={[{ required: true, message: "Nhập Tên thiết bị" }]}
           >
             <Input
               className="longInput"
@@ -86,7 +54,6 @@ function AddDevice() {
           <Form.Item
             name={"id_staff"}
             label="Người quản lý"
-            rules={[{ required: true, message: "Nhập id người quản lý" }]}
           >
             <Input
               className="longInput"
@@ -98,7 +65,6 @@ function AddDevice() {
           <Form.Item
             name={"status"}
             label="Trạng thái"
-            rules={[{ required: true, message: "Nhập trạng thái" }]}
           >
             <Select
               style={{ width: "200px" }}

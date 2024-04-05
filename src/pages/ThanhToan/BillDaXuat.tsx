@@ -1,14 +1,6 @@
-import { Col, Flex } from "antd";
-import React, { useEffect } from "react";
+import { Flex } from "antd";
+import React from "react";
 import { useParams } from "react-router-dom";
-import useGetTourByTID from "../../hooks/TourManagement/useGetTourByTID";
-import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
-import useGetBookingByPK from "../../hooks/Bill/useGetBookingByPK";
-import useUser from "../../hooks/accountsystem/useUser";
-import BookingDaThanhToan from "./BookingDaThanhToan";
-import useCheckOut from "../../hooks/Bill/useCheckOut";
-import { v4 as uuidv4 } from "uuid";
-import useGetBillByBID from "../../hooks/Bill/useGetBillByBID";
 import generatePDF, { Margin, Resolution } from "react-to-pdf";
 
 const invoiceStyles: React.CSSProperties = {
@@ -62,12 +54,8 @@ const lastRowStyles: React.CSSProperties = {
   borderBottom: "none",
 };
 
-const currentDateTime = new Date();
 
 const BillDaXuat: React.FC = () => {
-  const user = useUser();
-  let { bid } = useParams();
-  let bill = useGetBillByBID(bid);
   let cusname = "";
   let tourname = "";
   let sdt = "";
@@ -79,19 +67,6 @@ const BillDaXuat: React.FC = () => {
   let diemden = "";
   let ngay = "";
   let price = "";
-  if (bill.isSuccess) {
-    cusname = bill.data.cusname;
-    tourname = bill.data.tourname;
-    ngay = bill.data.ngay;
-    sdt = bill.data.sdt;
-    email = bill.data.email;
-    time = bill.data.time;
-    by = bill.data.by;
-    hanhkhach = bill.data.hanhkhach;
-    total = bill.data.total;
-    diemden = bill.data.diemden;
-    price = bill.data.price;
-  }
   const options = {
     // default is `save`
 

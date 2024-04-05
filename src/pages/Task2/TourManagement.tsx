@@ -4,7 +4,6 @@ import "../../components/Task2Component/TourStyle.css"
 import { Button } from 'antd';
 import { ArrowRightOutlined, FilterFilled, SearchOutlined, ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
 import { Input, Space, ConfigProvider } from 'antd';
-import useGetTourPage from "../../hooks/TourManagement/useGetTourPage";
 import { Link } from "react-router-dom";
 
 function TourManagement() {
@@ -12,10 +11,6 @@ function TourManagement() {
   const { Search } = Input;
   const [Page, setPage] = useState<number>(1);
   const [TourName, setTourName] = useState("");
-  const GetTourPage = useGetTourPage(Page, "", "", "2000-01-01T00:00:00.001Z", "2099-01-01T00:00:00.001Z", TourName);
-  if (GetTourPage.isError) {
-    console.log(GetTourPage.error);
-  }
 
   return <div>
 
@@ -35,10 +30,6 @@ function TourManagement() {
           size="large"
           style={{ marginTop: "30px" }}
           onChange={(e) => setTourName(e.target.value)}
-          onSearch={() => {
-            setPage(1);
-            GetTourPage.refetch();
-          }}
         />
         <div
             style={{
@@ -62,17 +53,6 @@ function TourManagement() {
               <Button icon={<PlusOutlined />} className="ButtonUp"></Button>
             </Link>
           </div>
-
-        {GetTourPage.data?.map((item) => (
-          <TourManagementCard
-            name={item.name}
-            id={item.id}
-            diemdi={item.diemdi}
-            hotel={item.hotel}
-            bia={item.bia}
-            price={item.price}
-          ></TourManagementCard>
-        ))}
         <div
         style={{
           display: "flex",
@@ -98,7 +78,6 @@ function TourManagement() {
           icon={<ArrowRightOutlined />}
           className="ButtonNext"
           style={{ direction: "rtl", boxShadow: "none", color: "White" }}
-          onClick={() => { GetTourPage.data?.length !== 0 && setPage(Page + 1) }}
         >
           Xem thêm
         </Button>

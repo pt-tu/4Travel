@@ -11,8 +11,6 @@ import {
 } from "@ant-design/icons";
 import { Input, ConfigProvider, DatePicker, Select } from "antd";
 import { Link, useLocation } from "react-router-dom";
-import useGetTourPage from "../../hooks/TourManagement/useGetTourPage";
-import useUser from "../../hooks/accountsystem/useUser";
 function BookingTour() {
   const data = useLocation(); // usually I call this location but it's already used in this module
   const { Search } = Input;
@@ -29,28 +27,7 @@ function BookingTour() {
   );
   // prettier-ignore
   const diaDiem = ["An Giang", "Bà Rịa – Vũng Tàu", "Bắc Giang", "Bắc Kạn", "Bạc Liêu", "Bắc Ninh", "Bến Tre", "Bình Định", "Bình Dương", "Bình Phước", "Bình Thuận", "Cà Mau", "Cần Thơ", "Cao Bằng", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Điện Biên", "Đồng Nai", "Đồng Tháp", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hậu Giang", "Hòa Bình", "Hồ Chí Minh", "Hưng Yên", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lâm Đồng", "Lạng Sơn", "Lào Cai", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"];
-  const GetTourPage = useGetTourPage(
-    Page,
-    diemdi,
-    diemden ?? "",
-    ngaydi,
-    ngayve,
-    TourName
-  );
-  const userAccount = useUser();
-  var isVis = false;
-
-  if (
-    userAccount.data?.user_metadata.role == "admin" ||
-    userAccount.data?.user_metadata.role == "staff"
-  ) {
-    isVis = true;
-  }
-
-  useEffect(() => {
-    setPage(1);
-    GetTourPage.refetch();
-  }, [diemdi, diemden, ngaydi, ngayve, data.state]);
+  var isVis = true;
 
   return (
     <div>
@@ -151,7 +128,6 @@ function BookingTour() {
             onChange={(e) => setTourName(e.target.value)}
             onSearch={() => {
               setPage(1);
-              GetTourPage.refetch();
             }}
           />
           <div
@@ -173,16 +149,6 @@ function BookingTour() {
               ></Button>
             </Link>
           </div>
-          {GetTourPage.data?.map((item) => (
-            <TourBooking
-              name={item.name}
-              id={item.id}
-              diemdi={item.diemdi}
-              hotel={item.hotel}
-              bia={item.bia}
-              price={item.price}
-            ></TourBooking>
-          ))}
           <div
             style={{
               display: "flex",
@@ -208,9 +174,6 @@ function BookingTour() {
               icon={<ArrowRightOutlined />}
               className="ButtonNext"
               style={{ direction: "rtl", boxShadow: "none", color: "White" }}
-              onClick={() => {
-                GetTourPage.data?.length !== 0 && setPage(Page + 1);
-              }}
             >
               Xem thêm
             </Button>

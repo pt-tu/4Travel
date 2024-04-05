@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./TourStyle.css";
-import { Button, ConfigProvider, Popconfirm, message } from "antd";
+import { Button, ConfigProvider } from "antd";
 import { Link } from "react-router-dom";
 import location from "../../images/location.png";
-import useDeleteTour from "../../hooks/TourManagement/useDeleteTour";
 
 interface PropsType {
   name: string;
@@ -16,20 +15,6 @@ interface PropsType {
 
 export const TourManagementCard = (props: PropsType) => {
   const [DeleteID, setDeleteID] = useState("");
-  const deleteTour = useDeleteTour(DeleteID);
-  if (deleteTour.isSuccess) {
-    message.success("Xoá thành công");
-    window.location.reload();
-  }
-
-  useEffect(() => {
-    if (DeleteID) deleteTour.mutate();
-  }, [DeleteID]);
-
-  useEffect(() => {
-    if (deleteTour.isError)
-      message.error("Xoá thất bại. Lỗi: " + (deleteTour.error as any).message);
-  }, [deleteTour.isError]);
 
   return (
     <div className="card GridContainer">
@@ -58,20 +43,6 @@ export const TourManagementCard = (props: PropsType) => {
               Sửa
             </Button>
           </Link>
-
-          <Popconfirm
-            title="Xác nhận?"
-            description={"Xóa tour " + props.name}
-            onConfirm={() => setDeleteID(props.id)}
-          >
-            <Button
-              type="primary"
-              style={{ boxShadow: "none", marginLeft: 10 }}
-              danger
-            >
-              Xóa
-            </Button>
-          </Popconfirm>
         </div>
       </ConfigProvider>
     </div>

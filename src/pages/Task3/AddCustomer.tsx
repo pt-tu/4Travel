@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import useCreateCustomer from "../../hooks/CustomerManagement/useCreateCustomer";
-import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
 import "./Form.css";
 import {
   Col,
@@ -32,68 +30,6 @@ function AddCustomer() {
   const [ghichu, setghichu] = useState("");
   const [yeucau, setyeucau] = useState("");
 
-  const createCustomer = useCreateCustomer(
-    {
-      hoten: hoten,
-      cccd: cccd,
-      sdt: sdt,
-      email: email,
-      ngaysinh: ngaysinh,
-      diachi: diachi,
-      ghichu: ghichu,
-      yeucau: yeucau,
-    },
-    customerid
-  );
-
-  if (createCustomer.isSuccess) {
-    message.success("Cập nhật thông tin thành công");
-    navigate(-1);
-    createCustomer.reset();
-  }
-
-  const getcustomer = useGetCustomerByCID(customerid);
-
-  useEffect(() => {
-    if (getcustomer.data) {
-      sethoten(getcustomer.data.hoten);
-      setcccd(getcustomer.data.cccd);
-      setsdt(getcustomer.data.sdt);
-      setemail(getcustomer.data.email);
-      setngaysinh(
-        getcustomer.data.ngaysinh
-          ? dayjs(getcustomer.data.ngaysinh).toISOString()
-          : ""
-      );
-      setdiachi(getcustomer.data.diachi);
-      setghichu(getcustomer.data.ghichu);
-      setyeucau(getcustomer.data.yeucau);
-
-      form.setFieldsValue({
-        name: getcustomer.data.hoten,
-        cic: getcustomer.data.cccd,
-        phone: getcustomer.data.sdt,
-        email: getcustomer.data.email,
-        bday: getcustomer.data.ngaysinh ? dayjs(getcustomer.data.ngaysinh) : "",
-        address: getcustomer.data.diachi,
-        notes: getcustomer.data.ghichu,
-        adhocreq: getcustomer.data.yeucau,
-      });
-    }
-  }, [customerid, getcustomer.data]);
-
-  useEffect(() => {
-    if (createCustomer.isError)
-      message.error(
-        "Thêm thất bại. Lỗi: " + (createCustomer.error as any).message
-      );
-  }, [createCustomer.isError]);
-
-  useEffect(() => {
-    if (getcustomer.isError && customerid)
-      message.error(+(getcustomer.error as any).message);
-  }, [getcustomer.isError]);
-
   return (
     <div className="wrapper">
       <ConfigProvider theme={{ token: { colorPrimary: "#4B268F" } }}>
@@ -113,7 +49,6 @@ function AddCustomer() {
           form={form}
           labelCol={{ span: 3 }}
           labelAlign="left"
-          onFinish={() => createCustomer.mutate()}
         >
           <Row justify={"space-between"}>
             <Col span={12}>
@@ -122,7 +57,6 @@ function AddCustomer() {
                 wrapperCol={{ span: 17 }}
                 name={"name"}
                 label="Họ và tên"
-                rules={[{ required: true, message: "Nhập họ tên" }]}
               >
                 <Input onChange={(e) => sethoten(e.target.value)} />
               </Form.Item>
@@ -133,7 +67,6 @@ function AddCustomer() {
                 labelCol={{ span: 6 }}
                 name={"cic"}
                 label="CMND/CCCD"
-                rules={[{ required: true, message: "Nhập CCCD" }]}
               >
                 <Input onChange={(e) => setcccd(e.target.value)} />
               </Form.Item>
@@ -147,7 +80,6 @@ function AddCustomer() {
                 wrapperCol={{ span: 17 }}
                 name={"phone"}
                 label="Số điện thoại"
-                rules={[{ required: true, message: "Nhập SĐT" }]}
               >
                 <Input onChange={(e) => setsdt(e.target.value)} />
               </Form.Item>
@@ -163,7 +95,6 @@ function AddCustomer() {
           <Form.Item
             name={"bday"}
             label="Ngày sinh"
-            rules={[{ required: true, message: "Nhập ngày sinh" }]}
           >
             <DatePicker
               placeholder="DD/MM/YY"
@@ -175,7 +106,6 @@ function AddCustomer() {
           <Form.Item
             name={"address"}
             label="Địa chỉ"
-            rules={[{ required: true, message: "Nhập địa chỉ" }]}
           >
             <Input
               className="longInput"

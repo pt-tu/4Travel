@@ -20,33 +20,12 @@ import type { ColumnsType } from "antd/es/table";
 import "../../components/Task2Component/TourStyle.css";
 import "../../components/Task2Component/CustomerDevice.css";
 import { Link, useNavigate } from "react-router-dom";
-import useGetDeviceList from "../../hooks/DeviceManagement/useGetDeviceList";
-import useDeleteDevice from "../../hooks/DeviceManagement/useDeleteDevice";
 
 function DeviceList() {
   const { Search } = Input;
   const navigate = useNavigate();
   const [SearchName, setSearchName] = useState("");
   const [DeleteID, setDeleteID] = useState("");
-
-  const DeviceList = useGetDeviceList(SearchName);
-
-  const DeleteDevice = useDeleteDevice(DeleteID);
-  if (DeleteDevice.isSuccess) {
-    message.success("Xoá thành công");
-    window.location.reload();
-  }
-
-  useEffect(() => {
-    if (DeleteID) DeleteDevice.mutate();
-  }, [DeleteID]);
-
-  useEffect(() => {
-    if (DeleteDevice.isError)
-      message.error(
-        "Xoá thất bại. Lỗi: " + (DeleteDevice.error as any).message
-      );
-  }, [DeleteDevice.isError]);
 
   interface DeviceType {
     id: string;
@@ -128,7 +107,6 @@ function DeviceList() {
             size="large"
             style={{ marginTop: "30px" }}
             onChange={(e) => setSearchName(e.target.value)}
-            onSearch={() => DeviceList.refetch()}
           />
 
           <div
@@ -164,7 +142,6 @@ function DeviceList() {
 
           <Table
             columns={columns}
-            dataSource={DeviceList.data}
             className="tableFilter"
           />
         </div>

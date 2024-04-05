@@ -10,16 +10,13 @@ import {
   DatePicker,
   FormInstance,
 } from "antd";
-import React, { useEffect } from "react";
+import React from "react";
 import { useImperativeHandle, useRef } from "react";
-import { useLocation } from "react-router-dom";
-import dayjs from "dayjs";
 
 function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
   // This is confusing, but for now it's the only way to get the form instance
   const [form] = Form.useForm(); // Form instance used inside this component to get validation status
   const bookingInfo = useRef<FormInstance>(); // Form instance referenced by parent component to trigger form validation
-  const location = useLocation();
 
   useImperativeHandle(ref, () => bookingInfo.current);
   // use global color variables
@@ -29,27 +26,6 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
   const padRight = { paddingRight: 5 };
   const { Option } = Select;
 
-  function HandleSubmit() {
-    const validationerror = form
-      .getFieldsError()
-      .filter(({ errors }) => errors.length).length;
-    if (!!validationerror) return;
-    props.sethanhkhach(
-      form.getFieldsValue().passengers.map((passenger: any) => ({
-        ...passenger,
-        ngaysinh: passenger.ngaysinh ? passenger.ngaysinh.toISOString() : "",
-      }))
-    );
-    props.onBookingInfoFinish();
-  }
-
-  useEffect(() => {
-    const updatedHanhkhach = props.hanhkhach.map((hk: any) => {
-      return { ...hk, ngaysinh: hk.ngaysinh ? dayjs(hk.ngaysinh) : "" };
-    });
-    form.setFieldValue("passengers", updatedHanhkhach);
-  }, [location.state.hanhkhach]);
-
   return (
     <div className="list">
       <h3>Thông tin hành khách</h3>
@@ -57,7 +33,6 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
         form={form}
         ref={bookingInfo as React.Ref<FormInstance>}
         style={listForm}
-        onFinish={HandleSubmit}
         layout="vertical"
       >
         <Form.List name="passengers">
@@ -70,7 +45,6 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
                       <Form.Item
                         {...restField}
                         name={[name, "hoten"]}
-                        rules={[{ required: true, message: "Nhập họ tên" }]}
                         label="Họ và tên"
                       >
                         <Input />
@@ -81,7 +55,6 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
                       <Form.Item
                         {...restField}
                         name={[name, "gioitinh"]}
-                        rules={[{ required: true, message: "Nhập giới tính" }]}
                         label="Giới tính"
                       >
                         <Select>
@@ -95,7 +68,6 @@ function BookingInfo(props: any, ref: React.Ref<FormInstance | undefined>) {
                       <Form.Item
                         {...restField}
                         name={[name, "ngaysinh"]}
-                        rules={[{ required: true, message: "Nhập ngày sinh" }]}
                         label="Ngày sinh"
                       >
                         <DatePicker

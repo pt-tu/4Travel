@@ -1,8 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import "./Form.css";
-import useCreateTour from "../../hooks/TourManagement/useCreateTour";
-import useGetTourByTID from "../../hooks/TourManagement/useGetTourByTID";
 import {
   Col,
   Row,
@@ -37,28 +35,6 @@ function AddTour() {
   const [chitiet, setchitiet] = useState("");
   const [price, setprice] = useState(0);
 
-  const createTour = useCreateTour(
-    {
-      name: name,
-      tourguide_id: tourguide_id,
-      bia: bia,
-      diemdi: diemdi,
-      diemden: diemden,
-      hotel: hotel,
-      start: start,
-      end: end,
-      chitiet: chitiet,
-      price: price,
-    },
-    tourid
-  );
-
-  if (createTour.isSuccess) {
-    message.success("Cập nhật thông tin thành công");
-    navigate(-1);
-    createTour.reset();
-  }
-
   const HandleImageChange = (e: any) => {
     const file = e.file;
     setbia(file.originFileObj);
@@ -67,47 +43,6 @@ function AddTour() {
   // prettier-ignore
   const diaDiem = ["An Giang", "Bà Rịa – Vũng Tàu", "Bắc Giang", "Bắc Kạn", "Bạc Liêu", "Bắc Ninh", "Bến Tre", "Bình Định", "Bình Dương", "Bình Phước", "Bình Thuận", "Cà Mau", "Cần Thơ", "Cao Bằng", "Đà Nẵng", "Đắk Lắk", "Đắk Nông", "Điện Biên", "Đồng Nai", "Đồng Tháp", "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh", "Hải Dương", "Hải Phòng", "Hậu Giang", "Hòa Bình", "Hồ Chí Minh", "Hưng Yên", "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lâm Đồng", "Lạng Sơn", "Lào Cai", "Long An", "Nam Định", "Nghệ An", "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình", "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng", "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa", "Thừa Thiên Huế", "Tiền Giang", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"];
   const { Option } = Select;
-
-  const gettour = useGetTourByTID(tourid);
-
-  useEffect(() => {
-    if (gettour.data) {
-      setname(gettour.data.name);
-      settourguide_id(gettour.data.tourguide_id);
-      setdiemdi(gettour.data.diemdi);
-      setdiemden(gettour.data.diemden);
-      sethotel(gettour.data.hotel);
-      setstart(
-        gettour.data.start ? dayjs(gettour.data.start).toISOString() : ""
-      );
-      setend(gettour.data.end ? dayjs(gettour.data.end).toISOString() : "");
-      setchitiet(gettour.data.chitiet);
-      setprice(gettour.data.price);
-
-      form.setFieldsValue({
-        name: gettour.data.name,
-        tgid: gettour.data.tourguide_id,
-        tgname: gettour.data.tourguide_name,
-        origin: gettour.data.diemdi,
-        destination: gettour.data.diemden,
-        hotel: gettour.data.hotel,
-        start: gettour.data.start ? dayjs(gettour.data.start) : "",
-        end: gettour.data.start ? dayjs(gettour.data.end) : "",
-        note: gettour.data.chitiet,
-        price: gettour.data.price,
-      });
-    }
-  }, [tourid, gettour.data]);
-
-  useEffect(() => {
-    if (createTour.isError)
-      message.error("Thêm thất bại. Lỗi: " + (createTour.error as any).message);
-  }, [createTour.isError]);
-
-  useEffect(() => {
-    if (gettour.isError && tourid)
-      message.error((gettour.error as any).message);
-  }, [gettour.isError]);
 
   return (
     <div className="wrapper">
@@ -124,25 +59,12 @@ function AddTour() {
 
         <h1 className="pageTitle">Thông tin tour</h1>
 
-        <Form
-          form={form}
-          labelCol={{ span: 3 }}
-          labelAlign="left"
-          onFinish={() => createTour.mutate()}
-        >
-          <Form.Item
-            name={"name"}
-            label="Tên tour"
-            rules={[{ required: true, message: "Nhập tên tour" }]}
-          >
+        <Form form={form} labelCol={{ span: 3 }} labelAlign="left">
+          <Form.Item name={"name"} label="Tên tour">
             <Input onChange={(e) => setname(e.target.value)} />
           </Form.Item>
 
-          <Form.Item
-            name={"tgid"}
-            label="Mã hướng dẫn viên"
-            rules={[{ required: true, message: "Nhập mã HDV" }]}
-          >
+          <Form.Item name={"tgid"} label="Mã hướng dẫn viên">
             <Input
               className="shortInput"
               onChange={(e) => settourguide_id(e.target.value)}
@@ -153,11 +75,7 @@ function AddTour() {
             <Input disabled className="shortInput" />
           </Form.Item>
 
-          <Form.Item
-            name={"origin"}
-            label="Điểm đi"
-            rules={[{ required: true, message: "Nhập điểm đi" }]}
-          >
+          <Form.Item name={"origin"} label="Điểm đi">
             <Select
               showSearch
               placeholder="Địa điểm"
@@ -169,11 +87,7 @@ function AddTour() {
             </Select>
           </Form.Item>
 
-          <Form.Item
-            name={"destination"}
-            label="Điểm đến"
-            rules={[{ required: true, message: "Nhập điểm đến" }]}
-          >
+          <Form.Item name={"destination"} label="Điểm đến">
             <Select
               showSearch
               placeholder="Địa điểm"
@@ -185,11 +99,7 @@ function AddTour() {
             </Select>
           </Form.Item>
 
-          <Form.Item
-            name={"hotel"}
-            label="Khách sạn"
-            rules={[{ required: true, message: "Nhập khách sạn" }]}
-          >
+          <Form.Item name={"hotel"} label="Khách sạn">
             <Input
               className="shortInput"
               onChange={(e) => sethotel(e.target.value)}
@@ -202,7 +112,6 @@ function AddTour() {
                 labelCol={{ span: 6 }}
                 name={"start"}
                 label="Thời gian bắt đầu"
-                rules={[{ required: true, message: "Nhập thời gian bắt đầu" }]}
               >
                 <DatePicker
                   placeholder="DD/MM/YY"
@@ -217,7 +126,6 @@ function AddTour() {
                 labelCol={{ span: 6 }}
                 name={"end"}
                 label="Thời gian kết thúc"
-                rules={[{ required: true, message: "Nhập thời gian kết thúc" }]}
               >
                 <DatePicker
                   placeholder="DD/MM/YY"

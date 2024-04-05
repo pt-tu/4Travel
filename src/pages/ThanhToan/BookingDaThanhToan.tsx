@@ -1,62 +1,15 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
-import { Button, ConfigProvider, Input, Table, Space } from "antd";
-import { ArrowLeftOutlined, HistoryOutlined,SearchOutlined } from "@ant-design/icons";
-import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
+import { ArrowLeftOutlined, SearchOutlined } from "@ant-design/icons";
+import { Button, ConfigProvider, Input, Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import "../../components/Task2Component/TourStyle.css";
-import "../../components/Task2Component/CustomerDevice.css";
+import React, { useState } from "react";
+import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { Link } from "react-router-dom";
-import useGetBookingList from "../../hooks/BookingManagement/useGetBookingList";
-import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
-import useGetTourByTID from "../../hooks/TourManagement/useGetTourByTID";
-import useGetBookingForBill from "../../hooks/Bill/useGetBookingForBill";
-import useGetBillList from "../../hooks/Bill/useGetBillList";
-//chuyen lay gio phut giay
-function convertToVietnameseFormat(dateTimeString: any) {
-  // Chuyển đổi thành đối tượng Date
-  const originalDate = new Date(dateTimeString);
-
-  // Đặt múi giờ Việt Nam (UTC+7)
-  const options = { timeZone: "Asia/Ho_Chi_Minh" };
-
-  // Format the date and time using the Vietnamese locale and the specified options
-  const vietnameseFormat = originalDate.toLocaleString("vi-VN", options);
-
-  return vietnameseFormat;
-}
-
-//chuyen khong lay gio phut giay
-function convertToVietnameseDateFormat(dateTimeString: any) {
-  // Chuyển đổi thành đối tượng Date
-  const originalDate = new Date(dateTimeString);
-
-  // Đặt múi giờ Việt Nam (UTC+7)
-  const options: Intl.DateTimeFormatOptions = {
-    timeZone: "Asia/Ho_Chi_Minh",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  };
-
-  // Format the date using the Vietnamese locale and the specified options
-  const vietnameseDateFormat = originalDate.toLocaleDateString(
-    "vi-VN",
-    options
-  );
-
-  return vietnameseDateFormat;
-}
+import "../../components/Task2Component/CustomerDevice.css";
+import "../../components/Task2Component/TourStyle.css";
 
 function BookingDaThanhToan() {
   const { Search } = Input;
-  const getbookinglist = useGetBookingForBill();
   const[CusName,setCusName]=useState("");
-
-  if (getbookinglist.isSuccess) {
-    console.log(getbookinglist.data.datadone);
-  }
-  const bill = useGetBillList();
 
   interface CustomerType {
     bid: any;
@@ -107,18 +60,6 @@ function BookingDaThanhToan() {
   ];
   const Customer: CustomerType[] = [];
 
-  bill.data?.map((item, i) => {
-    if(item.cusname.includes(CusName))
-    Customer.push({
-      key: i,
-      bid: item.id,
-      cusName: item.cusname, // Fix the property name here
-      tourName: item.tourname,
-      by: item.by,
-      time: item.time,
-    });
-  });
-
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: CustomerType[]) => {
       console.log(
@@ -154,7 +95,6 @@ function BookingDaThanhToan() {
             size="large"
             style={{paddingTop: "30px",paddingBottom: "30px"}}
             onChange={(e)=>setCusName(e.target.value)}
-            onSearch={()=>getbookinglist.refetch()}
           />
           <div
             style={{

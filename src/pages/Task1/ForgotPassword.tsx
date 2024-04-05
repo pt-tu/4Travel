@@ -2,20 +2,10 @@ import { Button, Form, Input, message } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import useSendmail from "../../hooks/accountsystem/useSendMail";
 
 function ForgotPassword() {
   const [mail, setMail] = useState("");
-  const sendmail = useSendmail(mail);
-  if (sendmail.isSuccess) {
-    message.success(
-      "Hướng dẫn khôi phục tài khoản đã được gửi đến mail của bạn"
-    );
-  }
   let message1 = "";
-  if (sendmail.isError) {
-    message1 = (sendmail.error as any).message;
-  }
   return (
     <div>
       <h1 style={{ color: "#4B268F", marginTop: 30 }}>4TRAVEL</h1>
@@ -51,9 +41,6 @@ function ForgotPassword() {
                 backgroundColor: "#7200E4",
                 color: "white",
                 fontWeight: "bold",
-              }}
-              onClick={() => {
-                sendmail.mutate();
               }}
             >
               Xác nhận

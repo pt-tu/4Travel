@@ -1,23 +1,13 @@
 import React, { useState } from "react";
-import Logo4T from "../../images/logo4T.png";
 import FormItem from "antd/es/form/FormItem";
 import { Button, Form, Input } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import useLogin from "../../hooks/accountsystem/useLogin";
 
 export default function Login() {
   const [email, setemail] = useState("");
   const [password, setepass] = useState("");
   const nav = useNavigate();
   let message = "";
-  const login = useLogin({ email, password });
-  if (login.isSuccess) {
-    nav("/");
-    window.location.reload();
-  }
-  if (login.isError) {
-    message = (login.error as any).message;
-  }
 
   return (
     <div>
@@ -62,9 +52,6 @@ export default function Login() {
                 backgroundColor: "#7200E4",
                 color: "white",
                 fontWeight: "bold",
-              }}
-              onClick={() => {
-                login.mutate();
               }}
             >
               Đăng nhập

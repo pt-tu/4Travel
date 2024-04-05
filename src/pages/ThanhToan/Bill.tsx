@@ -1,35 +1,7 @@
-import { Col, Flex } from "antd";
-import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import useGetTourByTID from "../../hooks/TourManagement/useGetTourByTID";
-import useGetCustomerByCID from "../../hooks/CustomerManagement/useGetCustomerByCID";
-import useGetBookingByPK from "../../hooks/Bill/useGetBookingByPK";
-import useUser from "../../hooks/accountsystem/useUser";
-import BookingDaThanhToan from "./BookingDaThanhToan";
-import useCheckOut from "../../hooks/Bill/useCheckOut";
-import { v4 as uuidv4 } from "uuid";
+import { Flex } from "antd";
+import React from "react";
 import generatePDF, { Margin, Resolution } from "react-to-pdf";
 
-function convertToVietnameseDateFormat(dateTimeString: any) {
-  // Chuyển đổi thành đối tượng Date
-  const originalDate = new Date(dateTimeString);
-
-  // Đặt múi giờ Việt Nam (UTC+7)
-  const options: Intl.DateTimeFormatOptions = {
-    timeZone: "Asia/Ho_Chi_Minh",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  };
-
-  // Format the date using the Vietnamese locale and the specified options
-  const vietnameseDateFormat = originalDate.toLocaleDateString(
-    "vi-VN",
-    options
-  );
-
-  return vietnameseDateFormat;
-}
 
 const invoiceStyles: React.CSSProperties = {
   width: "500px",
@@ -96,12 +68,6 @@ const seconds = currentDateTime.getSeconds().toString().padStart(2, "0");
 const formattedTime = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 
 const Bill: React.FC = () => {
-  const user = useUser();
-  const bid = uuidv4();
-  const { cid, tid } = useParams();
-  const tour = useGetTourByTID(tid as any);
-  const cus = useGetCustomerByCID(cid as any);
-  const booking = useGetBookingByPK(cid as any, tid as any);
   const date = Date();
   let hoten = "";
   let sdt = "";
@@ -110,51 +76,9 @@ const Bill: React.FC = () => {
   let name = "";
   let hanhkhach = [""];
   let diemden = "";
-  let status = "";
   let price = 0;
 
-  if (cus.isSuccess) {
-    hoten = cus.data.hoten;
-    sdt = cus.data.sdt;
-    email = cus.data.email;
-  }
-  if (tour.isSuccess) {
-    name = tour.data.name;
-    ngay = convertToVietnameseDateFormat(tour.data.start);
-    diemden = tour.data.diemden;
-    price = tour.data.price;
-  }
-  if (booking.isSuccess) {
-    hanhkhach = booking.data.hanhkhach;
-    status = booking.data.status;
-  }
   console.log(date);
-  const checkout = useCheckOut(
-    {
-      cus_id: cid ? cid : "",
-      tour_id: tid ? tid : "",
-      hanhkhach: hanhkhach,
-    },
-    {
-      id: bid,
-      tourname: name,
-      cusname: hoten,
-      sdt: sdt,
-      email: email,
-      time: formattedTime,
-      by: user.data?.user_metadata.ten,
-      hanhkhach: hanhkhach,
-      total: hanhkhach.length * price,
-      price: price,
-      diemden: diemden,
-      ngay: ngay,
-    }
-  );
-  useEffect(() => {
-    if (hanhkhach[0] != "" && hoten != "" && booking.data.status != "done") {
-      checkout.mutate();
-    }
-  }, [tour.data, cus.data]); //bug khi reload
 
   const options = {
     // default is `save`
@@ -258,7 +182,6 @@ const Bill: React.FC = () => {
                 Chi tiết hóa đơn:
               </p>
               <p style={text}>Vào lúc: {formattedTime} </p>
-              <p style={text}>Bởi: {user.data?.user_metadata.ten}</p>
             </div>
           </div>
         </Flex>
@@ -304,6 +227,3 @@ const Bill: React.FC = () => {
 };
 
 export default Bill;
-function convertToVietnamTime(start: any): any {
-  throw new Error("Function not implemented.");
-}

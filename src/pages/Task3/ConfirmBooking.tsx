@@ -5,10 +5,6 @@ import { Button, FormInstance, message, Modal, ConfigProvider } from "antd";
 import "./Form.css";
 import ContactInfo from "../../components/ContactInfo";
 import BookingInfo from "../../components/BookingInfo";
-import useCreateCustomer from "../../hooks/CustomerManagement/useCreateCustomer";
-import useCreateBooking from "../../hooks/BookingManagement/useCreateBooking";
-import useGetCustomerByCCCD from "../../hooks/CustomerManagement/useGetCustomerByCCCD";
-import useUser from "../../hooks/accountsystem/useUser";
 import dayjs from "dayjs";
 
 function ConfirmBooking() {
@@ -17,7 +13,6 @@ function ConfirmBooking() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const user = useUser();
   const tourid = location.state ? location.state.tour_id ?? "" : "";
   const [customerid, setcustomerid] = useState(
     location.state ? location.state.cus_id ?? "" : ""
@@ -95,110 +90,6 @@ function ConfirmBooking() {
     }
   }, []);
 
-  const createCustomer = useCreateCustomer(
-    {
-      hoten: hoten,
-      cccd: cccd,
-      sdt: sdt,
-      email: email,
-      ngaysinh: ngaysinh,
-      diachi: diachi,
-      ghichu: ghichu,
-      yeucau: yeucau,
-    },
-    customerid
-  );
-  if (createCustomer.isSuccess)
-    if (!customerid) setcustomerid(createCustomer.data.id);
-
-  const createBooking = useCreateBooking(
-    {
-      cus_id: customerid,
-      tour_id: tourid,
-      hanhkhach: hanhkhach,
-      status: "none",
-    },
-    user.data ? user.data.id : ""
-  );
-
-  if (createBooking.isSuccess) {
-    message.success("Cập nhật booking thành công");
-    navigate(-1);
-    createCustomer.reset();
-    createBooking.reset();
-  }
-
-  const getcustomerbycccd = useGetCustomerByCCCD(cccd);
-  if (getcustomerbycccd.isError)
-    console.log((getcustomerbycccd.error as any).message);
-
-  function HandleSubmit() {
-    getcustomerbycccd.refetch();
-    if (contactInfo.current) contactInfo.current.submit();
-  }
-
-  function HandleContactInfoFinish() {
-    if (bookingInfo.current) bookingInfo.current.submit();
-  }
-
-  function HandleBookingInfoFinish() {
-    if (!customerid && getcustomerbycccd.data) {
-      setcustomerid(getcustomerbycccd.data.id);
-      if (customerid) {
-        if (!ngaysinh)
-          setngaysinh(
-            getcustomerbycccd.data.ngaysinh
-              ? dayjs(getcustomerbycccd.data.ngaysinh).toISOString()
-              : ""
-          );
-        setdiachi(getcustomerbycccd.data.diachi);
-        setghichu(getcustomerbycccd.data.ghichu);
-        setyeucau(getcustomerbycccd.data.yeucau);
-      }
-    }
-
-    for (const hk of hanhkhach) {
-      if (hk.hoten == hoten) {
-        if (!ngaysinh) setngaysinh(hk.ngaysinh);
-        if (!ghichu) setghichu(hk.ghichu);
-        break;
-      }
-    }
-
-    if (!ngaysinh) setngaysinh(new Date().toISOString());
-
-    createCustomer.mutate();
-  }
-
-  useEffect(() => {
-    if (createCustomer.isSuccess) createBooking.mutate();
-  }, [createCustomer.isSuccess]);
-
-  // Lỗi 23505: duplicate key value violates unique constraint "customer_cccd_key"
-  // Lỗi này xảy ra khi ta update customer mà vẫn giữ nguyên cccd
-  // Do đó có thể xem đây là lỗi giả, cho phép chạy lại mutate 1 lần nữa
-  useEffect(() => {
-    if (createCustomer.isError) {
-      if (retrymutate) {
-        createCustomer.mutate();
-        setretrymutate(false);
-      } else
-        message.error(
-          "Cập nhật thông tin liên lạc thất bại. Lỗi: " +
-            (createCustomer.error as any).message
-        );
-    }
-  }, [createCustomer.isError]);
-
-  useEffect(() => {
-    if (createBooking.isError) {
-      message.error(
-        "Cập nhật booking thất bại. Lỗi: " +
-          (createBooking.error as any).message
-      );
-    }
-  }, [createBooking.isError]);
-
   return (
     <div className="wrapper">
       <ConfigProvider theme={{ token: { colorPrimary: "#4B268F" } }}>
@@ -224,14 +115,12 @@ function ConfirmBooking() {
           email={email}
           setemail={setemail}
           setretrymutate={setretrymutate}
-          onContactInfoFinish={HandleContactInfoFinish}
           ref={contactInfo}
         />
 
         <BookingInfo
           hanhkhach={hanhkhach}
           sethanhkhach={sethanhkhach}
-          onBookingInfoFinish={HandleBookingInfoFinish}
           ref={bookingInfo}
         />
 
@@ -239,7 +128,6 @@ function ConfirmBooking() {
           <Button
             type="primary"
             htmlType="submit"
-            onClick={HandleSubmit}
             style={{ boxShadow: "none", color: "White" }}
           >
             Xác nhận

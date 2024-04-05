@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import "./TourStyle.css";
-import Hanoi from "../../images/hanoi.jpg";
-import { Button, ConfigProvider, Popconfirm, message } from "antd";
+import { Button, ConfigProvider, Popconfirm } from "antd";
 import { Link } from "react-router-dom";
 import location from "../../images/location.png";
-import useDeleteBooking from "../../hooks/BookingManagement/useDeleteBooking";
 
 interface PropsType {
   name: any;
@@ -19,15 +17,6 @@ interface PropsType {
 export const TourHistory = (props: PropsType) => {
   const [cusid, setcusid] = useState("");
   const [tourid, settourid] = useState("");
-  const deleteBooking = useDeleteBooking(cusid, tourid);
-  if (deleteBooking.isSuccess) {
-    message.success("Xoá thành công");
-    window.location.reload();
-  }
-
-  useEffect(() => {
-    if (cusid && tourid) deleteBooking.mutate();
-  }, [cusid, tourid]);
 
   return (
     <div className="card GridContainer">

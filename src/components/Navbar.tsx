@@ -2,13 +2,10 @@ import { Button, Col, Dropdown, MenuProps, Row } from "antd";
 import Search from "antd/es/input/Search";
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import useUser from "../hooks/accountsystem/useUser";
 import { MdOutlineArrowDropDown } from "react-icons/md";
-import useLogOut from "../hooks/accountsystem/useLogout";
 
 function Navbar() {
   const navigate = useNavigate();
-  const logout = useLogOut();
 
   const style: React.CSSProperties = {
     fontSize: 14,
@@ -39,16 +36,12 @@ function Navbar() {
       label: (
         <div
           style={style}
-          onClick={() => {
-            logout.mutate();
-          }}
         >
           <p>Đăng xuất</p>
         </div>
       ),
     },
   ];
-  const user = useUser();
   const [p, setPath] = useState("");
   const loca = useLocation();
   React.useEffect(() => {
@@ -126,7 +119,7 @@ function Navbar() {
             justifyContent: "end",
           }}
         >
-          {user.data == null ? (
+          {true ? (
             <>
               {" "}
               <Link to="/dang-ky">
@@ -164,7 +157,7 @@ function Navbar() {
                     color: "white",
                   }}
                 >
-                  Xin chào {user.data.user_metadata.ten}
+                  Xin chào
                 </p>
                 <button
                   style={{
@@ -196,7 +189,7 @@ function Navbar() {
             ĐẶT TOUR
           </Button>
         </Link>
-        {user.data?.user_metadata.role == "staff" ? (
+        {true ? (
           <>
             {" "}
             <Link to="/danh-sach-khach-hang">
@@ -252,7 +245,7 @@ function Navbar() {
         ) : (
           <></>
         )}
-        {user.data?.user_metadata.role == "admin" ? (
+        {false ? (
           <>
             {" "}
             <Link to="/danh-sach-khach-hang">

@@ -1,6 +1,4 @@
-import React from "react";
 import "./TourStyle.css";
-import Hanoi from "../../images/hanoi.jpg";
 import location from "../../images/location.png";
 import { useNavigate } from "react-router";
 interface PropsType {
