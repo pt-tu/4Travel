@@ -25,6 +25,66 @@ function CustomerList() {
   const { Search } = Input;
   const [DeleteID, setDeleteID] = useState("");
   const [cccd, setcccd] = useState("");
+  const CustomerList1 = {
+    data: [
+      {
+        id: "1",
+        hoten: "Nguyen Van A",
+        cccd: "123456789",
+        sdt: "0901234567",
+        email: "nguyenvana@gmail.com",
+        ngaysinh: "1990-01-01",
+        diachi: "123 ABC, District 1, HCM City",
+        ghichu: "VIP customer",
+        yeucau: "Need special care",
+      },
+      {
+        id: "2",
+        hoten: "Le Thi B",
+        cccd: "987654321",
+        sdt: "0907654321",
+        email: "lethib@gmail.com",
+        ngaysinh: "1992-02-02",
+        diachi: "456 DEF, District 2, HCM City",
+        ghichu: "Regular customer",
+        yeucau: "None",
+      },
+      {
+        id: "3",
+        hoten: "Tran Van C",
+        cccd: "112233445",
+        sdt: "0908765432",
+        email: "tranvanc@gmail.com",
+        ngaysinh: "1993-03-03",
+        diachi: "789 GHI, District 3, HCM City",
+        ghichu: "New customer",
+        yeucau: "None",
+      },
+      {
+        id: "4",
+        hoten: "Pham Thi D",
+        cccd: "556677889",
+        sdt: "0901122334",
+        email: "phamthid@gmail.com",
+        ngaysinh: "1994-04-04",
+        diachi: "321 JKL, District 4, HCM City",
+        ghichu: "VIP customer",
+        yeucau: "Need special care",
+      },
+      {
+        id: "5",
+        hoten: "Hoang Van E",
+        cccd: "998877665",
+        sdt: "0904433221",
+        email: "hoangvane@gmail.com",
+        ngaysinh: "1995-05-05",
+        diachi: "654 MNO, District 5, HCM City",
+        ghichu: "Regular customer",
+        yeucau: "None",
+      },
+      // ... add more data as needed
+    ],
+  };
 
   interface Customer {
     id: string;
@@ -129,6 +189,7 @@ function CustomerList() {
 
           <Table
             columns={columns}
+            dataSource={CustomerList1.data}
             className="tableFilter"
             rowKey="id"
           />

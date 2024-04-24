@@ -1,4 +1,8 @@
-import { ArrowLeftOutlined, HistoryOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  HistoryOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { Button, ConfigProvider, Input, Space, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import React, { useState } from "react";
@@ -7,9 +11,56 @@ import { Link } from "react-router-dom";
 import "../../components/Task2Component/CustomerDevice.css";
 import "../../components/Task2Component/TourStyle.css";
 
+//chuyen khong lay gio phut giay
+function convertToVietnameseDateFormat(dateTimeString: any) {
+  // Chuyển đổi thành đối tượng Date
+  const originalDate = new Date(dateTimeString);
+
+  // Đặt múi giờ Việt Nam (UTC+7)
+  const options: Intl.DateTimeFormatOptions = {
+    timeZone: "Asia/Ho_Chi_Minh",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  };
+
+  // Format the date using the Vietnamese locale and the specified options
+  const vietnameseDateFormat = originalDate.toLocaleDateString(
+    "vi-VN",
+    options
+  );
+}
 
 function BookingCanThanhToan() {
   const { Search } = Input;
+
+  const getbookinglist = {
+    data: [
+      {
+        cus_id: { hoten: "Nguyen Van A", id: "1" },
+        tour_id: {
+          name: "Tour 1",
+          start: "2022-01-01",
+          end: "2022-01-31",
+          id: "1",
+        },
+        hanhkhach: ["Nguyen Van B", "Nguyen Van C"],
+      },
+      {
+        cus_id: { hoten: "Tran Thi B", id: "2" },
+        tour_id: {
+          name: "Tour 2",
+          start: "2022-02-01",
+          end: "2022-02-28",
+          id: "2",
+        },
+        hanhkhach: ["Tran Thi C", "Tran Thi D", "Tran Thi E"],
+      },
+      // Add more data as needed for testing
+    ],
+  };
+
+  const [CusName, setCusName] = useState("");
 
   interface CustomerType {
     bookingid: any;
@@ -18,7 +69,7 @@ function BookingCanThanhToan() {
     tourName: any;
     numPeople: number;
     startDay: any;
-    endDay: string;
+    endDay: any;
   }
   const columns: ColumnsType<CustomerType> = [
     {
@@ -63,6 +114,28 @@ function BookingCanThanhToan() {
   ];
   const Customer: CustomerType[] = [];
 
+  getbookinglist.data?.map(
+    (
+      item: {
+        cus_id: { [x: string]: string };
+        tour_id: { [x: string]: string };
+        hanhkhach: string | any[];
+      },
+      i: any
+    ) => {
+      if (item.cus_id["hoten" as any].includes(CusName))
+        Customer.push({
+          key: i,
+          cusName: item.cus_id["hoten" as any], // Fix the property name here
+          tourName: item.tour_id["name" as any],
+          numPeople: item.hanhkhach ? item.hanhkhach.length : 0, //có thể bug nếu hanhkhach null
+          startDay: convertToVietnameseDateFormat(item.tour_id["start" as any]), // Month is 0-indexed
+          endDay: convertToVietnameseDateFormat(item.tour_id["end" as any]), // Month is 0-indexed,
+          bookingid: item.cus_id["id" as any] + "/" + item.tour_id["id" as any],
+        });
+    }
+  );
+
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: CustomerType[]) => {
       console.log(
@@ -95,9 +168,9 @@ function BookingCanThanhToan() {
             className="SearchBar"
             allowClear
             enterButton={<SearchOutlined style={{ color: "White" }} />}
-
             size="large"
-            style={{paddingTop: "30px", paddingBottom: "30px"}}
+            style={{ paddingTop: "30px", paddingBottom: "30px" }}
+            onChange={(e) => setCusName(e.target.value)}
           />
           <div
             style={{

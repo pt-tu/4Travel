@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./TourStyle.css";
-import { Button, ConfigProvider } from "antd";
+import { Button, ConfigProvider, Popconfirm } from "antd";
 import { Link } from "react-router-dom";
 import location from "../../images/location.png";
 
@@ -43,6 +43,19 @@ export const TourManagementCard = (props: PropsType) => {
               Sửa
             </Button>
           </Link>
+          <Popconfirm
+            title="Xác nhận?"
+            description={"Xóa tour " + props.name}
+            onConfirm={() => setDeleteID(props.id)}
+          >
+            <Button
+              type="primary"
+              style={{ boxShadow: "none", marginLeft: 10 }}
+              danger
+            >
+              Xóa
+            </Button>
+          </Popconfirm>
         </div>
       </ConfigProvider>
     </div>

@@ -26,6 +26,35 @@ function DeviceList() {
   const navigate = useNavigate();
   const [SearchName, setSearchName] = useState("");
   const [DeleteID, setDeleteID] = useState("");
+  const DeviceList = {
+    data: [
+      {
+        id: "1",
+        name: "Device 1",
+        id_staff: "Staff 1",
+        status: "unoccupied",
+      },
+      {
+        id: "2",
+        name: "Device 2",
+        id_staff: "Staff 2",
+        status: "occupied",
+      },
+      {
+        id: "3",
+        name: "Device 3",
+        id_staff: "Staff 3",
+        status: "unoccupied",
+      },
+      // ... more data
+      {
+        id: "100",
+        name: "Device 100",
+        id_staff: "Staff 100",
+        status: "occupied",
+      },
+    ],
+  };
 
   interface DeviceType {
     id: string;
@@ -142,6 +171,7 @@ function DeviceList() {
 
           <Table
             columns={columns}
+            dataSource={DeviceList.data}
             className="tableFilter"
           />
         </div>

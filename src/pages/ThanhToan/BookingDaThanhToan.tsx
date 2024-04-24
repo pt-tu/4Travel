@@ -7,10 +7,56 @@ import { Link } from "react-router-dom";
 import "../../components/Task2Component/CustomerDevice.css";
 import "../../components/Task2Component/TourStyle.css";
 
+//chuyen khong lay gio phut giay
+function convertToVietnameseDateFormat(dateTimeString: any) {
+  // Chuyển đổi thành đối tượng Date
+  const originalDate = new Date(dateTimeString);
+
+  // Đặt múi giờ Việt Nam (UTC+7)
+  const options: Intl.DateTimeFormatOptions = {
+    timeZone: "Asia/Ho_Chi_Minh",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  };
+
+  // Format the date using the Vietnamese locale and the specified options
+  const vietnameseDateFormat = originalDate.toLocaleDateString(
+    "vi-VN",
+    options
+  );
+}
+
 function BookingDaThanhToan() {
   const { Search } = Input;
-  const[CusName,setCusName]=useState("");
+  const bill = {
+    data: [
+      {
+        id: "1",
+        cusname: "John Doe",
+        tourname: "Tour A",
+        by: "Admin",
+        time: "2022-01-01",
+      },
+      {
+        id: "2",
+        cusname: "Jane Smith",
+        tourname: "Tour B",
+        by: "Admin",
+        time: "2022-02-01",
+      },
+      {
+        id: "3",
+        cusname: "Robert Johnson",
+        tourname: "Tour C",
+        by: "Admin",
+        time: "2022-03-01",
+      },
+      // ... more data
+    ],
+  };
 
+  const [CusName, setCusName] = useState("");
   interface CustomerType {
     bid: any;
     key: React.Key;
@@ -60,6 +106,18 @@ function BookingDaThanhToan() {
   ];
   const Customer: CustomerType[] = [];
 
+  bill.data?.map((item, i) => {
+    if (item.cusname.includes(CusName))
+      Customer.push({
+        key: i,
+        bid: item.id,
+        cusName: item.cusname, // Fix the property name here
+        tourName: item.tourname,
+        by: item.by,
+        time: item.time,
+      });
+  });
+
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: CustomerType[]) => {
       console.log(
@@ -91,10 +149,9 @@ function BookingDaThanhToan() {
             className="SearchBar"
             allowClear
             enterButton={<SearchOutlined style={{ color: "White" }} />}
-
             size="large"
-            style={{paddingTop: "30px",paddingBottom: "30px"}}
-            onChange={(e)=>setCusName(e.target.value)}
+            style={{ paddingTop: "30px", paddingBottom: "30px" }}
+            onChange={(e) => setCusName(e.target.value)}
           />
           <div
             style={{
