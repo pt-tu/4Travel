@@ -6,6 +6,8 @@ import "./Form.css";
 import ContactInfo from "../../components/ContactInfo";
 import BookingInfo from "../../components/BookingInfo";
 import dayjs from "dayjs";
+import { client } from "../../hooks/recombee";
+import recombee from "recombee-js-api-client";
 
 function ConfirmBooking() {
   const contactInfo = useRef<FormInstance | undefined>();
@@ -90,6 +92,12 @@ function ConfirmBooking() {
     }
   }, []);
 
+  const onConfirm = () => {
+    if (tourid) {
+      // client.send(new recombee.AddPurchase("user-7499", tourid));
+    }
+  };
+
   return (
     <div className="wrapper">
       <ConfigProvider theme={{ token: { colorPrimary: "#4B268F" } }}>
@@ -129,6 +137,7 @@ function ConfirmBooking() {
             type="primary"
             htmlType="submit"
             style={{ boxShadow: "none", color: "White" }}
+            onClick={onConfirm}
           >
             Xác nhận
           </Button>

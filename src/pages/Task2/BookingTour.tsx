@@ -11,6 +11,9 @@ import {
 } from "@ant-design/icons";
 import { Input, ConfigProvider, DatePicker, Select } from "antd";
 import { Link, useLocation } from "react-router-dom";
+import { client } from "../../hooks/recombee";
+import recombee from "recombee-js-api-client";
+
 function BookingTour() {
   const data = useLocation(); // usually I call this location but it's already used in this module
   const { Search } = Input;
@@ -69,6 +72,11 @@ function BookingTour() {
       },
       // Add more tour page objects as needed
     ],
+  };
+
+  const getRecommendForUser = async (userId: string) => {
+    const res = await client.send(new recombee.RecommendItemsToUser(userId, 5));
+    return res;
   };
 
   return (
