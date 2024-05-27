@@ -10,6 +10,8 @@ import useCreateBooking from "../../hooks/BookingManagement/useCreateBooking";
 import useGetCustomerByCCCD from "../../hooks/CustomerManagement/useGetCustomerByCCCD";
 import useUser from "../../hooks/accountsystem/useUser";
 import dayjs from "dayjs";
+import { client } from "../../hooks/recombee";
+import recombee from "recombee-js-api-client";
 
 function ConfirmBooking() {
   const contactInfo = useRef<FormInstance | undefined>();
@@ -168,6 +170,8 @@ function ConfirmBooking() {
     if (!ngaysinh) setngaysinh(new Date().toISOString());
 
     createCustomer.mutate();
+
+    // client.send(new recombee.AddPurchase("user-7499", tourid));
   }
 
   useEffect(() => {

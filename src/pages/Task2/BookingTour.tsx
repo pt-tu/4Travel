@@ -11,6 +11,8 @@ import {
 } from "@ant-design/icons";
 import { Input, ConfigProvider, DatePicker, Select } from "antd";
 import { Link, useLocation } from "react-router-dom";
+import { client } from "../../hooks/recombee";
+import recombee from "recombee-js-api-client";
 import useGetTourPage from "../../hooks/TourManagement/useGetTourPage";
 import useUser from "../../hooks/accountsystem/useUser";
 function BookingTour() {
@@ -51,6 +53,11 @@ function BookingTour() {
     setPage(1);
     GetTourPage.refetch();
   }, [diemdi, diemden, ngaydi, ngayve, data.state]);
+
+  const getRecommendForUser = async (userId: string) => {
+    const res = await client.send(new recombee.RecommendItemsToUser(userId, 5));
+    return res;
+  };
 
   return (
     <div>

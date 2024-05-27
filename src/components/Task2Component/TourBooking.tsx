@@ -3,6 +3,8 @@ import "./TourStyle.css";
 import Hanoi from "../../images/hanoi.jpg";
 import location from "../../images/location.png";
 import { useNavigate } from "react-router";
+import { client } from "../../hooks/recombee";
+import recombee from "recombee-js-api-client";
 interface PropsType {
   name: string;
   id: string;
@@ -14,12 +16,16 @@ interface PropsType {
 
 export const TourBooking = (props: PropsType) => {
   const navigate = useNavigate();
+
+  const onClick = () => {
+    // client.send(new recombee.AddDetailView("user-9318", props.id));
+    navigate("/xac-nhan-dat-tour", { state: { tour_id: props.id } });
+  };
+
   return (
     <div
       className="card GridContainer"
-      onClick={() =>
-        navigate("/xac-nhan-dat-tour", { state: { tour_id: props.id } })
-      }
+      onClick={onClick}
       style={{ cursor: "pointer" }}
     >
       <div>
