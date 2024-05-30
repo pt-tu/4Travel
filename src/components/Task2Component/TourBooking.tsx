@@ -5,6 +5,7 @@ import location from "../../images/location.png";
 import { useNavigate } from "react-router";
 import { client } from "../../hooks/recombee";
 import recombee from "recombee-js-api-client";
+import useUser from "../../hooks/accountsystem/useUser";
 interface PropsType {
   name: string;
   id: string;
@@ -16,9 +17,10 @@ interface PropsType {
 
 export const TourBooking = (props: PropsType) => {
   const navigate = useNavigate();
-
+  const user = useUser();
   const onClick = () => {
-    // client.send(new recombee.AddDetailView("user-9318", props.id));
+    const userId = user.data?.id;
+    userId && client.send(new recombee.AddDetailView(userId, props.id));
     navigate("/xac-nhan-dat-tour", { state: { tour_id: props.id } });
   };
 
