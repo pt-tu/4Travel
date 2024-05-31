@@ -171,7 +171,7 @@ function ConfirmBooking() {
 
     createCustomer.mutate();
 
-    client.send(new recombee.AddPurchase(customerid, tourid));
+    user.data && client.send(new recombee.AddPurchase(user.data.id, tourid));
   }
 
   useEffect(() => {

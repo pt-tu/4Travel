@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { TourBooking } from "../../components/Task2Component/TourBooking";
 import "../../components/Task2Component/TourStyle.css";
 import location from "../../images/location.png";
@@ -15,6 +15,8 @@ import { client } from "../../hooks/recombee";
 import recombee from "recombee-js-api-client";
 import useGetTourPage from "../../hooks/TourManagement/useGetTourPage";
 import useUser from "../../hooks/accountsystem/useUser";
+import useGetTourByTID from "../../hooks/TourManagement/useGetTourByTID";
+import useGetTours from "../../hooks/TourManagement/useGetTours";
 function BookingTour() {
   const data = useLocation(); // usually I call this location but it's already used in this module
   const { Search } = Input;
@@ -40,6 +42,7 @@ function BookingTour() {
     ngayve,
     TourName
   );
+  const GetTours = useGetTours();
   const userAccount = useUser();
   var isVis = false;
 
@@ -53,6 +56,7 @@ function BookingTour() {
   useEffect(() => {
     setPage(1);
     GetTourPage.refetch();
+    GetTours.refetch();
   }, [diemdi, diemden, ngaydi, ngayve, data.state]);
 
   const userId = userAccount.data?.id;
@@ -189,9 +193,21 @@ function BookingTour() {
               ></Button>
             </Link>
           </div>
-          {(
-            GetTourPage.data?.filter((item) => recomms.includes(item.id)) ?? []
-          ).map((item: any) => (
+          {recomms.length > 0 && <h1>Recommended</h1>}
+          {GetTourPage.data
+            ?.filter((item) => recomms.includes(item.id))
+            .map((item: any) => (
+              <TourBooking
+                name={item.name}
+                id={item.id}
+                diemdi={item.diemdi}
+                hotel={item.hotel}
+                bia={item.bia}
+                price={item.price}
+              ></TourBooking>
+            ))}
+          <h1>All Tours</h1>
+          {GetTourPage.data?.map((item: any) => (
             <TourBooking
               name={item.name}
               id={item.id}
