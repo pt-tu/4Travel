@@ -193,7 +193,10 @@ function BookingTour() {
               ></Button>
             </Link>
           </div>
-          {recomms.length > 0 && <h1>Recommended</h1>}
+          {GetTourPage.data
+            ? GetTourPage.data.filter((item) => recomms.includes(item.id))
+                ?.length > 0 && <h1>Recommended</h1>
+            : null}
           {GetTourPage.data
             ?.filter((item) => recomms.includes(item.id))
             .map((item: any) => (
@@ -206,7 +209,10 @@ function BookingTour() {
                 price={item.price}
               ></TourBooking>
             ))}
-          <h1>All Tours</h1>
+          {GetTourPage.data
+            ? GetTourPage.data.filter((item) => recomms.includes(item.id))
+                ?.length > 0 && <h1>All Tours</h1>
+            : null}
           {GetTourPage.data?.map((item: any) => (
             <TourBooking
               name={item.name}
